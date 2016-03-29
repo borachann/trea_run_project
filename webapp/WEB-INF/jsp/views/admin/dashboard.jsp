@@ -153,12 +153,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6 col-sm-6 col-lg-3" style="cursor: pointer;" id="request_stock">
+						<div class="col-md-6 col-sm-6 col-lg-3" >
 							<div class="mini-stat clearfix bx-shadow">
 								<span class="mini-stat-icon bg-purple"><i
 									class="ion-ios7-cart"></i></span>
 								<div class="mini-stat-info text-right text-muted">
-									<span class="counter" id="total_request"></span> New Request
+									<span class="counter" id="total_request"></span> Total Stock
 								</div>
 							</div>
 						</div>
@@ -166,9 +166,19 @@
 						<div class="col-md-6 col-sm-6 col-lg-3">
 							<div class="mini-stat clearfix bx-shadow">
 								<span class="mini-stat-icon bg-primary"><i
-									class="ion-android-contacts"></i></span>
+									class="ion-arrow-graph-up-right"></i></span>
 								<div class="mini-stat-info text-right text-muted">
-									<span class="counter" id="total_users"></span> Total Users
+									<span class="counter" id="total_users"></span> Total Income
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-6 col-sm-6 col-lg-3" style="cursor: pointer;" id="request_stock">
+							<div class="mini-stat clearfix bx-shadow">
+								<span class="mini-stat-icon bg-primary"><i
+									class="ion-ios7-settings"></i></span>
+								<div class="mini-stat-info text-right text-muted">
+									<span class="counter" id="exchangeRate">0</span> Exchange Rate
 								</div>
 							</div>
 						</div>
@@ -344,15 +354,32 @@
 					
 			});
 	
-			$("#request_stock").click(function() {	
+			 $("#request_stock").click(function() {	
 					
-				get_request_stock_detail(1);
+				setExchangeRate();
 				$('#request_stock_list').modal({
 					"backdrop":"static"
 				}) ;
 				
-			});
-			
+			}); 
+			function setExchangeRate(){
+				$.ajax({
+					 url: "${pageContext.request.contextPath}/admin/ExchangeRate", 
+					 type: 'GET',
+					 datatype: 'JSON',
+					beforeSend: function(xhr) {
+			            xhr.setRequestHeader("Accept", "application/json");
+			            xhr.setRequestHeader("Content-Type", "application/json");
+			        },
+					success: function(data){
+						 
+					},
+					error:function(data, status,er){
+						console.log("error: " + data + "status: " + status + "er: ");
+					}
+				});
+				$("#txtexchange").val('4000');
+			}
 			$("#req_no").change(function(){		
 			
 				$("#out_of_stock option[value='all']").prop("selected",true);	

@@ -668,7 +668,8 @@
             			
             		});
                 		
-        			$("#btn_add_import").click(function(){    	
+        			$("#btn_add_import").click(function(){
+        				  
         				clear();
         				$("#tbllistimport tr").remove();
         				searchProduct();
@@ -919,7 +920,7 @@
     	                    xhr.setRequestHeader("Content-Type", "application/json");
     	                },
     				    success: function(data) { 
-    				      // console.log(data); 
+    				       console.log(data); 
     				       var availableTags=[];
     				       for(i=0; i<data.length; i++)
 		   						{							
@@ -944,7 +945,7 @@
     				        console.log("error: "+data+" status: "+status+" er:"+er);
     				    }
     				});
-    				
+    				return ;
     			} 
                 $("#print_report").click(function() {
                 	$("#report_start_date").html(" Date " + $("#REGS_DATE_S").val());
