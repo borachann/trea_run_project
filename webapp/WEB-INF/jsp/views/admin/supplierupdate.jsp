@@ -397,7 +397,7 @@
     	 			$.ajax({
     	 				 url: "${pageContext.request.contextPath}/admin/updateSupplier/" + id, 
      				    type: 'POST',
-    	 				datatype: 'JSON',
+    	 				dataType: 'JSON',
     	 				data: JSON.stringify(json), 
     	 				beforeSend: function(xhr) {
     	 		            xhr.setRequestHeader("Accept", "application/json");

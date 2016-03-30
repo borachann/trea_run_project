@@ -356,30 +356,60 @@
 	
 			 $("#request_stock").click(function() {	
 					
-				setExchangeRate();
+				getExchangeRate();
 				$('#request_stock_list').modal({
 					"backdrop":"static"
 				}) ;
 				
 			}); 
-			function setExchangeRate(){
+			 getExchangeRate();
+			function getExchangeRate(){
 				$.ajax({
-					 url: "${pageContext.request.contextPath}/admin/ExchangeRate", 
+					 url: "${pageContext.request.contextPath}/admin/getchangerate", 
 					 type: 'GET',
 					 datatype: 'JSON',
 					beforeSend: function(xhr) {
 			            xhr.setRequestHeader("Accept", "application/json");
 			            xhr.setRequestHeader("Content-Type", "application/json");
 			        },
-					success: function(data){
-						 
+					success: function(res){
+						 console.log(res);
+						 $("#txtexchange").val(res.data.exchangerate);
+						 $("#exchangeRate").html(res.data.exchangerate);
 					},
 					error:function(data, status,er){
 						console.log("error: " + data + "status: " + status + "er: ");
 					}
 				});
-				$("#txtexchange").val('4000');
+				
 			}
+			
+			 $("#btnsave").click(function(){
+				 var json = {
+						 	"rate" : $("#txtexchange").val()
+					};
+				 
+				 $.ajax({
+					 url: "${pageContext.request.contextPath}/admin/exchangeupdate", 
+					 type: 'GET',
+					 data: json,
+					 dataType: 'JSON',
+					beforeSend: function(xhr) {
+			            xhr.setRequestHeader("Accept", "application/json");
+			            xhr.setRequestHeader("Content-Type", "application/json");
+			        },
+					success: function(data){
+						 console.log(data);
+						 $("#exchangeRate").html($("#txtexchange").val());
+						 $('#request_stock_list').modal("hide") ;
+					},
+					error:function(data, status,er){
+						console.log("error: " + data + "status: " + status + "er: ");
+					}
+				});
+				 
+			 });
+			
 			$("#req_no").change(function(){		
 			
 				$("#out_of_stock option[value='all']").prop("selected",true);	
