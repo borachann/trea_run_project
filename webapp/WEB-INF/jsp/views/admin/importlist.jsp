@@ -753,7 +753,7 @@
         				$(this).removeClass("borderRed"); 
             	});
             	$(document).on("click","#addbtn",function(){ 
-            		exchangerate = JSON.parse(exchangerate.responseText).data.exchangerate;
+            		
             		if($("#productName").val()=="")
             			{
             				$("#productName").addClass("borderRed");           				
@@ -811,8 +811,9 @@
 							}
 					});
 					
-					if(isAdded==false){          		
-            		
+					if(isAdded==false){  
+						if($("#tbllistimport tr").length == 0)
+							exchangerate = JSON.parse(exchangerate.responseText).data.exchangerate;
             		var st="";
             		st += "<tr><td style='display: none;'>" + $('#proID').val() +"</td>";
             		st += "<td style='display: none;'>"+ $('#supID').val() +"</td>";
@@ -820,9 +821,9 @@
             		st += "<td>" + $("#productName").val() +"</td>";
             		st += "<td>" + numeral($("#qty").val()).format('0,0') +"</td>";
             		if($("#currency").val()=="dollar")
-            			st += "<td>" + $("#UnitPrice").val() +"</td>";
+            			st += "<td>" + $("#UnitPrice").val()*exchangerate +"</td>";
             		else
-            			st += "<td>" + $("#UnitPrice").val()/exchangerate +"</td>";
+            			st += "<td>" + $("#UnitPrice").val() +"</td>";
             		st += "<td>" + $("#supplierName").val() +"</td>";
             		st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> | <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
             		$("#tbllistimport").append(st);

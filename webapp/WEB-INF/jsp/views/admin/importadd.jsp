@@ -65,17 +65,14 @@
 					<h5 class="pull-left page-title"># Import List</h5>
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">
-							<table id="datatable"
+							<table id="popup_datatable"
 								class="table table-striped table-bordered dataTable">
-								<thead>
-
-								</thead>
 								<thead>
 									<tr>
 										<th>#</th>
 										<th>Product Name</th>
 										<th style="text-align: center;">Qty</th>
-										<th style="text-align: center;">Unit Price ( $ )</th>
+										<th style="text-align: center;">Unit Price ( Reil )</th>
 										<th style="text-align: center;">Supplier Name</th>
 										<th style="text-align: center;">Edit</th>
 									</tr>
