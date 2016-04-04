@@ -55,4 +55,8 @@ public class ImportForm {
 	public void setSupplierId(long supplierId) {
 		this.supplierId = supplierId;
 	}
+	public String toString(){
+		return ("" +  getUnitPrice());
+	}
+	
 }

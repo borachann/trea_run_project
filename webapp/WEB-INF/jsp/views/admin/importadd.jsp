@@ -32,16 +32,11 @@
 						<div class="form-group ">
 							<label for="UnitPrice" class="control-label col-lg-2">Unit
 								Price *</label>
-							<div class="col-lg-8">
+							<div class="col-lg-10">
 								<input class="form-control " required="required" id="UnitPrice"
 									name="Unit Pirce" type="text">
 							</div>
-							<div class="col-lg-2">
-								<select class="form-control" id="currency">
-							        <option value="dollar">Dollar</option>
-							        <option value="reil">Reil</option>
-						        </select>
-							</div>
+						 
 						</div>
 						<div class="form-group ">
 							<label for="supplierName" class="control-label col-lg-2">Supplier
@@ -72,7 +67,7 @@
 										<th>#</th>
 										<th>Product Name</th>
 										<th style="text-align: center;">Qty</th>
-										<th style="text-align: center;">Unit Price ( Reil )</th>
+										<th style="text-align: center;">Unit Price ( $ )</th>
 										<th style="text-align: center;">Supplier Name</th>
 										<th style="text-align: center;">Edit</th>
 									</tr>

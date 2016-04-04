@@ -49,18 +49,18 @@ public class ImportProduct implements Serializable{
 	
 	@Formula("(SELECT  coalesce(SUM(o.pro_qty*o.unit_price),0) FROM import_detail o WHERE o.imp_id=imp_id)")
 	@Column(name = "total_Amount")
-	private long totalAmount;
+	private double totalAmount;
 	
 	
 	public Set<ImportDetail> getImportDetail() {
 		return importDetail;
 	}
 
-	public long getTotalAmount() {
+	public double getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(long totalAmount) {
+	public void setTotalAmount(double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 

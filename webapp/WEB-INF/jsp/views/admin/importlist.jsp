@@ -430,7 +430,7 @@
 			var b = true;
         	var _thisRow ;
         	var isAdded=false;
-        	var exchangerate = $.ajax({
+        	/* var exchangerate = $.ajax({
 				 url: "${pageContext.request.contextPath}/admin/getchangerate", 
 				 type: 'GET',
 				 datatype: 'JSON',
@@ -444,7 +444,7 @@
 				error:function(data, status,er){
 					console.log("error: " + data + "status: " + status + "er: ");
 				}
-			});
+			}); */
 			 setCalendar();
 		
 			 getimportlist(1); 
@@ -813,17 +813,14 @@
 					
 					if(isAdded==false){  
 						if($("#tbllistimport tr").length == 0)
-							exchangerate = JSON.parse(exchangerate.responseText).data.exchangerate;
+						//	exchangerate = JSON.parse(exchangerate.responseText).data.exchangerate;
             		var st="";
             		st += "<tr><td style='display: none;'>" + $('#proID').val() +"</td>";
             		st += "<td style='display: none;'>"+ $('#supID').val() +"</td>";
             		st += "<td>" + ($("#tbllistimport tr").length + 1) +"</td>"; 
             		st += "<td>" + $("#productName").val() +"</td>";
             		st += "<td>" + numeral($("#qty").val()).format('0,0') +"</td>";
-            		if($("#currency").val()=="dollar")
-            			st += "<td>" + $("#UnitPrice").val()*exchangerate +"</td>";
-            		else
-            			st += "<td>" + $("#UnitPrice").val() +"</td>";
+            		st += "<td>" + $("#UnitPrice").val() +"</td>";
             		st += "<td>" + $("#supplierName").val() +"</td>";
             		st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> | <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
             		$("#tbllistimport").append(st);

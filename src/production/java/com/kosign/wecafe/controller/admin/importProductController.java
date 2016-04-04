@@ -100,7 +100,7 @@ public class importProductController {
 	@RequestMapping(value="/admin/addImport", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Boolean saveImpProduct(@RequestBody List<ImportForm> importForm)	{
 		ImportDetail importDetails = new ImportDetail();
-		System.out.println(importForm.size());
+		System.out.println("uniprice : " + importForm.toString());
 		try {			
 			return importService.saveImportPro(importForm);
 		} catch (Exception e) {
