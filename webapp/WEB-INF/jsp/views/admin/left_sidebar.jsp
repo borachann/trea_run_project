@@ -95,9 +95,9 @@
                                		<li><a href="${pageContext.request.contextPath}/admin/purchasereport">Purchase Reports</a></li>
                                     <%-- <li><a href="${pageContext.request.contextPath}/admin/sellreport">Sell Reports</a></li> --%>
                                     <li><a href="${pageContext.request.contextPath}/admin/sale_report">Sell Reports</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/admin/orderreport">Take Out Reports</a></li>
+                                    <%-- <li><a href="${pageContext.request.contextPath}/admin/orderreport">Take Out Reports</a></li> --%>
                                     <li><a href="${pageContext.request.contextPath}/admin/beveragestock">Beverage Stock Accounting Report</a></li>
-                                	<li><a href="${pageContext.request.contextPath}/admin/cupstock">Cup Stock</a></li>
+                                	<%-- <li><a href="${pageContext.request.contextPath}/admin/cupstock">Cup Stock</a></li> --%>
                                 </ul>
                             </li>
                             
@@ -109,13 +109,13 @@
                                 </ul>
                             </li>-->
                             
-                            <li class="has_sub">
+                           <%--  <li class="has_sub">
                                 <a href="#" class="waves-effect"><i class="md md-view-list"></i><span> Setting </span><span class="pull-right"><i class="md md-add"></i></span></a>
                                 <ul class="list-unstyled">
                                     <li><a href="${pageContext.request.contextPath}/admin/slides">Slide List</a></li>
                                     <li><a href="${pageContext.request.contextPath}/admin/slideadd">Add Slide</a></li>
                                 </ul>
-                            </li>                            
+                            </li>  --%>                           
                            
                         </ul>
                         <div class="clearfix"></div>

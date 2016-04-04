@@ -557,11 +557,11 @@
 					    	   st += "<tr><td>" + (i + 1) + "</td>";
 					    	   st += "<td>" + data[i].proname +"</td>";
 					    	   st += "<td>" + numeral( data[i].proqty).format('0,0') +"</td>";
-					    	   st += "<td>" + numeral(data[i].prounitprice).format('0,0') +"</td>";
+					    	   st += "<td>" + data[i].prounitprice +"</td>";
 					    	   st += "<td>" + data[i].supname +"</td></tr>";
 					    	   amount += (data[i].prounitprice * data[i].proqty);
 					       }
-					       $("#txttotal").val(numeral(amount).format('0,0'));
+					       $("#txttotal").val(amount.toFixed(2));
 					       $("#impProDetail").html(st);
 					    },
 					    error:function(data,status,er) { 
@@ -597,7 +597,7 @@
 										format(data.imports[i]); 
 									}  
 								$("#CONTENT_Importlist").tmpl(data.imports).appendTo("tbody#CONTENTS");
-								$("#allTotalAmount").val(numeral(data.total_amount[0].total_amount).format('0,0'));
+								$("#allTotalAmount").val(data.total_amount[0].total_amount);
 							}else{
 								$("tbody#CONTENTS").html('');
 								$("#allTotalAmount").val("");
@@ -613,7 +613,7 @@
 				 });
 			 }
 			 format = function(value){ 
-				 		value["totalAmount"] = numeral(value["totalAmount"]).format('0,0');				 		
+				 		value["totalAmount"] = value["totalAmount"];				 		
 				 	 	value["impDate"] =(value["impDate"]).substring(0, 10);
 				 		if(b){
 				 			order = v.pagination.perPage * (v.pagination.currentPage-1);
@@ -625,7 +625,7 @@
 				 		value["importDetail"] = ++j;   
 			 }
 			 format_print = function(value){ 
-			 		value["totalAmount"] = numeral(value["totalAmount"]).format('0,0');				 		
+			 		value["totalAmount"] = value["totalAmount"];				 		
 			 	 	value["impDate"] =(value["impDate"]).substring(0, 10);
 			 		if(b){
 			 			order = 0
@@ -995,7 +995,7 @@
 									}  
 								$("#CONTENT_Print_Import").tmpl(data.imports_print).appendTo("tbody#PRINT_CONTENTS");
 							//	$("#allTotalAmount_print").val(numeral(data.total_amount_print[0].total_amount).format('0,0'));
-								$("#allTotalAmount_print").html(numeral(data.total_amount_print[0].total_amount).format('0,0'));
+								$("#allTotalAmount_print").html(data.total_amount_print[0].total_amount);
 							}else{
 								$("tbody#PRINT_CONTENTS").html('');
 								$("#allTotalAmount_print").html("");
