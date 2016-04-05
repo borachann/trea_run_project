@@ -204,7 +204,7 @@
 
 	
 	
-	<%@ include file="requeststocklist.jsp"%>
+	<%-- <%@ include file="requeststocklist.jsp"%> --%>
 	
 
 	<script>
@@ -307,7 +307,7 @@
 				})
 			}
 			loadDataInDashboard();
-			$("#PAGINATION").pagination({
+			/* $("#PAGINATION").pagination({
 				items: 10,
 				itemsOnPage:10,
 				cssStyle: 'light-theme',
@@ -315,9 +315,9 @@
 				displayedPages:3,
 				currentPage:1,
 				onPageClick:pageingClick
-			});
+			}); */
 			
-			$("#out_of_stock").change(function(){
+			/* $("#out_of_stock").change(function(){
 				
 				$('tbody tr').each(function(){
 					
@@ -333,9 +333,9 @@
 						st=0;
 					}						
 				});
-			});
+			}); */
 			
-			$("#btn_approve").click(function() {
+			/* $("#btn_approve").click(function() {
 				var error=false;
 				if($("#req_no").val()!=0){
 					$('tbody tr').each(function(){	
@@ -352,9 +352,9 @@
 					alert("Please select approve");				
 				}
 					
-			});
+			}); */
 	
-			 $("#request_stock").click(function() {	
+			 $("#request_stock").click(function() {
 					
 				getExchangeRate();
 				$('#request_stock_list').modal({
@@ -410,18 +410,18 @@
 				 
 			 });
 			
-			$("#req_no").change(function(){		
+			/* $("#req_no").change(function(){		
 			
 				$("#out_of_stock option[value='all']").prop("selected",true);	
 				request_id=$(this).val();			
 
 				get_request_stock_detail(1);			
 						
-			});			
+			});	 */		
 			
 		});
 		
-		function pageingClick(pageN,event){
+		/* function pageingClick(pageN,event){
 			currentPage=pageN;
 			get_request_stock_detail(pageN);
 			$("#out_of_stock option[value='all']").prop("selected",true);
@@ -434,9 +434,9 @@
 			$(obj).parent().find("#icon_edit").hide();
 			$(obj).parent().find("#icon_save").show();
 		
-		}
+		} */
 		
-		function update_qty(req_id,pro_id,obj){		
+		function update_qty(req_id,pro_id,obj){
 			
 			var pro_qty=0, remain_qty=0;		
 			

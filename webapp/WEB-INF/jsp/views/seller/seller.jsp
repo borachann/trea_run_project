@@ -733,7 +733,7 @@
 										 	str += "<div style='float: left;'>"
 										 	str += "<div id='idpro' style='display: none;'>" + data.searchpro[i].productId + "</div>";
 										 	str += "<div style='width: 300px;'> <img id='imgpro' src='${pageContext.request.contextPath}/resources/images/products/"+  data.searchpro[i].image + "'/>";
-										 	str += "<span id='Proname'>" + data.searchpro[i].productName + "</span></div>";
+										 	str += "<span id='Proname'> " + data.searchpro[i].productName + "</span></div>";
 										 	str += "<input type='text' class='form-control' value='" + data.searchpro[i].productId + "'";
 										 	str += " id='pro_id' style='display: none;'>";
 										 	str += "<input type='text' class='form-control' value='" +data.searchpro[i].productName + "'";
