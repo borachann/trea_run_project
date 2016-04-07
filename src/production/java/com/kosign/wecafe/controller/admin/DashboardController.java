@@ -40,7 +40,7 @@ public class DashboardController {
 	@RequestMapping(value="/admin/dashboardsize")
 	public ResponseEntity<Map<String, Object>> dashboardsize(){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("TOTAL_SALES", sellerService.getSellAmount());
+		//map.put("TOTAL_SALES", sellerService.getSellAmount());
 		//map.put("NEW_ORDERS", sellProductService.getOrdered().size());
 		map.put("AllProduct", productService.AllProducts());
 		map.put("REQUEST_STOCK", sellProductService.getRequestStock().size());

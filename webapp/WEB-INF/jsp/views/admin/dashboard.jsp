@@ -298,7 +298,7 @@
 			           },
 					    success: function(data) {
 					    	var totalStock = 0;
-					    	$("#total_sales").html(numeral(data.TOTAL_SALES).format('0,0'));
+					    	$("#total_sales").html(numeral(0).format('0,0'));
 					    	 
 					    	for(i=0; i<data.AllProduct.length; i++){
 					    	totalStock += ((data.AllProduct[i].unitPrice/data.AllProduct[i].unit.qty)*data.AllProduct[i].quantity);

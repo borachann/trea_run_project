@@ -369,6 +369,7 @@ public class SellServiceImpl implements SellService{
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<Sale> getSellAmount() {
