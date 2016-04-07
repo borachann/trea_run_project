@@ -194,4 +194,20 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return null;
 	}
+
+	@Override
+	@Transactional
+	public List<Product> AllProducts() {
+		Session session = null;
+		try{
+			session = sessionFactory.getCurrentSession();
+			Criteria criteria = session.createCriteria(Product.class);
+			List<Product> products = (List<Product>)criteria.list();
+			return products;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+		}
+		return null;
+	}
 }

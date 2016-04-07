@@ -12,7 +12,7 @@
 	content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
 <meta name="author" content="Coderthemes">
 
-<link rel="shortcut icon" href="images/favicon_1.ico">
+<!-- <link rel="shortcut icon" href="images/favicon_1.ico"> -->
 
 <title>KOSIGN WeCafe...</title>
 
@@ -297,9 +297,15 @@
 			               xhr.setRequestHeader("Content-Type", "application/json");
 			           },
 					    success: function(data) {
+					    	var totalStock = 0;
 					    	$("#total_sales").html(numeral(data.TOTAL_SALES).format('0,0'));
-					    	$("#total_request").html(numeral(data.REQUEST_STOCK).format('0,0'));
+					    	 
+					    	for(i=0; i<data.AllProduct.length; i++){
+					    	totalStock += ((data.AllProduct[i].unitPrice/data.AllProduct[i].unit.qty)*data.AllProduct[i].quantity);
+					    	}
+					    	$("#total_request").html(totalStock.toFixed(2) + " $");
 					    	$("#total_users").html(numeral(data.TOTAL_USERS).format('0,0'));
+					    	console.log(data);
 					    },
 					    error:function(data,status,er) { 
 					        console.log("error: ",data," status: ",status," er:",er);
@@ -307,52 +313,7 @@
 				})
 			}
 			loadDataInDashboard();
-			/* $("#PAGINATION").pagination({
-				items: 10,
-				itemsOnPage:10,
-				cssStyle: 'light-theme',
-				edges:3,
-				displayedPages:3,
-				currentPage:1,
-				onPageClick:pageingClick
-			}); */
 			
-			/* $("#out_of_stock").change(function(){
-				
-				$('tbody tr').each(function(){
-					
-					if($("#out_of_stock").val()=="out"){
-					 if ($(this).hasClass("out_stock")){
-						    $(this).show();	
-						    st=1;
-					}else{					 
-							 $(this).hide();
-						}
-					}else{
-						$(this).show();
-						st=0;
-					}						
-				});
-			}); */
-			
-			/* $("#btn_approve").click(function() {
-				var error=false;
-				if($("#req_no").val()!=0){
-					$('tbody tr').each(function(){	
-						 if ($(this).hasClass("out_stock")){
-							 alert("Please check some product qty is out of stock"); 
-							 error=true;
-							 return false;
-						 }
-					});
-					if(error==false){					 
-						 approve_request();																											
-					}
-				}else{
-					alert("Please select approve");				
-				}
-					
-			}); */
 	
 			 $("#request_stock").click(function() {
 					
@@ -410,198 +371,17 @@
 				 
 			 });
 			
-			/* $("#req_no").change(function(){		
-			
-				$("#out_of_stock option[value='all']").prop("selected",true);	
-				request_id=$(this).val();			
-
-				get_request_stock_detail(1);			
-						
-			});	 */		
+				
 			
 		});
 		
-		/* function pageingClick(pageN,event){
-			currentPage=pageN;
-			get_request_stock_detail(pageN);
-			$("#out_of_stock option[value='all']").prop("selected",true);
-		}
-		
-		function edit_qty(qty,remain_qty,obj){	
-			var qty=$(obj).parent().siblings("#pro_qty").html();
-			$(obj).parent().siblings("#pro_qty").html("<input type='text' value='"+qty+"' class='form-control'>");
-			$(obj).parent().siblings("#remain_qty").html("<input type='text' value='"+remain_qty+"' class='form-control'>");
-			$(obj).parent().find("#icon_edit").hide();
-			$(obj).parent().find("#icon_save").show();
-		
-		} */
-		
-		function update_qty(req_id,pro_id,obj){
-			
-			var pro_qty=0, remain_qty=0;		
-			
-			$(obj).parent().find("#icon_edit").show();
-			
-			$(obj).parent().find("#icon_save").hide();
-			
-			pro_qty=parseInt($(obj).parent().siblings("#pro_qty").find("input").val());
-			
-			remain_qty=parseInt($(obj).parent().siblings("#remain_qty").find("input").val());
-			
-			$(obj).parent().siblings("#pro_qty").find("input").remove() ;
-			
-			$(obj).parent().siblings("#remain_qty").find("input").remove() ;		
-			
-			var input={
-				"reqId" :req_id,
-				"proId" :pro_id,
-				"proQty" : pro_qty,
-				"remainQty" : remain_qty
-			}
-		
-			$.ajax({
-				 url: "${pageContext.request.contextPath}/admin/update_req_qty", 
-				 type: 'POST',
-				 data:JSON.stringify(input),
-				datatype: 'JSON',
-				beforeSend: function(xhr) {
-		            xhr.setRequestHeader("Accept", "application/json");
-		            xhr.setRequestHeader("Content-Type", "application/json");
-		        },
-				success: function(data){
-					if(data==true){
-						get_request_stock_detail(currentPage);
-					$("#out_of_stock option[value='all']").prop("selected",true);
-					}
-				},
-				error:function(data, status,er){
-					console.log("error: " + data + "status: " + status + "er: ");
-				}
-			});    
-			
-		}
-		
-		function approve_request(){
-			
-			var products=[];
-		
-					
-			for(var i=0;i<data.RSD.length;i++){		
-				
-				var  pro_qty=data.RSD[i].pro_qty;							
-				var  pro_id=data.RSD[i].pro_id;
-				var  req_id=data.RSD[i].req_id;	
-				
-				var json={"reqId":req_id,"proId":pro_id,"proQty":pro_qty};
-				products.push(json);
-			}
 	
-			 $.ajax({
-				 url: "${pageContext.request.contextPath}/admin/approve_request", 
-				 type: 'POST',
-				 data : JSON.stringify(products),
-				datatype: 'JSON',
-				beforeSend: function(xhr) {
-		            xhr.setRequestHeader("Accept", "application/json");
-		            xhr.setRequestHeader("Content-Type", "application/json");
-		        },
-				success: function(data){
-					if(data==true){
-						alert("Request has successfully approved");
-						get_request_stock_detail(1);			
-						$("#out_of_stock option[value='all']").prop("selected",true);
-					};
-				},
-				error:function(data, status,er){
-					console.log("error: " + data + "status: " + status + "er: ");
-				}
-			}); 
-		}
+		
+		
+		
+		
 			
-		function get_request_stock_detail(currentPage){
-			
-			var result="",result1=""; 	
-			var input={
-					"currentPage" :currentPage,
-		    		"perPage"     :10		
-			}
- 			$.ajax({
- 				 url: "${pageContext.request.contextPath}/admin/list_request_stock_detail?req_id="+request_id, 
-				 type: 'POST',
-				 data:JSON.stringify(input),
- 				datatype: 'JSON',
- 				beforeSend: function(xhr) {
- 		            xhr.setRequestHeader("Accept", "application/json");
- 		            xhr.setRequestHeader("Content-Type", "application/json");
- 		        },
- 				success: function(v){
- 					data=v;
- 					if(v!=""){
- 										
- 						$("#req_no").html("");
- 						
- 						$("#PAGINATION").html("");
-
- 						$("#PAGINATION").pagination('updateItems',v.pagination.totalCount);
- 						
- 						for(var i=0;i<v.RSD.length;i++){
- 							
- 							var pro_qty=v.RSD[i].pro_qty;							
- 							var qty_stock=v.RSD[i].stock_qty;
- 							var remain_qty=v.RSD[i].remain_qty;
- 							var req_id=v.RSD[i].req_id;
- 							var pro_id=v.RSD[i].pro_id;
- 							var out_stock_style="";
- 							var classOutStock="";
- 							if(pro_qty > qty_stock ){
- 								out_stock_style="color:red";	
- 								classOutStock="out_stock";
- 							}
- 							
- 							result+="<tr style='"+out_stock_style+"'  class='"+classOutStock+"'>"
-									+"<td>"+req_id+"</td>"
-									+"<td>"+pro_id+"</td>"
-									+"<td>"+v.RSD[i].pro_name+"</td>"
-									+"<td id='pro_qty'>"+pro_qty+"</td>"
-									+"<td id='remain_qty'>"+remain_qty+"</td>"
-									+"<td id='stock_qty'>"+qty_stock+"</td>"
-									+"<td>"+v.RSD[i].firstname +" "+v.RSD[i].lastname+"</td>"
-									+"<td>"+v.RSD[i].req_date+"</td>"
-									+"<td>"
-									+"<a id='icon_save' style='display: none;' href='#none' onclick='return update_qty("+req_id+","+pro_id+",this)'>"
-									+ "<span  class='glyphicon glyphicon-save'></span></a>"
-									+ "&nbsp;"
-									+ "<a id='icon_edit'  href='#none' onclick='return edit_qty("+ pro_qty +","+remain_qty+",this)'>"
-									+ "<span class='glyphicon glyphicon-pencil'></span></a></td>"
-								+"</tr>";							
- 							
- 						}
- 						
- 						$("#request_stock_info").html(result);
- 						
- 						$("#req_no").prepend("<option value='0'>---Select Approve--</option>");
- 						for(var i=0;i<v.RS.length;i++){
- 						
- 							var req_id1=v.RS[i].req_id;										
- 												
- 							result1+= "<option value='" + req_id1 + "'> " + req_id1 + " </option>";
- 						}						
- 						
- 					
- 						
- 						$("#req_no").append(result1);
- 						
- 						$("#req_no option[value="+request_id+"]").attr("selected","selected");	
- 						
- 						request_id="";
- 						 
- 					}
- 				},
- 				error:function(data, status,er){
- 					console.log("error: " + data + "status: " + status + "er: ");
- 				}
- 			});    
-		}
+		
 	</script>
 
 </body>

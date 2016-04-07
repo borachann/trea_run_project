@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kosign.wecafe.entities.Order;
 import com.kosign.wecafe.entities.Pagination;
+import com.kosign.wecafe.entities.Product;
 import com.kosign.wecafe.entities.Sale;
 import com.kosign.wecafe.util.HibernateUtil;
 
@@ -366,7 +368,21 @@ public class SellServiceImpl implements SellService{
 		// TODO Auto-generated method stub
 		return null;
 	}
-		
-	
-	
+
+	@Override
+	@Transactional
+	public List<Sale> getSellAmount() {
+		Session session = null;
+		try{
+			session = sessionFactory.getCurrentSession();
+			Criteria criteria = session.createCriteria(Sale.class);
+			List<Sale> saleAmount = (List<Sale>)criteria.list();
+			return saleAmount;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+		}
+		return null;
+	}
+	 
 }
