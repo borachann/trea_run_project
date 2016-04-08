@@ -64,8 +64,8 @@
         <![endif]-->
 
 
-<script
-	src="${pageContext.request.contextPath}/resources/js/modernizr.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/modernizr.min.js"></script>
+<script	src="${pageContext.request.contextPath}/resources/js/numeral.min.js"></script>
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
@@ -267,7 +267,7 @@
 						<div class="col-sm-4">
 							<img
 								src="${pageContext.request.contextPath}/resources/images/products/drink.jpg"
-								style="height: 250px;">
+								style="height: 250px;" id="imgProduct">
 						</div>
 						<div class="col-sm-8 container">
 							<div class="form-group">
@@ -336,18 +336,49 @@
 
 						</tbody>
 					</table>
-
+<hr>
 					<div class="form-horizontal">
-						<div class="form-group">
-							<label class="control-label col-sm-10" for="txtName">Total
-								Amount :</label>
-							<div class="col-sm-2">
+						<div>
+							<label class="control-label col-md-7" >Total Amount $ :</label>
+							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30"
-									readonly="readonly" name="txtName" id="totalamount"
+									readonly="readonly"  id="totalamount"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-1" >Pay $ :</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" maxlength="30"  id="txtpay" value="0"
 									style="margin-bottom: 2px;">
 							</div>
 						</div>
-
+						<div>
+							<label class="control-label col-md-7">Total Amount Reil :</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" maxlength="30" 
+									readonly="readonly" name="txtName" id="totalreil"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-1">Pay Reil :</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" maxlength="30" id="txtpayreil" value="0"
+									style="margin-bottom: 2px;" readonly="readonly">
+							</div>
+						</div>
+						<div>
+							<label class="control-label col-md-7">Rate :</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" maxlength="30"
+									readonly="readonly"  id="exchangerate"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-1">Change :</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" maxlength="30" value="0"
+									readonly="readonly"  id="txtchange"
+									style="margin-bottom: 2px;">
+							</div>
+						</div>
+						
 					</div>
 				</div>
 				<div class="modal-footer" style="height: 80px;">
@@ -377,7 +408,7 @@
 		</div>
 		
 <!-- Modal -->
-<div class="modal fade" id="form_request_stock" role="dialog " >
+<!-- <div class="modal fade" id="form_request_stock" role="dialog " >
 	<div class="modal-dialog modal-lg" style="width: 80%">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -423,7 +454,7 @@
 									type="button">Cancel</button>
 							</div>
 						</form>
-						<!-- =================== -->
+						===================
 						<h5 class="pull-left page-title"># Product List</h5>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12">
@@ -448,7 +479,7 @@
 							</div>
 						</div>
 
-						<!-- =================== -->
+						===================
 						<div class="form-group" align="right">
 							<button class="btn btn-success waves-effect waves-light"
 								style="width: 100px;" id="btn_save" type="button">Save</button>
@@ -458,14 +489,14 @@
 						</div>
 
 					</div>
-					<!-- .form -->
+					.form
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
 
 
 
@@ -664,12 +695,12 @@
 						
 
 						//Click button save cancel
-						$("#btn_cancel_save").click(function() {
+						/* $("#btn_cancel_save").click(function() {
 							if (confirm("Do you want to cancel?")) {
 								$("#tbllistimport tr").remove();
 								//$("#form_request_stock").bPopup().close();
 							}
-						});
+						}); */
 						
 						//Click cancel add to list
 						$("#btn_cancel_add").click(function() {
@@ -678,16 +709,51 @@
 							$("#btn_update").attr("id", "btn_add");
 						});
 						
-						
+						$("#txtpay").on("blur",function(){
+							var paid = 0, paidreil = 0;
+							
+							if($(this).val() != ""){
+								paid = ($("#totalamount").val() - $(this).val()).toFixed(2)
+								if(paid <= 0){									
+									paidreil = (paid * $("#exchangerate").val()).toFixed(0);
+									$("#txtpayreil").val('0');
+									$("#txtchange").val(numeral(paidreil).format('0,0'));
+								}
+								else{
+									paidreil = (paid * $("#exchangerate").val()).toFixed(0);
+									$("#txtpayreil").val(numeral(paidreil).format('0,0'));
+									$("#txtchange").val('0');
+								}
+							}
+						});
+						$("#txtpayreil").on("dblclick",function(){
+							$(this).removeAttr('readonly');
+						});
+						$("#txtpayreil").on("blur",function(){
+							var paid = 0;
+							var total = 0;
+							$(this).removeAttr('readonly');
+							paid = ($("#txtpay").val() != "") ? $("#txtpay").val() : 0;
+							
+							total = (paid * parseInt($("#exchangerate").val())) + parseInt($(this).val());
+							totalreil = (parseInt($("#totalreil").val().replace(',', '')));
+							if(total > totalreil){
+								$("#txtchange").val(numeral(total - totalreil).format('0,0'));
+							}else
+							{
+								$("#txtchange").val('0');
+							}
+								
+						});
 						//Click request stock
-						$("#btn_request_stock").click(function() {
+						/* $("#btn_request_stock").click(function() {
 							searchProduct();
 							$('#form_request_stock').modal({
 								"backdrop":"static"
 							});
 							//$("#form_request_stock").bPopup();
 
-						});
+						}); */
 						$("#btnSearch").click(function(e){
 							e.preventDefault(); 
 							
@@ -845,7 +911,7 @@
 							time : 1200
 						});
 
-						$("#btn_save").click(function() {
+						/* $("#btn_save").click(function() {
 											var requestDetail = [];
 											if ($('#tbllistimport tr').length == 0) {
 												alert("There is no data was added");
@@ -880,7 +946,7 @@
 												console.log("error: " + data + "status: " + status + "er: ");
 											}
 										});
-									});
+									}); */
 
 						function clear() {
 							$("#product_name").val("");
@@ -977,14 +1043,28 @@
 	$(document).ready(function() {
 						getsizeSession();
 						getordered();
-						$(document)
-								.on(
-										'keypress',
-										'#qtytxt',
-										function(e) {
-											if ((e.keyCode == 8)
-													|| (e.keyCode == 46)
-													|| ((e.keyCode >= 37) && (e.keyCode <= 40)))
+						var exchangerate = $.ajax({
+							 url: "${pageContext.request.contextPath}/admin/getchangerate", 
+							 type: 'GET',
+							 datatype: 'JSON',
+							 async: false,
+							beforeSend: function(xhr) {
+					            xhr.setRequestHeader("Accept", "application/json");
+					            xhr.setRequestHeader("Content-Type", "application/json");
+					        },
+							success: function(res){
+								 return (res);
+							},
+							error:function(data, status,er){
+								console.log("error: " + data + "status: " + status + "er: ");
+							}
+						});
+						
+						exchangerate = JSON.parse(exchangerate.responseText).data.exchangerate;
+						
+						console.log(exchangerate);
+						$(document).on('keypress', '#qtytxt', function(e) {
+											if ((e.keyCode == 8)|| (e.keyCode == 46)|| ((e.keyCode >= 37) && (e.keyCode <= 40)))
 												return;
 											var data = String
 													.fromCharCode(e.which);
@@ -996,8 +1076,7 @@
 						$("#btnlistorder").click(function() {
 							getordered();
 						});
-						$('#btncancelorder, #btnconfirmorder')
-								.click(
+						$('#btncancelorder, #btnconfirmorder').click(
 										function() {
 											if ($(this).attr('id') == 'btncancelorder')
 												var updatestatus = 'cancelOrder/';
@@ -1162,11 +1241,14 @@
 														+ "</td>";
 												st += "<td>"
 														+ data[i].totalAmount
-														+ "</td>";
+														+ "</td>";												
+												st += "<td>"+ ((data[i].comment != null) ? data[i].comment : "") + "</td>";
 												st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
 												amount += data[i].totalAmount;
 											}
 											$("#totalamount").val(amount);
+											$("#exchangerate").val(exchangerate);
+											$("#totalreil").val(numeral(amount*exchangerate).format('0,0'));
 											$("#orderdetail").html(st);
 										},
 										error : function(data, stutus, er) {
@@ -1248,12 +1330,7 @@
 																.children().eq(
 																		3)
 																.html());
-												$("#procomment").val(
-														$(this).parent()
-																.parent()
-																.children().eq(
-																		5)
-																.html());
+												$("#procomment").val($(this).parent().parent().children().eq(5).html());
 												$("#myModal").bPopup();
 											} else if (_this.html() == "Cancel") {
 

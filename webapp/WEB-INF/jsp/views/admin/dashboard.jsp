@@ -298,10 +298,14 @@
 			           },
 					    success: function(data) {
 					    	var totalStock = 0;
-					    	$("#total_sales").html(numeral(0).format('0,0'));
-					    	 
+					    	var totalSale = 0;
+					    	var totalIncome = 0;
+					    	for(i=0; i<data.TOTAL_SALES.length; i++){
+					    		totalSale += (data.TOTAL_SALES[i].TOTAL);
+					    	}
+					    	$("#total_sales").html(totalSale.toFixed(2) + " $");
 					    	for(i=0; i<data.AllProduct.length; i++){
-					    	totalStock += ((data.AllProduct[i].unitPrice/data.AllProduct[i].unit.qty)*data.AllProduct[i].quantity);
+					    		totalStock += ((data.AllProduct[i].unitPrice/data.AllProduct[i].unit.qty)*data.AllProduct[i].quantity);
 					    	}
 					    	$("#total_request").html(totalStock.toFixed(2) + " $");
 					    	$("#total_users").html(numeral(data.TOTAL_USERS).format('0,0'));

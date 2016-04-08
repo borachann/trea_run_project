@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.From;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -372,16 +374,23 @@ public class SellServiceImpl implements SellService{
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public List<Sale> getSellAmount() {
+	public List<Map> getSellAmount() {
 		Session session = null;
-		try{
-			session = sessionFactory.getCurrentSession();
-			Criteria criteria = session.createCriteria(Sale.class);
-			List<Sale> saleAmount = (List<Sale>)criteria.list();
-			return saleAmount;
-		}catch(Exception ex){
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			//session.getTransaction().begin();
+			//Query query = session.createQuery("From Sale");
+			Query query = session.createQuery("SELECT new Map(S.saleId AS ID, S.totalAmount AS TOTAL, S.saleDatetime AS SALE_DATE, S.user.username AS SELLER, S.order.orderId AS ORDER_ID) FROM Sale S");
+			
+			List<Map> sales= (List<Map>)query.list();
+			//session.getTransaction().commit();
+			return sales;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			session.getTransaction().rollback();
+		}finally {
+			session.close();
 		}
 		return null;
 	}
