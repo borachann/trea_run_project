@@ -103,7 +103,7 @@
 </head>
 <body>
 
-	<div id="wrapper">
+	<div id="wrapper" class="hidden-print">
 
 
 		<!-- Top Bar Start -->
@@ -185,7 +185,7 @@
 										</div>
 										<div style="text-align: right;">
 											<span id="PRICE"><%=products.get(i).getSalePrice()%></span><span>&nbsp;
-												Riels</span>
+												$</span>
 											<div>
 												<br> <a href="#"> <span id="btnminus"
 													class="glyphicon glyphicon-minus"></span>
@@ -310,7 +310,7 @@
 
 		<!-- ############################################################# -->
 
-		<div id="addtocart" style="display: none;" style="width: 80%;">
+		<div id="addtocart" style="display: none;" class="" style="width: 80%;">
 			<div class="modal-content">
 				<div class="modal-header">
 
@@ -1478,6 +1478,7 @@
 										});
 
 						$("#btnconfirm").click(function() {
+							window.print();return;
 											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/insertcartsell",
 														type : 'POST',
@@ -1497,9 +1498,8 @@
 														success : function(data) {
 															console.log(data);
 															clearallsession();
-															$(
-																	'input[name="orderqty"]')
-																	.val('0');
+															$('input[name="orderqty"]').val('0');
+															window.print();
 														},
 														error : function(data,
 																status, er) {

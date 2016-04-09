@@ -9,7 +9,7 @@
 	<!-- LOGO -->
 	<div class="topbar-left">
 		<div class="text-center">
-			<a href="index.html" class="logo">
+			<a href="admin/" class="logo">
 				<!-- <i class="md md-terrain"></i> --> <span>WECafe</span>
 			</a>
 		</div>
