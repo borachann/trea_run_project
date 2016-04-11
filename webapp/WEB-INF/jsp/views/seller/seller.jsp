@@ -310,7 +310,7 @@
 
 		<!-- ############################################################# -->
 
-		<div id="addtocart" style="display: none;" class="" style="width: 80%;">
+		<div id="addtocart" style="display: none;" class="hidden-print" style="width: 80%;">
 			<div class="modal-content">
 				<div class="modal-header">
 
@@ -1127,28 +1127,16 @@
 
 						});
 
-						$(document)
-								.on(
-										'click',
-										'#cusordered',
-										function() {
+						$(document).on('click','#cusordered',function() {
 											_this = $(this);
-											_orderid = (_this
-													.find("#orderedId").html());
-											$("#btnconfirmorder").removeClass(
-													"hidebtn");
-											$("#btncancelorder").removeClass(
-													"hidebtn");
+											_orderid = (_this.find("#orderedId").html());
+											$("#btnconfirmorder").removeClass("hidebtn");
+											$("#btncancelorder").removeClass("hidebtn");
 											$("#btncancel").addClass("hidebtn");
-											$("#btnconfirm")
-													.addClass("hidebtn");
-											$
-													.ajax({
+											$("#btnconfirm").addClass("hidebtn");
+											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/getOrderedDetail/"
-																+ _this
-																		.find(
-																				"#orderedId")
-																		.html(),
+																+ _this.find("#orderedId").html(),
 														type : 'GET',
 														dataType : 'JSON',
 														beforeSend : function(
@@ -1214,49 +1202,48 @@
 						function listproductorder() {
 							var st = "";
 							var amount = 0;
-							$
-									.ajax({
-										url : "${pageContext.request.contextPath}/seller/listtocart",
-										type : 'POST',
-										dataType : 'JSON',
-										beforeSend : function(xhr) {
-											xhr.setRequestHeader("Accept",
-													"application/json");
-											xhr.setRequestHeader(
-													"Content-Type",
-													"application/json");
-										},
-										success : function(data) {
-											console.log(data);
-											for (i = 0; i < data.length; i++) {
-												st += "<tr><td id='pro_id' style='display: none;'>"
-														+ data[i].productId
-														+ "</td>"
-												st += "<td>"
-														+ data[i].productName
-														+ "</td>";
-												st += "<td>" + data[i].price
-														+ "</td>";
-												st += "<td>" + data[i].quantity
-														+ "</td>";
-												st += "<td>"
-														+ data[i].totalAmount
-														+ "</td>";												
-												st += "<td>"+ ((data[i].comment != null) ? data[i].comment : "") + "</td>";
-												st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
-												amount += data[i].totalAmount;
-											}
-											$("#totalamount").val(amount);
-											$("#exchangerate").val(exchangerate);
-											$("#totalreil").val(numeral(amount*exchangerate).format('0,0'));
-											$("#orderdetail").html(st);
-										},
-										error : function(data, stutus, er) {
-											console.log("error:  " + data
-													+ " status: " + status
-													+ " er:" + er)
-										}
-									});
+							$.ajax({
+								url : "${pageContext.request.contextPath}/seller/listtocart",
+								type : 'POST',
+								dataType : 'JSON',
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader("Accept",
+											"application/json");
+									xhr.setRequestHeader(
+											"Content-Type",
+											"application/json");
+								},
+								success : function(data) {
+									console.log(data);
+									for (i = 0; i < data.length; i++) {
+										st += "<tr><td id='pro_id' style='display: none;'>"
+												+ data[i].productId
+												+ "</td>"
+										st += "<td>"
+												+ data[i].productName
+												+ "</td>";
+										st += "<td>" + data[i].price
+												+ "</td>";
+										st += "<td>" + data[i].quantity
+												+ "</td>";
+										st += "<td>"
+												+ data[i].totalAmount
+												+ "</td>";												
+										st += "<td>"+ ((data[i].comment != null) ? data[i].comment : "") + "</td>";
+										st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
+										amount += data[i].totalAmount;
+									}
+									$("#totalamount").val(amount);
+									$("#exchangerate").val(exchangerate);
+									$("#totalreil").val(numeral(amount*exchangerate).format('0,0'));
+									$("#orderdetail").html(st);
+								},
+								error : function(data, stutus, er) {
+									console.log("error:  " + data
+											+ " status: " + status
+											+ " er:" + er)
+								}
+							});
 						}
 
 						$("#bt_add, #btnCart").click(function() {
@@ -1364,6 +1351,7 @@
 
 						$("#btnUpdate").click(function() {
 											_qty = $("#qtytxt").val();
+											alert(_qty + " " + _orderid + " " + _productid );
 											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/updateOrderProduct/"
 																+ _orderid
@@ -1478,63 +1466,78 @@
 										});
 
 						$("#btnconfirm").click(function() {
-							window.print();return;
-											$.ajax({
-														url : "${pageContext.request.contextPath}/seller/insertcartsell",
-														type : 'POST',
-														datatype : 'JSON',
-													//	data : JSON.stringify(json),
-														beforeSend : function(
-																xhr) {
-															xhr
-																	.setRequestHeader(
-																			"Accept",
-																			"application/json");
-															xhr
-																	.setRequestHeader(
-																			"Content-Type",
-																			"application/json");
-														},
-														success : function(data) {
-															console.log(data);
-															clearallsession();
-															$('input[name="orderqty"]').val('0');
-															window.print();
-														},
-														error : function(data,
-																status, er) {
-															console
-																	.log("error: "
-																			+ data
-																			+ "status: "
-																			+ status
-																			+ "er: ");
-														}
+						
+									$.ajax({
+												url : "${pageContext.request.contextPath}/seller/insertcartsell",
+												type : 'POST',
+												datatype : 'JSON',
+											//	data : JSON.stringify(json),
+												beforeSend : function(
+														xhr) {
+													xhr
+															.setRequestHeader(
+																	"Accept",
+																	"application/json");
+													xhr
+															.setRequestHeader(
+																	"Content-Type",
+																	"application/json");
+												},
+												success : function(data) {
+													console.log(data);
+													clearallsession();
+													$('input[name="orderqty"]').val('0');															
+													var st = "";
+													
+													$('#orderdetail tr').each(function(i,e){
+														var child = $(e).children();
+														st += '<tr><td>' + (i+1) + '</td>';
+														st += '<td>' + child.eq(1).html() + '</td>';
+														st += '<td>' + child.eq(2).html() + '</td>';
+														st += '<td>' + child.eq(3).html() + '</td>';
+														st += '<td>' + child.eq(4).html() + '</td></tr>';
 													});
-										});
+													$("#tblprint").html(st);
+													$("#printtotal").html($("#totalamount").val());
+													$("#printpaid").html($("#txtpay").val());
+													$("#printpaidr").html($("#txtpayreil").val());
+													$("#printchange").html($("#txtchange").val());							
+													window.print(); 
+												},
+												error : function(data,
+														status, er) {
+													console
+															.log("error: "
+																	+ data
+																	+ "status: "
+																	+ status
+																	+ "er: ");
+												}
+											});
+								});
 
-						function getsizeSession() {
-							$.ajax({
-										url : "${pageContext.request.contextPath}/order/listcart",
-										type : 'POST',
-										dataType : 'JSON',
-										/* data: JSON.stringify(json), */
-										beforeSend : function(xhr) {
-											xhr.setRequestHeader("Accept",
-													"application/json");
-											xhr.setRequestHeader(
-													"Content-Type",
-													"application/json");
-										},
-										success : function(data) {
-											$("#totalproduce").html(data.length);
-										},
-										error : function(data, status, er) {
-											console.log("error: " + data
-													+ " status: " + status
-													+ " er:" + er);
-										}
-									});
+				function getsizeSession() {
+					$.ajax({
+								url : "${pageContext.request.contextPath}/order/listcart",
+								type : 'POST',
+								dataType : 'JSON',
+								/* data: JSON.stringify(json), */
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader("Accept",
+											"application/json");
+									xhr.setRequestHeader(
+											"Content-Type",
+											"application/json");
+								},
+								success : function(data) {
+									$("#totalproduce").html(data.length);
+								},
+								error : function(data, status, er) {
+									console.log("error: " + data
+											+ " status: " + status
+											+ " er:" + er);
+								}
+							});
 
 						}
 
@@ -1656,7 +1659,47 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.ui.autocomplete.scroll.min.js"></script>
 
+<div class="container visible-print-block"> 
+  <p>#26E0, St. 144 Chomkamorn</p>    
+  <p>Phone: 098 497 244</p>        
+  <hr>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>N<sup>0</sup></th>
+        <th>Name</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody id="tblprint">
+      
+    </tbody>
+  </table>
 
+
+  <div class="row text-right">
+  <div class="col-xs-2 col-xs-offset-8">
+    <p>
+      <strong>
+        Total : <br/>
+        Paid $ : <br/>
+        Paid R : <br/>
+        Changed : <br/>
+      </strong>
+    </p>
+  </div>
+  <div class="col-xs-2 text-left">
+    <strong>
+      <span id="printtotal"></span><br/>
+      <span id="printpaid"></span><br/>
+      <span id="printpaidr"></span><br/>
+      <span id="printchange"></span><br/>
+    </strong>
+  </div>
+</div>
+</div>
 
 
 
