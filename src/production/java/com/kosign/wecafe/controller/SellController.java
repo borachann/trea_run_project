@@ -253,14 +253,22 @@ public class SellController {
 		return false;
 	}
 	
-//	@RequestMapping(value="/seller/updateOrderProduct", method=RequestMethod.GET)
-//	public @ResponseBody Boolean updateOrderProduct(@RequestBody OrderDetail orderDetailForm){
-//		OrderDetail orderDetail = new OrderDetail();
-//		Order orders = new Order();
-//		orders.setOrderId(orderDetailForm.get);;
-//		orderDetail.setOrder(orderDetailForm.getOrder().getOrderId());
-//		orderDetail.setProQty(orderDetailForm.getProQty());
-//		sellProductService.updateOrderProduct(orderDetail);
-//		return false;
-//	}
+	@RequestMapping(value="/seller/updateSellerProduct/{productid}/{quatity}", method=RequestMethod.GET)
+	public @ResponseBody List<Cart> updateSellerProduct(HttpSession session, @PathVariable("productid") Long proId, @PathVariable("quatity") Long qty){
+		List<Cart> carts = new ArrayList<Cart>();
+		if(session.getAttribute("CARTS")!=null){
+			carts = (ArrayList<Cart>)session.getAttribute("CARTS"); 
+			for(int i=0; i <carts.size();i++){ 
+				/*System.out.println("cart.getProductName" + cart.getProductName());
+				System.out.println("carts.get(i).getProductName()" + carts.get(i).getProductName());*/
+				if(carts.get(i).getProductId().equals(proId)){
+					carts.get(i).setQuantity(qty);
+					carts.get(i).setTotalAmount(carts.get(i).getPrice().multiply(new BigDecimal(qty)));
+					session.setAttribute("CARTS", carts);
+					return carts;
+				}
+			}
+		}		
+		return null;
+	}
 }

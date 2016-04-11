@@ -717,7 +717,7 @@
 								if(paid <= 0){									
 									paidreil = (paid * $("#exchangerate").val()).toFixed(0);
 									$("#txtpayreil").val('0');
-									$("#txtchange").val(numeral(paidreil).format('0,0'));
+									$("#txtchange").val(numeral(Math.abs(paidreil)).format('0,0'));
 								}
 								else{
 									paidreil = (paid * $("#exchangerate").val()).toFixed(0);
@@ -1351,77 +1351,26 @@
 
 						$("#btnUpdate").click(function() {
 											_qty = $("#qtytxt").val();
-											alert(_qty + " " + _orderid + " " + _productid );
+											 
 											$.ajax({
-														url : "${pageContext.request.contextPath}/seller/updateOrderProduct/"
-																+ _orderid
-																+ "/"
-																+ _productid
-																+ "/" + _qty,
+														url : "${pageContext.request.contextPath}/seller/updateSellerProduct/"+ _productid + "/" + _qty,
 														type : 'GET',
 														dataType : 'JSON',
-														beforeSend : function(
-																xhr) {
-															xhr
-																	.setRequestHeader(
-																			"Accept",
-																			"application/json");
-															xhr
-																	.setRequestHeader(
-																			"Content-Type",
-																			"application/json");
+														beforeSend : function(xhr) {
+															xhr.setRequestHeader("Accept", "application/json");
+															xhr.setRequestHeader("Content-Type", "application/json");
 														},
 														success : function(data) {
-															var subtotal = $(
-																	"#qtytxt")
-																	.val()
-																	* _thisRow
-																			.children()
-																			.eq(
-																					2)
-																			.html();
-															var totalamount = $(
-																	"#totalamount")
-																	.val()
-																	- _thisRow
-																			.children()
-																			.eq(
-																					4)
-																			.html();
-
-															_thisRow
-																	.children()
-																	.eq(3)
-																	.html(
-																			$(
-																					"#qtytxt")
-																					.val());
-															_thisRow
-																	.children()
-																	.eq(4)
-																	.html(
-																			subtotal);
-															_thisRow
-																	.children()
-																	.eq(5)
-																	.html(
-																			$(
-																					"#procomment")
-																					.html());
-															$("#totalamount")
-																	.val(
-																			subtotal
-																					+ totalamount);
+															console.log(data);
+															var subtotal = $("#qtytxt").val() * _thisRow.children().eq(2).html();
+															var totalamount = $("#totalamount").val() - _thisRow.children().eq(4).html();
+															_thisRow.children().eq(3).html($("#qtytxt").val());
+															_thisRow.children().eq(4).html(subtotal);
+															_thisRow.children().eq(5).html($("#procomment").html());
+															$("#totalamount").val(subtotal + totalamount);
 														},
-														error : function(data,
-																status, er) {
-															console
-																	.log("error: "
-																			+ data
-																			+ " status: "
-																			+ status
-																			+ " er:"
-																			+ er);
+														error : function(data, status, er) {
+															console.log("error: " + data + " status: " + status + " er:" + er);
 														}
 													});
 										});
