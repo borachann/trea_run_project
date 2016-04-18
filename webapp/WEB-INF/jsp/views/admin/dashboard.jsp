@@ -204,7 +204,7 @@
 
 	
 	
-	<%-- <%@ include file="requeststocklist.jsp"%> --%>
+	 <%@ include file="requeststocklist.jsp"%> 
 	
 
 	<script>
