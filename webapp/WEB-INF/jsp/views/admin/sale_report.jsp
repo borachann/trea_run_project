@@ -316,6 +316,7 @@ a {
 												
 											</div>
 										</div>
+										
 										<div class="row">
 											<div class="col-md-2">
 												<select id="PER_PAGE" class="form-control">

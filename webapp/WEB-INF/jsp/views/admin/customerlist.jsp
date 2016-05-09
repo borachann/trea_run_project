@@ -128,11 +128,15 @@
 										<th>#</th>
 										<th>Name</th>
 										<th>Phone Number</th>
+										<th>Amount</th>
+										<th>Status</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody id="CONTENTS"> 
 								</tbody>
 							</table>
+						<hr>
 							<div class="row">
 										<div class="col-md-2">
 											<select id="PER_PAGE" class="form-control"> 
@@ -142,6 +146,12 @@
 												<option value="100">100</option>
 											</select>
 										</div> 
+										<div class="col-md-10 form-horizontal" align="right">
+												<label  class="control-label col-md-9">Total Amount : </label>
+													<div class="col-md-3">
+															<input class="form-control" readonly="readonly" id="allTotalAmount" type="text">
+													</div>												
+											</div>
 										<div id="PAGINATION" class="pull-right"></div>
 							</div> 
 						</div>
@@ -266,6 +276,14 @@
 		<td>{{= order}}</td>
 		<td>{{= customerName}}</td>								
 		<td>{{= phoneNumber}}</td>
+		<td>{{= amount}}</td>
+		<td>{{= status}}</td>
+		<td class="actions" style="text-align: center;">
+			<a class="on-default edit-row" href="${pageContext.request.contextPath}/admin/viewupdate/{{= supId}}">
+				<i class="fa fa-pencil"></i></a> 
+			<a class="on-default remove-row" href="javascript:;" id="btnRemove">
+				<i class="fa fa-trash-o"></i></a>
+		</td>
 	</tr>
 </script>
 	<script type="text/javascript">
@@ -487,7 +505,7 @@ setPagination = function(totalPage, currentPage){
 			}	
                    
         	$('#form_add_user').on('hidden.bs.modal', function (event) {
-    			if(isAdded==true)location.href="${pageContext.request.contextPath}/admin/userlist"; 
+        		listAllCustomer(1); 
 			})
     		
         		
