@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kosign.wecafe.entities.Customer;
 import com.kosign.wecafe.entities.Pagination;
-import com.kosign.wecafe.entities.Supplier;
 import com.kosign.wecafe.services.CustomerService;
-import com.kosign.wecafe.services.SupplierService;
 
 @Controller
 public class CustomerController {
@@ -43,6 +41,7 @@ public class CustomerController {
 		pagination.setTotalPages(pagination.totalPages());
 		map.put("pagination",pagination);
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		
 	}
 	
 	@RequestMapping(value="/admin/addcustomer", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)

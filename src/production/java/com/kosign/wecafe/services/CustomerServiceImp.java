@@ -2,6 +2,7 @@ package com.kosign.wecafe.services;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
@@ -23,19 +24,19 @@ public class CustomerServiceImp implements CustomerService{
 	public List<Customer> getAllCustomer(Pagination pagination) {
 		Session session = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSessionFactory().openSession();			
 			session.getTransaction().begin();
 			Query query = session.createQuery("FROM Customer");
 			query.setFirstResult(pagination.offset());
 			query.setMaxResults(pagination.getPerPage());
+			@SuppressWarnings("unchecked")
 			List<Customer> supplier = (List<Customer>)query.list(); 
-			return supplier; 
+			return supplier;
+			
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
-			
-		}finally {
-			session.close();
 		}
 		return null; 
 	}

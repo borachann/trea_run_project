@@ -264,8 +264,8 @@
 	<tr> 
 		<td style="display: none;" id="CUS_ID">{{= id }}
 		<td>{{= order}}</td>
-		<td>{{= name}}</td>								
-		<td>{{= phone }}</td>
+		<td>{{= customerName}}</td>								
+		<td>{{= phoneNumber}}</td>
 	</tr>
 </script>
 	<script type="text/javascript">
@@ -312,13 +312,13 @@
 						console.log(data); 
 						b =true;
 						//v=data;	
-						if(data.users.length>0){  
+						if(data.customer.length>0){  
 							$("tbody#CONTENTS").html('');					
-							for(i=0; i<data.users.length;i++)
+							for(i=0; i<data.customer.length;i++)
 								{
-									format(data.users[i]); 
+									format(data.customer[i]); 
 								}
-							$("#CONTENT_Userlist").tmpl(data.users).appendTo("tbody#CONTENTS"); 
+							$("#CONTENT_Userlist").tmpl(data.customer).appendTo("tbody#CONTENTS"); 
 						}else{
 							$("tbody#CONTENTS").html('<tr>NO CONTENTS</tr>'); 
 						}
@@ -335,7 +335,7 @@
 			    		"perPage"     : $("#PER_PAGE").val() 
 				};
     			$.ajax({
-				    url: "${pageContext.request.contextPath}/admin/listcustomer/", 
+				    url: "${pageContext.request.contextPath}/admin/listcustomer", 
 				    type: 'GET', 
 				    data: json,  
 				    beforeSend: function(xhr) {
@@ -346,13 +346,13 @@
 				    	console.log(data);
 						b =true;
 						v=data;	
-						if(data.users.length>0){  
+						if(data.customer.length>0){  
 							$("tbody#CONTENTS").html('');					
-							for(i=0; i<data.users.length;i++)
+							for(i=0; i<data.customer.length;i++)
 								{
-									format(data.users[i]); 
+									format(data.customer[i]); 
 								}
-							$("#CONTENT_Userlist").tmpl(data.users).appendTo("tbody#CONTENTS"); 
+							$("#CONTENT_Userlist").tmpl(data.customer).appendTo("tbody#CONTENTS"); 
 						}else{
 							$("tbody#CONTENTS").html('<tr>NO CONTENTS</tr>'); 
 						}
