@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kosign.wecafe.entities.Customer;
+import com.kosign.wecafe.entities.OwedCustomer;
 import com.kosign.wecafe.entities.Pagination;
 import com.kosign.wecafe.services.CustomerService;
 
@@ -53,6 +54,23 @@ public class CustomerController {
 			customers.setCustomerName(customerForm.getCustomerName());
 			customers.setPhoneNumber(customerForm.getPhoneNumber());			 
 			return customerService.saveCustomer(customers);
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	@RequestMapping(value="/admin/saveCusOwed", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Boolean saveCusOwed(@RequestBody OwedCustomer owedCus){
+		
+		try {
+			OwedCustomer Owed = new OwedCustomer();
+			 
+			Owed.setCus_id(owedCus.getCus_id());
+			Owed.setTotalAmount(owedCus.getTotalAmount());			
+			Owed.setOwedDate(new Date());
+			Owed.setStatus(true); 
+			return customerService.saveCusOwed(Owed);
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kosign.wecafe.entities.ImportDetail;
 import com.kosign.wecafe.entities.Order;
 import com.kosign.wecafe.entities.OrderDetail;
+import com.kosign.wecafe.entities.Pagination;
 import com.kosign.wecafe.entities.Product;
 import com.kosign.wecafe.entities.RequestStockDetail;
 import com.kosign.wecafe.forms.Cart;
 import com.kosign.wecafe.forms.ImportForm;
 import com.kosign.wecafe.forms.RequestForm;
+import com.kosign.wecafe.services.CustomerService;
 import com.kosign.wecafe.services.ImportService;
 import com.kosign.wecafe.services.RequestService;
 import com.kosign.wecafe.services.SellProductServiceImpl;
@@ -47,7 +49,7 @@ public class SellController {
 	
 	@Inject ImportService importService;
 	@Inject RequestService requestService;
-	
+	@Inject	private CustomerService customerService;
 	@Autowired
 	UserService userService;
 	
@@ -67,6 +69,12 @@ public class SellController {
 	@RequestMapping(value="/seller/searchproduct", method=RequestMethod.POST)
 	public @ResponseBody List<Product> searchProductName(){
 		return importService.listAllProduct();
+	}
+	@RequestMapping(value="/admin/getallcustomer", method=RequestMethod.GET) 
+	public ResponseEntity<Map<String, Object>> getAllcustomer(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("customer", customerService.getAllCustomers());		
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);		
 	}
 	
 	@SuppressWarnings({ "unchecked" })

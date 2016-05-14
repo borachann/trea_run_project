@@ -10,6 +10,7 @@ import com.kosign.wecafe.entities.ImportDetail;
 import com.kosign.wecafe.entities.ImportProduct;
 import com.kosign.wecafe.entities.Order;
 import com.kosign.wecafe.entities.OrderDetail;
+import com.kosign.wecafe.entities.OwedCustomer;
 import com.kosign.wecafe.entities.Product;
 import com.kosign.wecafe.entities.Sale;
 import com.kosign.wecafe.entities.Supplier;
@@ -52,7 +53,8 @@ public class HibernateUtil {
 			configuration.addAnnotatedClass(ImportProduct.class);
 			configuration.addAnnotatedClass(importDetailPK.class);
 			configuration.addAnnotatedClass(Unit.class);
-			configuration.addAnnotatedClass(Customer.class);		
+			configuration.addAnnotatedClass(Customer.class);
+			configuration.addAnnotatedClass(OwedCustomer.class);
 			
 			//configuration.addPackage("com.kosign.wecafe.entities");
 			return configuration.buildSessionFactory(new StandardServiceRegistryBuilder().build());

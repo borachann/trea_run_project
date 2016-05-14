@@ -593,7 +593,7 @@
 
 
 		<%@ include file="footer.jsp"%>
-
+		<%@ include file="owedPaymentAdd.jsp"%>
 		<!-- ======================================================================================= -->
 	</div>
 	<script>
@@ -678,7 +678,10 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.bpopup.min.js"></script>
 		
-
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery-ui.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/jquery.ui.autocomplete.scroll.min.js"></script>
 <!-- Request Stock -->
 <script type="text/javascript">
 	/* ==============================================
@@ -957,7 +960,7 @@
 							$("#remain_qty").val("");
 							$("#remain_qty").removeClass("borderRed"); 
 						} 
-						function searchProduct() {
+						/* function searchProduct() {
 							$.ajax({	url : "${pageContext.request.contextPath}/seller/searchproduct",
 										type : 'POST',
 										dataType : 'JSON',
@@ -985,7 +988,7 @@
 											console.log("error: " + data + " status: " + status + " er:" + er);
 										}
 									}); 
-						}
+						} */
 						
 						//Edit list
 						$(document).on("click", "#btn_edit", function() { 
@@ -1413,57 +1416,139 @@
 														}
 													});
 										});
-
-						$("#btnconfirm").click(function() {
-						
-									$.ajax({
-												url : "${pageContext.request.contextPath}/seller/insertcartsell",
-												type : 'POST',
-												datatype : 'JSON',
-											//	data : JSON.stringify(json),
-												beforeSend : function(
-														xhr) {
-													xhr
-															.setRequestHeader(
-																	"Accept",
-																	"application/json");
-													xhr
-															.setRequestHeader(
-																	"Content-Type",
-																	"application/json");
-												},
-												success : function(data) {
-													console.log(data);
-													clearallsession();
-													$('input[name="orderqty"]').val('0');															
-													var st = "";
-													
-													$('#orderdetail tr').each(function(i,e){
-														var child = $(e).children();
-														st += '<tr><td>' + (i+1) + '</td>';
-														st += '<td>' + child.eq(1).html() + '</td>';
-														st += '<td>' + child.eq(2).html() + '</td>';
-														st += '<td>' + child.eq(3).html() + '</td>';
-														st += '<td>' + child.eq(4).html() + '</td></tr>';
-													});
-													$("#tblprint").html(st);
-													$("#printtotal").html($("#totalamount").val());
-													$("#printpaid").html($("#txtpay").val());
-													$("#printpaidr").html($("#txtpayreil").val());
-													$("#printchange").html($("#txtchange").val());							
-													window.print(); 
-												},
-												error : function(data,
-														status, er) {
-													console
-															.log("error: "
-																	+ data
-																	+ "status: "
-																	+ status
-																	+ "er: ");
-												}
-											});
+$("#savebtn").click(function(){
+	$("#addOwedForm").submit();
+});				
+$("#addOwedForm").submit(function(e){
+	e.preventDefault(); 
+ 	json = {
+		"cus_id" : {
+			"customerId" :$("#cusID").val()
+		},
+		"totalAmount"  : $("#txtAmount").val()		 
+	};  
+	$.ajax({ 
+	    url: "${pageContext.request.contextPath}/admin/saveCusOwed", 
+	    type: 'POST', 
+	    dataType: 'JSON', 
+	    data: JSON.stringify(json), 
+	    beforeSend: function(xhr) {
+                  xhr.setRequestHeader("Accept", "application/json");
+                  xhr.setRequestHeader("Content-Type", "application/json");
+              },
+	    success: function(data) {
+	        if(data){
+	        	alert('YOU HAVE BEEN INSERTED SUCCESSFULLY.');
+	        	isAdded=true;
+	       // 	clearUser();
+	      //  	location.href="${pageContext.request.contextPath}/admin/seller/";
+	        }else{
+	        	alert('YOU HAVE ERRORS WHEN INSERT NEW USER.');
+	        }
+	    },
+	    error:function(data,status,er) { 
+	        console.log("error: "+data+" status: "+status+" er:"+er);
+	    }
+	});  
+});
+$("#btnconfirm").click(function() {	
+					
+	$.ajax({
+			url : "${pageContext.request.contextPath}/seller/insertcartsell",
+			type : 'POST',
+			datatype : 'JSON',
+		//	data : JSON.stringify(json),
+			beforeSend : function(
+					xhr) {
+				xhr
+						.setRequestHeader(
+								"Accept",
+								"application/json");
+				xhr
+						.setRequestHeader(
+								"Content-Type",
+								"application/json");
+				},
+		success : function(data) {
+								console.log(data);
+								clearallsession();
+								$('input[name="orderqty"]').val('0');															
+								var st = "";
+								
+								$('#orderdetail tr').each(function(i,e){
+									var child = $(e).children();
+									st += '<tr><td>' + (i+1) + '</td>';
+									st += '<td>' + child.eq(1).html() + '</td>';
+									st += '<td>' + child.eq(2).html() + '</td>';
+									st += '<td>' + child.eq(3).html() + '</td>';
+									st += '<td>' + child.eq(4).html() + '</td></tr>';
 								});
+								$("#tblprint").html(st);
+								$("#printtotal").html($("#totalamount").val());
+								$("#printpaid").html($("#txtpay").val());
+								$("#printpaidr").html($("#txtpayreil").val());
+								$("#printchange").html($("#txtchange").val());
+								var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));
+								
+								if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){
+									$("#addtocart").hide();
+									if(confirm("Do you want to save the rest of payment?"))
+									{
+										searchCustomer();
+										$("#txtAmount").val(parseInt($("#totalreil").val().replace(',', ''))-restPayment);
+										$('#form_add_import').modal({
+											"backdrop":"static"
+										}) ;
+									}else{
+										window.print();}
+								}else{
+									window.print(); 
+								}
+							},
+			error : function(data, status, er) {
+				console.log("error: " + data + "status: " + status + "er: ");
+				}
+			});
+});
+function searchCustomer(){	 
+	$.ajax({ 
+	    url: "${pageContext.request.contextPath}/admin/getallcustomer", 
+	    type: 'GET', 
+	    dataType: 'JSON', 
+	    beforeSend: function(xhr) {
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        },
+	    success: function(data) { 
+	       console.log(data); 
+	       var availableTags=[];
+	       for(i=0; i<data.customer.length; i++)
+					{						
+	    	   availableTags[i]= 
+					         {
+					         	"label": data.customer[i].customerName,
+								"dataid": data.customer[i].customerId,
+								"dataphone": data.customer[i].phoneNumber
+					         };
+					}
+	       $("#customerName" ).autocomplete({
+	    	   
+	    	   select: function(event, ui){
+	    		   $("#cusID").val(ui.item.dataid);
+	    		   $("#phoneNumber").val(ui.item.dataphone);
+	    	   },
+	    	  // maxShowItems: 8,
+	           source: availableTags
+	       });
+	       $(".ui-autocomplete").css("position", "absolute");
+		   $(".ui-autocomplete").css("z-index", "2147483647");
+	    },
+	    error:function(data,status,er) { 
+	        console.log("error: "+data+" status: "+status+" er:"+er);
+	    }
+	});
+	return ;
+} 
 
 				function getsizeSession() {
 					$.ajax({

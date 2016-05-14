@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kosign.wecafe.entities.Customer;
+import com.kosign.wecafe.entities.OwedCustomer;
 import com.kosign.wecafe.entities.Pagination; 
 import com.kosign.wecafe.util.HibernateUtil;
 import org.hibernate.SessionFactory;
@@ -40,6 +41,22 @@ public class CustomerServiceImp implements CustomerService{
 		}
 		return null; 
 	}
+	@Override
+	public List<Customer> getAllCustomers() {
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();			
+			session.getTransaction().begin();
+			Query query = session.createQuery("FROM Customer");			
+			@SuppressWarnings("unchecked")
+			List<Customer> supplier = (List<Customer>)query.list(); 
+			return supplier;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}
+		return null; 
+	}
 
 	@Override
 	@Transactional
@@ -51,6 +68,28 @@ public class CustomerServiceImp implements CustomerService{
 			
 			session.save(customer);
 			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.close();
+			//HibernateUtil.getSessionFactory().close();
+		}
+		
+		return false;
+	}
+	
+	@Override
+	@Transactional
+	public Boolean saveCusOwed(OwedCustomer cusowed) {
+		Session session = null;
+		try {
+			session =  HibernateUtil.getSessionFactory().openSession();
+			session.getTransaction().begin();
+ 
+			session.save(cusowed);
+			session.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.getTransaction().rollback();
