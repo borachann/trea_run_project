@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -442,17 +443,17 @@
             		$("#supplierName").val($(this).parents("tr").children().eq(6).html()); 
             	});
             	 
-                $(document).on('keypress','#qty, #UnitPrice', function(e){
+            	 $(document).on('keypress','#qty, #UnitPrice', function(e){
 
-    				if((e.keyCode == 8) || (e.keyCode == 46) || ((e.keyCode >=37) && (e.keyCode <= 40)))
-    					return ;
+     				if((e.keyCode == 8) || (e.keyCode == 46) || ((e.keyCode >=37) && (e.keyCode <= 40)))
+     					return ;
 
-    			var data = String.fromCharCode(e.which);	
-    					var reg = new RegExp('^[0-9]+$');
-    		    	    if(!reg.test(data)){
-    		    	    	e.preventDefault();
-    					}
-    			     });
+     			var data = String.fromCharCode(e.which);	
+     					var reg = new RegExp('^[0-9]+$');
+     		    	    if(!reg.test(data)){
+     		    	    	e.preventDefault();
+     					}
+     			     });
             	
             	$("#cencelBtn").click(function(){
             		$("#tbllistimport tr").remove();

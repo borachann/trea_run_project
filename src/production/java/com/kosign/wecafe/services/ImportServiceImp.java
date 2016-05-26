@@ -341,7 +341,7 @@ public class ImportServiceImp implements ImportService {
 	public List<Product> searchByName(String str) { 
 			Session session = sessionFactory.getCurrentSession();
 			try {
-				Query query = session.createQuery("FROM Product where status='t' and lower(productName) like '" + str.toLowerCase() + "%'");
+				Query query = session.createQuery("FROM Product where status='t' and qty>0 and lower(productName) like '" + str.toLowerCase() + "%'");
 				 
 				List<Product> products = query.list(); 
 				 return products; 

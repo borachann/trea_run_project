@@ -15,6 +15,7 @@ public interface SellProductsService {
 	public List<RequestStock> getRequestStock();
 	public List<OrderDetail> getOrderedDetail(Long orderID);
 	public Boolean addNewSaleProducts(List<Cart> carts);
+	public Boolean validatePro(List<Cart> carts);
 	public Boolean cancelOrder(Long orderID);
 	public Boolean addOrderToSale(Long orderID);
 	public Boolean updateOrderProduct(Long orderId, Long productId, Long qty );

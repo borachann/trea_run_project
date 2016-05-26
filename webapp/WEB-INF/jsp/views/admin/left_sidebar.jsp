@@ -85,7 +85,7 @@
                                 <ul class="list-unstyled">
                                 	<li><a href="${pageContext.request.contextPath}/admin/userlist">User</a></li>
                                     <li><a href="${pageContext.request.contextPath}/admin/supplierlist">Suppliers</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/admin/customerlist">Customers</a></li>
+                                    <%-- <li><a href="${pageContext.request.contextPath}/admin/customerlist">Customers</a></li> --%>
                                 </ul>
                             </li>
                             

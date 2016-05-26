@@ -129,7 +129,7 @@
 										<th>Name</th>
 										<th>Phone Number</th>
 										<th>Amount</th>
-										<th>Status</th>
+										<!-- <th>Status</th> -->
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -272,17 +272,14 @@
 		
 	<script id="CONTENT_Userlist" type="text/x-jquery-tmpl"> 
 	<tr> 
-		<td style="display: none;" id="CUS_ID">{{= id }}
+		<td style="display: none;" id="CUS_ID">{{= customerId}}</td>
 		<td>{{= order}}</td>
 		<td>{{= customerName}}</td>								
 		<td>{{= phoneNumber}}</td>
-		<td>{{= amount}}</td>
-		<td>{{= status}}</td>
+		<td>{{= amount}}</td>		
 		<td class="actions" style="text-align: center;">
-			<a class="on-default edit-row" href="${pageContext.request.contextPath}/admin/viewupdate/{{= supId}}">
-				<i class="fa fa-pencil"></i></a> 
-			<a class="on-default remove-row" href="javascript:;" id="btnRemove">
-				<i class="fa fa-trash-o"></i></a>
+			<a id="editCus" class="on-default edit-row" href="#">
+				<i class="fa fa-pencil"></i></a>
 		</td>
 	</tr>
 </script>
@@ -512,11 +509,70 @@ setPagination = function(totalPage, currentPage){
 			$("#btn_add_user").click(function(){    	
 				//clearFormAdd();
 				clearUser();
+				$("#saveCus").removeClass("hidden");
+				$("#updateCus").addClass("hidden");
 				$('#form_add_user').modal({
 					"backdrop":"static"
 				}) ;
 			});
-			
+        	$("#updateCus").click(function(){ 
+        		json = {
+   					 	"customerId" : $("#cus_id").val(),
+    					"customerName" : $("#firstName").val(),
+    					"phoneNumber"  : $("#lastName").val()    					 
+    				};  
+    				$.ajax({ 
+    				    url: "${pageContext.request.contextPath}/admin/updatecus", 
+    				    type: 'POST', 
+    				    dataType: 'JSON', 
+    				    data: JSON.stringify(json), 
+    				    beforeSend: function(xhr) {
+    	                    xhr.setRequestHeader("Accept", "application/json");
+    	                    xhr.setRequestHeader("Content-Type", "application/json");
+    	                },
+    				    success: function(data) {
+    				        if(data){
+    				        	alert('YOU HAVE BEEN INSERTED SUCCESSFULLY.');
+    				        	isAdded=true;
+    				       // 	clearUser();
+    				      //  	location.href="${pageContext.request.contextPath}/admin/userlist";
+    				        }else{
+    				        	alert('YOU HAVE ERRORS WHEN INSERT NEW USER.');
+    				        }
+    				    },
+    				    error:function(data,status,er) { 
+    				        console.log("error: "+data+" status: "+status+" er:"+er);
+    				    }
+    				});  
+        	});
+        	$(document).on('click','#editCus',function(){ 
+        		$("#saveCus").addClass("hidden");
+				$("#updateCus").removeClass("hidden");
+        		customerId = $(this).parent().parent().children().eq(0).text(); 
+        		 
+        		$.ajax({ 
+				    url: "${pageContext.request.contextPath}/admin/viewupdatecus/" + customerId, 
+				    type: 'GET', 
+				    dataType: 'JSON', 
+				    beforeSend: function(xhr) {
+	                    xhr.setRequestHeader("Accept", "application/json");
+	                    xhr.setRequestHeader("Content-Type", "application/json");
+	                },
+				    success: function(data) {
+				     console.log(data);
+				     $("#firstName").val(data.customer.customerName);
+				     $("#lastName").val(data.customer.phoneNumber);
+				     $("#cus_id").val(data.customer.customerId);
+				    },
+				    error:function(data,status,er) { 
+				        console.log("error: "+data+" status: "+status+" er:"+er);
+				    }
+				}); 
+				$('#form_add_user').modal({
+					"backdrop":"static"
+				}) ;
+			});
+        	
 			
 
 			$("#frmAddNewUser").submit(function(e){

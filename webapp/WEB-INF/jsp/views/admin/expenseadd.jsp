@@ -48,7 +48,7 @@
 							<label for="remark" class="control-label col-lg-2">Remark
 							</label>
 							<div class="col-lg-5">
-								<textarea class="form-control" rows="4" id="remark"></textarea>
+								<textarea style="resize: none;" class="form-control" rows="4" id="remark"></textarea>
 							</div>
 							<div align="right">
 

@@ -158,6 +158,7 @@
 												<option value="100">100</option>
 											</select>
 										</div>
+										 
 										<div class="col-md-10 form-horizontal" align="right">
 											<label  class="control-label col-md-9">Total Amount : </label>
 												<div class="col-md-3">
@@ -360,7 +361,7 @@
 											format(data.expense[i]); 
 										}
 									$("#CONTENT_Expenselist").tmpl(data.expense).appendTo("tbody#CONTENTS");
-									$("#allTotalAmount").val(numeral(data.total_amount[0].total_amount).format('0,0'));
+									$("#allTotalAmount").val((data.total_amount[0].total_amount).toFixed(2));
 								}else{
 									$("tbody#CONTENTS").html('<tr>NO CONTENTS</tr>');
 									$("#allTotalAmount").val("");
@@ -377,7 +378,7 @@
 			}
 		format = function(value){
 			 		value["exp_date"] =(value["exp_date"]).substring(0, 10);
-			 		value["totalAmount"] = numeral(value["totalAmount"]).format('0,0');	
+			 		value["totalAmount"] = (value["totalAmount"]).toFixed(2)	
 			 		if(b){
 			 			order = v.pagination.perPage * (v.pagination.currentPage-1);
 			 			j = order + 1;
@@ -409,13 +410,13 @@
 					    	   st += "<tr><td>" + (i + 1) + "</td>";
 					    	   st += "<td>" + data[i].exp_description +"</td>";
 					    	   st += "<td>" + numeral(data[i].exp_qty).format('0,0') +"</td>";
-					    	   st += "<td>" + numeral(data[i].exp_unitprice).format('0,0') +"</td>";
-					    	   st += "<td>" + numeral((data[i].exp_unitprice * data[i].exp_qty)).format('0,0') +"</td>";
+					    	   st += "<td>" + (data[i].exp_unitprice).toFixed(2) +"</td>";
+					    	   st += "<td>" + ((data[i].exp_unitprice * data[i].exp_qty)).toFixed(2) +"</td>";
 					    	   st += "<td>" + data[i].customer +"</td>";
 					    	   st += "<td>" + data[i].remark +"</td></tr>"; 
 					    	   amount += (data[i].exp_unitprice * data[i].exp_qty);
 					       }
-					       $("#txttotal").val(numeral(amount).format('0,0'));
+					       $("#txttotal").val((amount).toFixed(2));
 					       $("#impProDetail").html(st); 
 					    },
 					    error:function(data,status,er) { 

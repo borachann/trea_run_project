@@ -181,6 +181,7 @@ public class SellController {
 				long aa = 1L;
 				if( bb > aa){
 					cart.setQuantity(cart.getQuantity() - 1);
+					cart.setTotalAmount(cart.getPrice().multiply(new BigDecimal(cart.getQuantity())));
 					System.out.println("cart.getQuantity()" + cart.getQuantity());
 				}
 				else{
@@ -219,7 +220,10 @@ public class SellController {
 		if(session.getAttribute("CARTS")!=null){
 			carts = (ArrayList<Cart>)session.getAttribute("CARTS");
 			System.out.println("CARTS SIZE:"+ carts.size());
-			return sellProductService.addNewSaleProducts(carts);
+			if(!sellProductService.validatePro(carts))
+				return false;
+			else
+				return sellProductService.addNewSaleProducts(carts);
 		}
 		return false;
 	}

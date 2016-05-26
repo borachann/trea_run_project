@@ -9,8 +9,8 @@
 	<!-- LOGO -->
 	<div class="topbar-left">
 		<div class="text-center">
-			<a href="admin/" class="logo">
-				<!-- <i class="md md-terrain"></i> --> <span>WECafe</span>
+			<a href="${pageContext.request.contextPath}/admin/" class="logo">
+				<!-- <i class="md md-terrain"></i> --> <span>Admin Page</span>
 			</a>
 		</div>
 	</div>

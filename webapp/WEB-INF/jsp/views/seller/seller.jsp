@@ -17,7 +17,7 @@
 
 <link rel="shortcut icon" href="images/favicon_1.ico">
 
-<title>KOSIGN WeCafe...</title>
+<title>Stock Management</title>
 
 <!-- Base Css Files --> 
 <link
@@ -98,6 +98,13 @@
 .borderRed {
 	border-color: red;
 }
+ @media print {
+  @page { margin: 0; }
+  body { margin: 1cm; }
+}  
+#myCarousel1{
+    		interval: false;
+	};
 </style>
 
 </head>
@@ -142,7 +149,7 @@
 			</div>
 		</div>
 
-		<div id="myCarousel1" class="carousel slide">
+		<div id="myCarousel1" class="carousel">
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner" role="listbox" style="height: 888px;">
 				<%
@@ -317,18 +324,18 @@
 					<button type="button" class="close" aria-hidden="true">
 						<span class="button b-close"><span>×</span></span>
 					</button>
-					<h4 class="modal-title">Cart</h4>
+					<h4 class="modal-title">មុខ ទំនិញ</h4>
 
 				</div>
 				<div class="modal-body" style="height: 290px;">
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Produce Name</th>
-								<th>Price</th>
-								<th>Qty</th>
-								<th>Total Amount</th>
-								<th>Comment</th>
+								<th>ឈ្មោះ</th>
+								<th>តំលៃ</th>
+								<th>ចំនួន</th>
+								<th>សរុប</th>
+								<th>ផ្សេងទៀត</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -339,56 +346,87 @@
 <hr>
 					<div class="form-horizontal">
 						<div>
-							<label class="control-label col-md-7" >Total Amount $ :</label>
+							<label class="control-label col-md-2" >លក់ជូន :</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" maxlength="30"  id="tocusname"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-2" >ប្រាក់សរុប $ :</label>
 							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30"
 									readonly="readonly"  id="totalamount"
 									style="margin-bottom: 2px;">
 							</div>
-							<label class="control-label col-md-1" >Pay $ :</label>
+							<label class="control-label col-md-1" >ដុល្លា :</label>
 							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30"  id="txtpay" value="0"
 									style="margin-bottom: 2px;">
 							</div>
 						</div>
 						<div>
-							<label class="control-label col-md-7">Total Amount Reil :</label>
+							<label class="control-label col-md-2" >អាស័យ​ដ្ឋាន :</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="cusaddr"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-2">ប្រាក់សរុប ៛ :</label>
 							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30" 
 									readonly="readonly" name="txtName" id="totalreil"
 									style="margin-bottom: 2px;">
 							</div>
-							<label class="control-label col-md-1">Pay Reil :</label>
+							<label class="control-label col-md-1">រៀល :</label>
 							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30" id="txtpayreil" value="0"
 									style="margin-bottom: 2px;" readonly="readonly">
 							</div>
 						</div>
 						<div>
-							<label class="control-label col-md-7">Rate :</label>
+							<label class="control-label col-md-2" >ទូរស័ព្ទ :</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="cusphone"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-2">អត្រាប្រាក់ :</label>
 							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30"
 									readonly="readonly"  id="exchangerate"
 									style="margin-bottom: 2px;">
 							</div>
-							<label class="control-label col-md-1">Change :</label>
+							<label class="control-label col-md-1">អាប់ ៛ :</label>
 							<div class="col-md-2">
 								<input type="text" class="form-control" maxlength="30" value="0"
 									readonly="readonly"  id="txtchange"
 									style="margin-bottom: 2px;">
 							</div>
 						</div>
-						
+						<div>
+							<label class="control-label col-md-2" >ថ្ងៃខែឆ្នាំ :</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="cusdate" readonly="readonly"
+									style="margin-bottom: 2px;">
+							</div>
+							<label class="control-label col-md-2"></label>
+							<div class="col-md-2">
+							</div>
+							<label class="control-label col-md-1">អាប់ $ : </label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" maxlength="30" value="0"
+									readonly="readonly"  id="txtchangedollar"
+									style="margin-bottom: 2px;">
+							</div>
+						</div>
+					
 					</div>
 				</div>
 				<div class="modal-footer" style="height: 80px;">
 					<div align="right">
 						<button type="button" id="btnbuymore" class="btn btn-default">
-							<span class="button b-close"><span>Buy more</span></span>
+							<span class="button b-close"><span>បន្ថៃមទំនិញ</span></span>
 						</button>
 						<button type="button" id="btnconfirm"
-							class="btn btn-default hidebtn">
-							<span class="button b-close"><span>Confirm</span></span>
+							class="btn btn-default hidebtn b-close">
+							<span class="button b-close"><span>យល់ព្រម</span></span>
 						</button>
 						<button type="button" id="btnconfirmorder"
 							class="btn btn-default hidebtn">
@@ -396,7 +434,7 @@
 						</button>
 						<button type="button" id="btncancel"
 							class="btn btn-default hidebtn">
-							<span class="button b-close"><span>Cancel Order</span></span>
+							<span class="button b-close"><span>លុបចោល</span></span>
 						</button>
 						<button type="button" id="btncancelorder"
 							class="btn btn-default hidebtn">
@@ -688,6 +726,13 @@
 	Counter Up
 	=============================================== */
 	jQuery(document).ready(function($) {
+		$(function() {
+		    $('.carousel').each(function(){
+		        $(this).carousel({
+		            interval: false
+		        });
+		    });
+		});
 						var _thisRow;
 						
 						//Check qty for input only number
@@ -721,11 +766,13 @@
 									paidreil = (paid * $("#exchangerate").val()).toFixed(0);
 									$("#txtpayreil").val('0');
 									$("#txtchange").val(numeral(Math.abs(paidreil)).format('0,0'));
+									$("#txtchangedollar").val(Math.abs(paid));
 								}
 								else{
 									paidreil = (paid * $("#exchangerate").val()).toFixed(0);
 									$("#txtpayreil").val(numeral(paidreil).format('0,0'));
 									$("#txtchange").val('0');
+									$("#txtchangedollar").val('0');
 								}
 							}
 						});
@@ -742,9 +789,11 @@
 							totalreil = (parseInt($("#totalreil").val().replace(',', '')));
 							if(total > totalreil){
 								$("#txtchange").val(numeral(total - totalreil).format('0,0'));
+								$("#txtchangedollar").val((total - totalreil)/parseInt($("#exchangerate").val()));
 							}else
 							{
 								$("#txtchange").val('0');
+								("#txtchangedollar").val('0');
 							}
 								
 						});
@@ -1124,10 +1173,11 @@
 										});
 
 						$('#btncancel').click(function() {
-							clearallsession();
-
-							$('input[name="orderqty"]').val('0');
-
+							if(confirm("តើអ្នកពិតជា ចង់លុបចោលការបព្ចារទិញនេះពិតមែនទេ?"))
+							{   
+								clearallsession();
+								$('input[name="orderqty"]').val('0');
+							}
 						});
 
 						$(document).on('click','#cusordered',function() {
@@ -1255,6 +1305,16 @@
 							$("#btnconfirmorder").addClass("hidebtn");
 							$("#btnconfirm").removeClass("hidebtn");
 							listproductorder();
+							
+							$("#tocusname").val("");
+							$("#cusaddr").val("");
+							$("#cusphone").val("");
+							$("#txtpay").val("0");
+							$("#txtpayreil").val("0");
+							$("#txtchange").val("0");
+							$("#txtchangedollar").val("0");							
+							$("#cusdate").val(moment().format('DD-MM-YYYY'));
+							
 							$("#addtocart").bPopup();
 
 						});
@@ -1423,7 +1483,9 @@ $("#addOwedForm").submit(function(e){
 	e.preventDefault(); 
  	json = {
 		"cus_id" : {
-			"customerId" :$("#cusID").val()
+			"customerId" :$("#cusID").val(),
+			"customerName" : $("#customerName").val(),
+			"phoneNumber" : $("#phoneNumber").val()
 		},
 		"totalAmount"  : $("#txtAmount").val()		 
 	};  
@@ -1452,7 +1514,13 @@ $("#addOwedForm").submit(function(e){
 	});  
 });
 $("#btnconfirm").click(function() {	
-					
+	var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));			
+	if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){		 
+		if(!(confirm("ការបង់ ប្រាក់មិនគ្រប់គ្រាន់។ ចុច Ok ដើម្បីបន្ត រឺ Cancel ដើម្បីគិតឡើងវីញ។")))
+		{   
+			return;
+		}
+	}
 	$.ajax({
 			url : "${pageContext.request.contextPath}/seller/insertcartsell",
 			type : 'POST',
@@ -1471,39 +1539,57 @@ $("#btnconfirm").click(function() {
 				},
 		success : function(data) {
 								console.log(data);
+								if(data == false)
+								{
+									alert("លោកអ្នកមិន មានទំនិញគ្រប់គ្រាន់ក្នុងដំណើរការ នៃលក់នេះ។ ");
+									return;
+								}
 								clearallsession();
 								$('input[name="orderqty"]').val('0');															
-								var st = "";
-								
+								var st = "";								
 								$('#orderdetail tr').each(function(i,e){
 									var child = $(e).children();
 									st += '<tr><td>' + (i+1) + '</td>';
 									st += '<td>' + child.eq(1).html() + '</td>';
-									st += '<td>' + child.eq(2).html() + '</td>';
 									st += '<td>' + child.eq(3).html() + '</td>';
+									st += '<td>' + child.eq(2).html() + '</td>';
 									st += '<td>' + child.eq(4).html() + '</td></tr>';
 								});
 								$("#tblprint").html(st);
 								$("#printtotal").html($("#totalamount").val());
+								$("#printtotalreil").html($("#totalreil").val());
 								$("#printpaid").html($("#txtpay").val());
 								$("#printpaidr").html($("#txtpayreil").val());
 								$("#printchange").html($("#txtchange").val());
-								var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));
+								$("#printdollar").html($("#txtchangedollar").val());
+								$("#printrate").html($("#exchangerate").val());
+								$("#printcusdate").html($("#cusdate").val());
 								
-								if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){
+								if($("#tocusname").val() != "")
+									$("#printtocusname").html($("#tocusname").val());
+								if($("#cusaddr").val() != "")
+									$("#printcusaddr").html($("#cusaddr").val());
+								if($("#cusphone").val() != "")
+									$("#printcusphone").html($("#cusphone").val());								
+								
+								alert("ការបព្ចារទិញ បានជោគជ័យ។");
+								//var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));
+								window.print();
+								/* if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){
 									$("#addtocart").hide();
 									if(confirm("Do you want to save the rest of payment?"))
 									{
 										searchCustomer();
 										$("#txtAmount").val(parseInt($("#totalreil").val().replace(',', ''))-restPayment);
-										$('#form_add_import').modal({
+										 $('#form_add_import').modal({
 											"backdrop":"static"
 										}) ;
 									}else{
 										window.print();}
 								}else{
 									window.print(); 
-								}
+								} */
+								alert("ដំណើរការ នៃលក់ ទទួលបានជោគជ័យ។ ");
 							},
 			error : function(data, status, er) {
 				console.log("error: " + data + "status: " + status + "er: ");
@@ -1694,17 +1780,23 @@ function searchCustomer(){
 	src="${pageContext.request.contextPath}/resources/js/jquery.ui.autocomplete.scroll.min.js"></script>
 
 <div class="container visible-print-block"> 
-  <p>#26E0, St. 144 Chomkamorn</p>    
-  <p>Phone: 098 497 244</p>        
-  <hr>
+  <div class="text-center"><h3>សេងហ៊ី ចំការមន</h3></div>    
+  <p class="text-center">Tel: 077 72 83 83 / 098 71 17 18</p>         
+    <div>
+  	លក់ជូន : <span id="printtocusname" style="width: 10%;">..................................</span>  	
+  	<span class="pull-right">ទូរស័ព្ទ : <span  id="printcusphone"style="width: 10%;">..................................</span></span>
+  	<br>
+  	អាស័យ​ដ្ឋាន : <span id="printcusaddr" style="width: 10%;">............................</span>  	
+  	<span class="pull-right">ថ្ងៃខែឆ្នាំ : <span  id="printcusdate"style="width: 10%;">..................................</span></span>
+  </div>
   <table class="table table-condensed">
     <thead>
       <tr>
         <th>N<sup>0</sup></th>
-        <th>Name</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Amount</th>
+        <th>ឈ្មោះ</th>
+        <th>ចំនួន</th>
+        <th>តំលៃ</th>
+        <th>សរុប</th>
       </tr>
     </thead>
     <tbody id="tblprint">
@@ -1714,22 +1806,28 @@ function searchCustomer(){
 
 
   <div class="row text-right">
-  <div class="col-xs-2 col-xs-offset-8">
+  <div class="col-xs-3 col-xs-offset-7">
     <p>
       <strong>
-        Total : <br/>
-        Paid $ : <br/>
-        Paid R : <br/>
-        Changed : <br/>
+        ប្រាក់សរុប : <br/>
+        ប្រាក់សរុប : <br/>
+        ទទួលប្រាក់ ដុល្លា : <br/>
+        ទទួលប្រាក់ រៀល : <br/>
+        អាប់ប្រាក់ រៀល : <br/>
+        អាប់ប្រាក់ ដុល្លា : <br/>
+        អត្រាប្រាក់ : 
       </strong>
     </p>
   </div>
   <div class="col-xs-2 text-left">
     <strong>
-      <span id="printtotal"></span><br/>
-      <span id="printpaid"></span><br/>
-      <span id="printpaidr"></span><br/>
-      <span id="printchange"></span><br/>
+      <span id="printtotal"></span> $<br/>
+      <span id="printtotalreil"></span> ៛<br/>
+      <span id="printpaid"></span> $<br/>
+      <span id="printpaidr"></span> ៛<br/>
+      <span id="printchange"></span> ៛<br/>
+      <span id="printdollar"></span> $<br/>
+      <span id="printrate"></span> ៛
     </strong>
   </div>
 </div>

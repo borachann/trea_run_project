@@ -1,5 +1,6 @@
 package com.kosign.wecafe.services.report;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -424,7 +425,7 @@ public class AdminReportSaleServiceIml implements AdminReportSaleService {
 
 	@Override
 	@Transactional
-	public Long getAllTotalAmount(Date startdate, Date enddate) {
+	public BigDecimal getAllTotalAmount(Date startdate, Date enddate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = sdf.format(startdate);
 		String endDate = sdf.format(enddate);
@@ -438,8 +439,9 @@ public class AdminReportSaleServiceIml implements AdminReportSaleService {
 							+ " from sale C INNER JOIN wecafe_order D on C.ord_id = D.order_id "
 							+ " 		LEFT JOIN order_detail A ON C.ord_id = A.order_id " 
 							+ " WHERE D.status = 2 and to_char(C.sale_datetime,'YYYY-mm-dd') between '" + startDate +"' and '" +  endDate +"'");  
-			query.addScalar("total_amount", LongType.INSTANCE); 	
-			return  (Long) (query.uniqueResult());
+			//query.addScalar("total_amount", LongType.INSTANCE); 
+			//System.out.println("total " + query.uniqueResult());
+			return   (BigDecimal) (query.uniqueResult());
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally {

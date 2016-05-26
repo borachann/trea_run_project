@@ -86,7 +86,6 @@ public class CustomerServiceImp implements CustomerService{
 		try {
 			session =  HibernateUtil.getSessionFactory().openSession();
 			session.getTransaction().begin();
- 
 			session.save(cusowed);
 			session.getTransaction().commit();
 			return true;
@@ -103,8 +102,20 @@ public class CustomerServiceImp implements CustomerService{
 
 	@Override
 	public Boolean updateCustomer(Customer customer) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.getTransaction().begin();
+			session.update(customer);
+			session.beginTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}finally {
+			session.close();
+		}		
+		return false;
 	}
 
 	@Override
@@ -125,5 +136,23 @@ public class CustomerServiceImp implements CustomerService{
 		}
 		return 0L; 
 	}
+	@Override
+	public Customer getCustomer(Long cusId) {
+
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();			
+			session.getTransaction().begin();
+			Query query = session.createQuery("FROM Customer where customerId =" + cusId);			
+			@SuppressWarnings("unchecked")
+			Customer supplier = (Customer) query.uniqueResult(); 
+			return supplier;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}
+		return null;
+	}
+ 
 
 }

@@ -691,7 +691,7 @@ a {
 	               xhr.setRequestHeader("Content-Type", "application/json");
 	           },
 			    success: function(data) { 
-			    	
+			    	console.log(data);
 			    	b =true;
 					v=data;
 			    	//var alltotal = 0;
@@ -702,7 +702,7 @@ a {
 							sales.formatDaily(data.reportdaily[i]); 
 						}   
 						$("#CONTENT_DAILY").tmpl(data.reportdaily).appendTo("tbody#tbodydaily"); 
-						$("#allTotalAmount").val(numeral(data.getTotalAmount).format('0,0'));
+						$("#allTotalAmount").val((data.getTotalAmount).toFixed(2));
 					}else{
 						$("tbody#tbodydaily").html("");
 						$("#allTotalAmount").val('');
@@ -860,7 +860,7 @@ a {
 			}); 
 	 } 
 	 sales.formatDetail = function(value){
-		 value["total_amount"] = numeral(value["total_amount"]).format('0,0');
+		 value["total_amount"] =(value["total_amount"]).toFixed(2); 		 
 		 if(value["purchase_type"] == 0)
 		 		value["purchase_type"] = "Import";
 		 else
@@ -875,8 +875,8 @@ a {
 	 		value["order"] = ++j; 
 	 }
 	 sales.formatDaily = function(value){
-		 value["total_amount"] = numeral(value["total_amount"]).format('0,0');
-		 value["pro_unit_price"] = numeral(value["pro_unit_price"]).format('0,0');
+		 value["total_amount"] =(value["total_amount"]).toFixed(2); 
+		 value["pro_unit_price"] = (value["pro_unit_price"]).toFixed(2);
 		 value["product_qty"] = numeral(value["product_qty"]).format('0,0'); 
 		 if(b){
 	 			order = v.pagination.perPage * (v.pagination.currentPage-1);
@@ -888,8 +888,8 @@ a {
 	 		value["order"] = ++j; 
 	 } 
 	 formatDaily_print = function(value){
-		 value["total_amount"] = numeral(value["total_amount"]).format('0,0');
-		 value["pro_unit_price"] = numeral(value["pro_unit_price"]).format('0,0');
+		 value["total_amount"] =(value["total_amount"]).toFixed(2); 
+		 value["pro_unit_price"] = (value["pro_unit_price"]).toFixed(2);
 		 value["product_qty"] = numeral(value["product_qty"]).format('0,0'); 
 		 if(b){
 	 			order = 0;
@@ -901,13 +901,13 @@ a {
 	 		value["order"] = ++j; 
 	 } 
 	 sales.formatWeekly = function(value){ 
-		 value["total_amount"] = numeral(value["day1_amount"] + 
+		 value["total_amount"] = (value["day1_amount"] + 
 					value["day2_amount"] + 
 					value["day3_amount"] +
 					value["day4_amount"] +
 					value["day5_amount"] +
 					value["day6_amount"] +
-					value["day7_amount"]).format('0,0') ;
+					value["day7_amount"]).toFixed(2);
 		value["total_qty"] = numeral(value["day1_qty"] + 
 				 value["day2_qty"] + 
 				 value["day3_qty"] +

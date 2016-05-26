@@ -685,7 +685,7 @@ a {
 							   total_amount += data.get_total_amount[i].purchase_total_amount;
 						   }
 						$("#CONTENT_DAILY").tmpl(data.reportdaily).appendTo("tbody#tbodydaily"); 
-						$("#allTotalAmount").val(numeral(total_amount).format('0,0'));
+						$("#allTotalAmount").val((total_amount).toFixed(2));
 					}else{
 						$("tbody#tbodydaily").html("");
 						$("#allTotalAmount").val('');
@@ -875,7 +875,7 @@ a {
 		 else
 			 	value["purchase_type"] = "Expense";
 		 value["purchase_date"] = value["purchase_date"].substring(0,10);
-		 value["purchase_total_amount"] = numeral(value["purchase_total_amount"]).format('0,0');
+		 value["purchase_total_amount"] = (value["purchase_total_amount"]).toFixed(2);
 		 if(b){
 	 			order = v.pagination.perPage * (v.pagination.currentPage-1);
 	 			j = order + 1;
@@ -890,9 +890,9 @@ a {
 		 		value["purchase_type"] = "Import";
 		 else
 			 	value["purchase_type"] = "Expense"; 
-		 value['product_qty'] = numeral(value['product_qty']).format('0,0');
-		 value['pro_unit_price'] = numeral(value['pro_unit_price']).format('0,0');
-		 value['purchase_total_amount'] = numeral(value['purchase_total_amount']).format('0,0');
+		 value['product_qty'] = (value['product_qty']).toFixed(2);
+		 value['pro_unit_price'] = (value['pro_unit_price']).toFixed(2);
+		 value['purchase_total_amount'] = (value['purchase_total_amount']).toFixed(2);
 		 if(b){
 	 			order = v.pagination.perPage * (v.pagination.currentPage-1);
 	 			j = order + 1;
@@ -1260,8 +1260,8 @@ a {
 				    	   st += "<tr><td>" + (i + 1) + "</td>";
 				    	   st += "<td>" + data[i].proname +"</td>";
 				    	   st += "<td>" + data[i].proqty +"</td>";
-				    	   st += "<td>" + data[i].prounitprice +"</td>";
-				    	   st += "<td>" + data[i].proqty * data[i].prounitprice +"</td>";
+				    	   st += "<td>" + data[i].prounitprice.toFixed(2) +"</td>";
+				    	   st += "<td>" + (data[i].proqty * data[i].prounitprice).toFixed(2) +"</td>";
 				    	   st += "<td>" + data[i].supname +"</td></tr>"
 				    	   amount += data[i].proqty * data[i].prounitprice;
 				       }
@@ -1271,14 +1271,14 @@ a {
 				    	   st += "<tr><td>" + (i + 1) + "</td>";
 				    	   st += "<td>" + data[i].exp_description +"</td>";
 				    	   st += "<td>" + numeral(data[i].exp_qty).format('0,0') +"</td>";
-				    	   st += "<td>" + numeral(data[i].exp_unitprice).format('0,0') +"</td>";
-				    	   st += "<td>" + numeral((data[i].exp_unitprice * data[i].exp_qty)).format('0,0') +"</td>";
+				    	   st += "<td>" + (data[i].exp_unitprice).toFixed(2) +"</td>";
+				    	   st += "<td>" + ((data[i].exp_unitprice * data[i].exp_qty)).toFixed(2) +"</td>";
 				    	   st += "<td>" + data[i].customer +"</td>"; 
-				    	   amount += (data[i].exp_unitprice * data[i].exp_qty);
+				    	   amount += data[i].exp_unitprice * data[i].exp_qty;
 				       }
 		    		}
 					       $("#impProDetail").html(st);
-					       $("#btotalamount").val(amount);
+					       $("#btotalamount").val(amount.toFixed(2));
 					    
 			    	},
 			    error:function(data,status,er) { 

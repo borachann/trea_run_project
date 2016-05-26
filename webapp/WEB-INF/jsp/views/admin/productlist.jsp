@@ -78,7 +78,7 @@
 						<div class="col-sm-12">
 							<h4 class="pull-left page-title">Product List</h4>
 							<ol class="breadcrumb pull-right">
-								<li><a href="#">KOSIGN WECAFE</a></li>
+								<!-- <li><a href="#">KOSIGN WECAFE</a></li> -->
 								<li class="active">Product List</li>
 							</ol>
 						</div>

@@ -200,12 +200,12 @@ public class ExpenseServiceImp implements ExpenseService {
 	public Object getTotalAmount(Date startDate, Date endDate) {
 
 		Session session = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	//	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try{
 			session = sessionFactory.getCurrentSession();
 			SQLQuery query = session.createSQLQuery("SELECT sum(B.expense_qty* B.expense_unitprice) as total_amount"
 					+ " FROM tbl_expense A INNER JOIN tbl_expense_detail B on A.expense_id = B.expense_id "
-					+ " WHERE A.expense_date BETWEEN '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'");
+					+ " WHERE A.expense_date BETWEEN '" + (startDate) + "' and '" + (endDate) + "'");
 			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 			List<Map<String, Object>> sales= (List<Map<String, Object>>)query.list();
 			return sales;

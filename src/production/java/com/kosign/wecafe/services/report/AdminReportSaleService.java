@@ -1,5 +1,6 @@
 package com.kosign.wecafe.services.report;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -22,5 +23,5 @@ public interface AdminReportSaleService {
 	public Long countDaily(Date dateTime) throws HibernateException, ParseException;
 	//public Long countWeekly(Date startDate, Date endDate);
 	public Long count();
-	public Long getAllTotalAmount(Date startdate, Date enddate);
+	public BigDecimal getAllTotalAmount(Date startdate, Date enddate);
 }

@@ -18,6 +18,7 @@
 													<input class=" form-control" id="firstName"
 														name="firstName" type="text">
 												</div>
+												<input type="hidden" id="cus_id">
 											</div>
 											<div class="form-group ">
 												<label for="productname" class="control-label col-lg-2">Phone *</label>
@@ -29,8 +30,8 @@
 										   
 											<div class="form-group">
 												<div class="col-lg-offset-2 col-lg-10">
-													<button class="btn btn-success waves-effect waves-light"  
-														type="submit">Save</button>
+													<button class="btn btn-success waves-effect waves-light" id="saveCus" type="submit">Save</button>
+													<button class="btn btn-success waves-effect waves-light" id="updateCus">Update</button>
 													<button class="btn btn-default waves-effect" data-dismiss="modal" type="button">Cancel</button>
 												</div>
 											</div>

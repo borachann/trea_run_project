@@ -9,6 +9,7 @@ import com.kosign.wecafe.entities.Pagination;
 public interface CustomerService {
 	public List<Customer> getAllCustomer(Pagination pagination );
 	public List<Customer> getAllCustomers();
+	public Customer getCustomer(Long cusId);
 	public Boolean saveCustomer(Customer customer);
 	public Boolean updateCustomer(Customer customer);
 	public List<Customer> searchCustomer(String str);

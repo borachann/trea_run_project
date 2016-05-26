@@ -44,7 +44,7 @@ public class SellProductServiceImpl implements SellProductsService {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			Query query = session.createQuery("FROM Product WHERE status = true");
+			Query query = session.createQuery("FROM Product WHERE status = true and qty>0");
 
 			List<Product> products = query.list();
 
@@ -285,6 +285,26 @@ public class SellProductServiceImpl implements SellProductsService {
 		}
 		return null;
 	}
-	
+	@Override
+	@Transactional
+	public Boolean validatePro(List<Cart> carts) {
+		Session session = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+
+			for (Cart cart : carts) {
+				Product product = session.get(Product.class, new Long(cart.getProductId()));	
+				System.out.println("validationg " + (product.getQuantity() - cart.getQuantity()));
+				if((product.getQuantity() - cart.getQuantity()) < 0 )
+					return false;
+			}			
+			return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			// session.close();
+		}
+		return false;
+	}
 
 }

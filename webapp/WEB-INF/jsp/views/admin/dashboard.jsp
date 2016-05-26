@@ -136,7 +136,7 @@
 						<div class="col-sm-12">
 							<h4 class="pull-left page-title">Welcome !</h4>
 							<ol class="breadcrumb pull-right">
-								<li><a href="#">KOSIGN WECAFE</a></li>
+								<!-- <li><a href="#">KOSIGN WECAFE</a></li> -->
 								<li class="active">Dashboard</li>
 							</ol>
 						</div>
