@@ -91,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.and()
 					.formLogin()
 					.loginPage("/admin/login")
-					.failureUrl("/admin/login?error")
+					.failureUrl("/admin/login") //.failureUrl("/admin/login?error")
 					//.defaultSuccessUrl("/admin/")
 					.successHandler(customSuccessConfirguation)
 					.usernameParameter("username")
