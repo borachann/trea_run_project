@@ -286,8 +286,7 @@
 
 	<!--  <script src="http://malsup.github.com/jquery.form.js"></script> -->
 
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>	
+	<script	src="${pageContext.request.contextPath}/resources/js/jquery.form.min.js"></script>	
 	<script>
             var resizefunc = [];
      </script>

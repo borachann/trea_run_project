@@ -218,8 +218,7 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/js/jquery.todo.js"></script>
 
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+	<script	src="${pageContext.request.contextPath}/resources/js/jquery.form.min.js"></script>
 
 	<script type="text/javascript">
     		$(function(){
