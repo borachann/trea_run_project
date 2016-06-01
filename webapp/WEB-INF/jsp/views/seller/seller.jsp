@@ -301,7 +301,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer" style="height: 80px; overflow: auto;">
+					<div class="modal-footer" style="height: 80px;overflow: auto;">
 						<button type="button" class="btn btn-default" id="btnUpdate">
 							<span class="button b-close"><span>Update</span></span>
 							<!-- 							<span style="display:none;" class='btnhidden' id='orderID'></span> -->
@@ -419,7 +419,7 @@
 					
 					</div>
 				</div>
-				<div class="modal-footer" style="height: 80px;">
+				<div class="modal-footer" style="height: 80px; overflow: auto;">
 					<div align="right">
 						<button type="button" id="btnbuymore" class="btn btn-default">
 							<span class="button b-close"><span>បន្ថៃមទំនិញ</span></span>
@@ -630,7 +630,7 @@
 		</div>
 
 
-		<%@ include file="footer.jsp"%>
+	<span class="hidden-print">	<%@ include file="footer.jsp"%></span>
 		<%@ include file="owedPaymentAdd.jsp"%>
 		<!-- ======================================================================================= -->
 	</div>
@@ -1286,7 +1286,7 @@
 										st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
 										amount += data[i].totalAmount;
 									}
-									$("#totalamount").val(amount);
+									$("#totalamount").val(amount.toFixed(2));
 									$("#exchangerate").val(exchangerate);
 									$("#totalreil").val(numeral(amount*exchangerate).format('0,0'));
 									$("#orderdetail").html(st);
@@ -1589,7 +1589,7 @@ $("#btnconfirm").click(function() {
 								}else{
 									window.print(); 
 								} */
-								alert("ដំណើរការ នៃលក់ ទទួលបានជោគជ័យ។ ");
+								//alert("ដំណើរការ នៃលក់ ទទួលបានជោគជ័យ។ ");
 							},
 			error : function(data, status, er) {
 				console.log("error: " + data + "status: " + status + "er: ");
@@ -1779,12 +1779,12 @@ function searchCustomer(){
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.ui.autocomplete.scroll.min.js"></script>
 
-<div class="container visible-print-block"> 
+<div class="container visible-print-block"  style="font-size : 11px;"> 
   <div class="text-center"><h3>សេងហ៊ី ចំការមន</h3></div>    
   <p class="text-center">Tel: 077 72 83 83 / 098 71 17 18</p>         
     <div>
   	លក់ជូន : <span id="printtocusname" style="width: 10%;">..................................</span>  	
-  	<span class="pull-right">ទូរស័ព្ទ : <span  id="printcusphone"style="width: 10%;">..................................</span></span>
+  	<span class="pull-right">ទូរស័ព្ទ : <span  id="printcusphone"style="width: 10%;">.....................</span></span>
   	<br>
   	អាស័យ​ដ្ឋាន : <span id="printcusaddr" style="width: 10%;">............................</span>  	
   	<span class="pull-right">ថ្ងៃខែឆ្នាំ : <span  id="printcusdate"style="width: 10%;">..................................</span></span>
@@ -1792,11 +1792,11 @@ function searchCustomer(){
   <table class="table table-condensed">
     <thead>
       <tr>
-        <th>N<sup>0</sup></th>
-        <th>ឈ្មោះ</th>
-        <th>ចំនួន</th>
-        <th>តំលៃ</th>
-        <th>សរុប</th>
+        <td>N<sup>0</sup></td>
+        <td>ឈ្មោះ</td>
+        <td>ចំនួន</td>
+        <td>តំលៃ</td>
+        <td>សរុប</td>
       </tr>
     </thead>
     <tbody id="tblprint">
@@ -1806,7 +1806,7 @@ function searchCustomer(){
 
 
   <div class="row text-right">
-  <div class="col-xs-3 col-xs-offset-7">
+  <div class="col-xs-4 col-xs-offset-6">
     <p>
       <strong>
         ប្រាក់សរុប : <br/>
