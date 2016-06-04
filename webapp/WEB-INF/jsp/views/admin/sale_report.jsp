@@ -742,7 +742,7 @@ a {
 							   sales.formatWeekly(data.reportweekly[i]);
 						}   
 						$("#CONTENT_WEEKLY").tmpl(data.reportweekly).appendTo("tbody#tbodyweekly");  
-						$("#allTotalAmount").val(numeral(data.getTotalAmount).format('0,0'));
+						$("#allTotalAmount").val((data.getTotalAmount).toFixed(2));
 					}else{
 						$("tbody#tbodyweekly").html("");
 						$("#allTotalAmount").val('');
@@ -804,7 +804,7 @@ a {
 				    		//total_all += total_amount;
 						}
 				    	$("#monthlytable tbody").html(st);
-				    	$("#allTotalAmount").val(numeral(data.getTotalAmount).format('0,0'));
+				    	$("#allTotalAmount").val((data.getTotalAmount).toFixed(2));
 				    } 
 			    	    if(check){
 				    		sales.setPagination(data.pagination.totalPages,1);
@@ -843,7 +843,7 @@ a {
 				    	//total_amount += parseInt(data.reportyear[i].total_amount.replace(',',''));
 				    	}
 			    		 $("#CONTENT_YEARLY").tmpl(data.reportyear).appendTo("tbody#tbodyyearly");	
-			    		 $("#allTotalAmount").val(numeral(data.getTotalAmount).format('0,0'));
+			    		 $("#allTotalAmount").val((data.getTotalAmount).toFixed(2));
 			    	}
 			    	else
 			    		{
