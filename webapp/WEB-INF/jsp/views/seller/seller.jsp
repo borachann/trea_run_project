@@ -1393,7 +1393,7 @@
 												$("#myModal").bPopup();
 											} else if (_this.html() == "Cancel") {
 
-											} else{
+											} else{ 
 												_this = $(this);
 												 var proId =  _this.parents(".panel-body").find("#idpro").html(); 
 												 $.ajax({
