@@ -182,15 +182,15 @@
 														required="required">
 												</div>
 											</div>
-											<%-- <div class="form-group ">
-												<label for="costprice" class="control-label col-lg-2">Cost
+											<div class="form-group ">
+												<label for="costprice" class="control-label col-lg-2">Retail
 													Price</label>
 												<div class="col-lg-10">
 													<input class="form-control " id="costPrice"
 														name="costPrice" type="text" value="${product.costPrice }"
 														required="required">
 												</div>
-											</div> --%>
+											</div>
 											<div class="form-group ">
 												<label for="costprice" class="control-label col-lg-2">Sale
 													Price</label>

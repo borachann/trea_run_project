@@ -105,6 +105,12 @@
 #myCarousel1{
     		interval: false;
 	};
+#tblprint{
+	border-collapse: collapse;
+}
+#tblprint td{
+	border: 1px solid black;
+}
 </style>
 
 </head>
@@ -154,6 +160,7 @@
 			<div class="carousel-inner" role="listbox" style="height: 888px;">
 				<%
 					List<Product> products = (List<Product>) request.getAttribute("products");
+				//out.println("products" + products);
 					int A = products.size();
 					int i;
 					boolean T = true;
@@ -178,9 +185,15 @@
 										<div style="float: left;">
 											<div id="idpro" style="display: none;"><%=products.get(i).getProductId()%></div>
 											<div style="width: 300px;">
+											<span class='col-md-8'>
 												<img id="imgpro"
 													src="${pageContext.request.contextPath}/resources/images/products/<%=products.get(i).getImage()%>">
 												<span id="Proname"> <%=products.get(i).getProductName()%></span>
+											</span>
+												<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 35px;' id='saleType'>
+										 	<option value="<%=products.get(i).getSalePrice()%>"><%=products.get(i).getUnit().getUnitName()%></option>
+										 	<option value="<%=products.get(i).getCostPrice()%>"><%=products.get(i).getUnit().getTo()%></option>
+										 	</select></span>
 											</div>
 
 											<input type="text" class="form-control"
@@ -287,8 +300,15 @@
 								<label class="control-label col-sm-3" for="txtName">Qty
 									:</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" maxlength="30"
-										name="txtName" id="qtytxt">
+									<span class="col-sm-5">
+									<input type="text" class="form-control" maxlength="30" name="txtName" id="qtytxt">
+									</span>
+									<span class="col-sm-7">
+										<select class="form-control" id="editSaleType">
+									        <option>1</option>
+									        <option>2</option>
+								      	</select>
+									</span>
 								</div>
 							</div>
 							<div class="form-group">
@@ -327,7 +347,7 @@
 					<h4 class="modal-title">មុខ ទំនិញ</h4>
 
 				</div>
-				<div class="modal-body" style="height: 290px;">
+				<div class="modal-body" style="overflow: auto;">
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -850,8 +870,12 @@
 										 	str += "<div class='panel-body'>";
 										 	str += "<div style='float: left;'>"
 										 	str += "<div id='idpro' style='display: none;'>" + data.searchpro[i].productId + "</div>";
-										 	str += "<div style='width: 300px;'> <img id='imgpro' src='${pageContext.request.contextPath}/resources/images/products/"+  data.searchpro[i].image + "'/>";
-										 	str += "<span id='Proname'> " + data.searchpro[i].productName + "</span></div>";
+										 	str += "<div style='width: 300px;'><span class='col-md-8'> <img id='imgpro' src='${pageContext.request.contextPath}/resources/images/products/"+  data.searchpro[i].image + "'/>";
+										 	str += "<span id='Proname'> " + data.searchpro[i].productName + "</span></span>";
+										 	str += "<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 33px;' id='saleType'>";
+										 	str += "<option value="+ data.searchpro[i].salePrice +">" + data.searchpro[i].unit.unitName + "</option>";
+										 	str += "<option value="+ data.searchpro[i].costPrice +">" + data.searchpro[i].unit.to + "</option>";
+										 	str += "</select></span></div>";
 										 	str += "<input type='text' class='form-control' value='" + data.searchpro[i].productId + "'";
 										 	str += " id='pro_id' style='display: none;'>";
 										 	str += "<input type='text' class='form-control' value='" +data.searchpro[i].productName + "'";
@@ -905,6 +929,11 @@
 										return;
 									} else
 										$(this).removeClass("borderRed");
+						});
+						// change price of produce when change type of sale paroduce
+						$(document).on("change", "#saleType", function(){
+							cost_price = $(this).find(":selected").val();
+							$(this).parents(".panel-body").find("#PRICE").text(cost_price);
 						});
 						
 						$(document).on("click", "#btn_add", function() {
@@ -1237,7 +1266,7 @@
 																	.html(
 																			data[0][1].orderId);
 															$("#addtocart")
-																	.bPopup();
+																	.bPopup({follow: [false, false], position: ["10%","50%"]});
 														},
 														error : function(data,
 																status, er) {
@@ -1277,8 +1306,7 @@
 												+ "</td>";
 										st += "<td>" + data[i].price
 												+ "</td>";
-										st += "<td>" + data[i].quantity
-												+ "</td>";
+										st += "<td>" + data[i].quantity + ' ' + data[i].saleType +"</td>";
 										st += "<td>"
 												+ data[i].totalAmount
 												+ "</td>";												
@@ -1315,7 +1343,7 @@
 							$("#txtchangedollar").val("0");							
 							$("#cusdate").val(moment().format('DD-MM-YYYY'));
 							
-							$("#addtocart").bPopup();
+							$("#addtocart").bPopup({follow: [false, false], position: ["10%","5%"]});
 
 						});
 
@@ -1356,30 +1384,11 @@
 												//document.getElementById("demo").innerHTML = txt;
 
 											} else if (_this.html() == "Edit") {
-												_productid = $(this).parent()
-														.parent().children()
-														.eq(0).html();
-												var proId = $(this).parent()
-														.parent().children()
-														.eq(0).html();
-												$("#productNm").html(
-														$(this).parent()
-																.parent()
-																.children().eq(
-																		1)
-																.html());
-												$("#productprice").html(
-														$(this).parent()
-																.parent()
-																.children().eq(
-																		2)
-																.html());
-												$("#qtytxt").val(
-														$(this).parent()
-																.parent()
-																.children().eq(
-																		3)
-																.html());
+												_productid = $(this).parent().parent().children().eq(0).html();
+												var proId = $(this).parent().parent().children().eq(0).html();
+												$("#productNm").html($(this).parent().parent().children().eq(1).html());
+												$("#productprice").html($(this).parent().parent().children().eq(2).html());
+												$("#qtytxt").val(parseInt($(this).parent().parent().children().eq(3).html()));
 												$("#procomment").val($(this).parent().parent().children().eq(5).html());
 												$("#myModal").bPopup();
 											} else if (_this.html() == "Cancel") {
@@ -1441,7 +1450,7 @@
 											var proNm = $(this).parents(".panel-body").find("#pro_nm").val();
 											var proId = $(this).parents(".panel-body").find("#pro_id").val();
 											var price = $(this).parents(".panel-body").find("#PRICE").html();
-											var price = $(this).parents(".panel-body").find("#PRICE").html();
+											var saletype = $(this).parents(".panel-body").find("#saleType").find(":selected").text();
 											var proqty = 1;
 											var _this = $(this);
 											var totalAmount = proqty * price;
@@ -1451,7 +1460,8 @@
 												"productName" : proNm,
 												"price" : price,
 												"quantity" : proqty,
-												"totalAmount" : totalAmount
+												"totalAmount" : totalAmount,
+												"saleType" : saletype
 											};
 											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/addtocart",
@@ -1779,7 +1789,7 @@ function searchCustomer(){
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.ui.autocomplete.scroll.min.js"></script>
 
-<div class="container visible-print-block"  style="font-size : 11px;"> 
+<div class="container visible-print-block"  style="font-size : 13px;"> 
   <div class="text-center"><h3>សេងហ៊ី ចំការមន</h3></div>    
   <p class="text-center">Tel: 077 72 83 83 / 098 71 17 18</p>         
     <div>

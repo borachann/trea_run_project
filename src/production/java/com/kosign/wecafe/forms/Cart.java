@@ -23,6 +23,17 @@ public class Cart implements Serializable{
 	private String comment;
 
 	private String time;
+	
+	private String saleType;
+	
+	public String getSaleType() {
+		return saleType;
+	}
+
+	public void setSaleType(String saleType) {
+		this.saleType = saleType;
+	}
+
 	public String getTime() {
 		return time;
 	}

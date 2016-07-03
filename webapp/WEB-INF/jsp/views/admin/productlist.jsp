@@ -113,11 +113,11 @@
 														<th>Name</th>
 														<th>Quantity</th>
 														<th>Unit Price</th>
-														<!-- <th>Cost Price</th> -->
+														<th>Retail Price</th>
 														<th>Sale Price</th>
 														<th>Category</th>
 														<th>Unit</th>
-														<th>Image</th>
+														<!-- <th>Image</th> -->
 														<th>Status</th>
 														<th>Action</th>
 													</tr>
@@ -203,7 +203,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<%-- <td style="text-align:center;"><img style="text-align:center;" src="${pageContext.request.contextPath}/resources/images/products/{{= image}}" class="img-thumbnail" alt="" width="30px" height="30px"/></td> --%>
 	<!-- ========== Include product add ========== -->
 	<%@ include file="productadd.jsp"%>
 	
@@ -214,11 +214,11 @@
 				<td class="content-left"><span class="ellipsis">{{= productName}}</span></td>
 				<td class="content-left" >{{= quantity + " " + unit.to}}</td>
 				<td class="content-left">1 {{= unit.unitName}} = {{= unitPrice}} <span style="font-weight:bold;"> $ </span></td>
-				
+				<td class="content-left">1 {{= unit.to}} = {{= costPrice}} <span style="font-weight:bold;"> $ </span></td>
 				<td style="text-align:right;">{{= salePrice}} <span style="font-weight:bold;"> $ </span></td>
 				<td class="content-left">{{= category.catName}}</td>
 				<td class="content-left">{{= unit.unitName +" (" + unit.qty + " " + unit.to +")"}}</td>
-				<td style="text-align:center;"><img style="text-align:center;" src="${pageContext.request.contextPath}/resources/images/products/{{= image}}" class="img-thumbnail" alt="" width="30px" height="30px"/></td>
+				
 				<td style="text-align:center;">
 					<span>
 						<a href="javascript:;" class="btn {{= button}} btn-sm waves-effect" type="button" id="btnStatus">{{= status}}</a>
