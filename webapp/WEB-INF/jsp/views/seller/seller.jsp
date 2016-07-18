@@ -236,6 +236,10 @@
 												<a href="#"> <span id="btnplus" class="glyphicon glyphicon-plus"></span>
 												</a>
 											</div>
+											<br>	<%=products.get(i).getQuantity()/products.get(i).getUnit().getQty()%> 
+											 		<%=products.get(i).getUnit().getUnitName()%>, 
+											 		<%=products.get(i).getQuantity()%products.get(i).getUnit().getQty()%> 
+											  		<%=products.get(i).getUnit().getTo()%> 
 										</div>
 									</div>
 								</div>
@@ -882,7 +886,7 @@
 										 	str += " id='pro_nm' + style='display: none;'></div>";
 										 	str += "<div style='text-align: right;'>";
 										 	str += "<span id='PRICE'>"+ data.searchpro[i].salePrice + "</span><span>&nbsp; Riels</span>";
-										 	str += "<div><br><a href='#'><span id='btnminus' class='glyphicon glyphicon-minus'> </span></a>"; 
+										 	str += "<div><br><a href='#'><span id='btnminus' class='glyphicon glyphicon-minus'> </span></a> "; 
 										 	
 											var exist = false;  
 										 	for(j = 0; j < data.carts.length; j++) {
@@ -897,8 +901,10 @@
 												str += " <input id='txtqty' name='orderqty' type='text' readonly='readonly' style='width: 10%; text-align: center;' value='0'>";													
 											} 
 											
-											str += "<a href='#'> <span id='btnplus' class='glyphicon glyphicon-plus'></span></a>"
-											str += "</div></div></div></div></div>";										
+											str += "<a href='#'> <span id='btnplus' class='glyphicon glyphicon-plus'></span></a></div>";
+											str += "<br>" +Math.floor(data.searchpro[i].quantity/data.searchpro[i].unit.qty) + " " + data.searchpro[i].unit.unitName; 
+										 	str += ", " + data.searchpro[i].quantity%data.searchpro[i].unit.qty + " " + data.searchpro[i].unit.to;
+											str += "</div></div></div></div>";										
 										}  
 										str += "</div></div>";
 										if (A / 6 >= 1) {
@@ -934,6 +940,42 @@
 						$(document).on("change", "#saleType", function(){
 							cost_price = $(this).find(":selected").val();
 							$(this).parents(".panel-body").find("#PRICE").text(cost_price);
+							if($(this).parents(".panel-body").find("#txtqty").val() == 0)
+								return;
+							
+							var proId = $(this).parents(".panel-body").find("#pro_id").val();
+							var price = $(this).parents(".panel-body").find("#PRICE").html();
+							var saletype = $(this).parents(".panel-body").find("#saleType").find(":selected").text();
+							json = {
+								    "productId": proId,
+								    "price": price,
+								    "saleType": saletype
+								};
+							
+							console.log(json);
+							$.ajax({
+							    url: "${pageContext.request.contextPath}/seller/changeCate",
+							    type: 'POST',
+							    datatype: 'JSON',
+							    data: JSON.stringify(json),
+							    beforeSend: function(xhr) {
+							        xhr.setRequestHeader("Accept", "application/json");
+							        xhr.setRequestHeader("Content-Type", "application/json");
+							    },
+							    success: function(data) {
+							     /*   getsizeSession();
+							        for (i = 0; i < data.length; i++) {
+							            if (data[i].productId == proId) {
+							                _this.parents(".panel-body").find("#txtqty").val(data[i].quantity);
+							                break;
+							            }
+							        }*/
+							    },
+							    error: function(data, status, er) {
+							        console.log("error: " + data + "status: " + status + "er: ");
+							    }
+							});
+							
 						});
 						
 						$(document).on("click", "#btn_add", function() {
@@ -1257,9 +1299,7 @@
 																st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
 																//amount += data[i][1].orderAmount;
 															}
-															$("#totalamount")
-																	.val(
-																			data[0][1].orderAmount);
+															$("#totalamount").val(data[0][1].orderAmount.toFixed(2));
 															$("#orderdetail")
 																	.html(st);
 															$("#orderID")
@@ -1347,14 +1387,14 @@
 
 						});
 
-						$(document).on('click',"#btndelete, #btnminus, #btnedit,#cancelbtn",function() { 
+						$(document).on('click',"#btndelete, #btnminus, #btnedit,#cancelbtn",function() {
 											_thisRow = $(this).parents("tr");
 											var st = "";
 											var _url = "";
 											var amount = 0;
 											_this = $(this);
 
-											if (_this.html() == "Delete") { 
+											if (_this.html() == "Delete") {
 												var proId = $(this).parent().parent().children().eq(0).html(); 
 												var txt;
 												var msg = confirm("Do you want to remove " + $(this).parent().parent().children().eq(1).html() + " from your cart?");
@@ -1369,7 +1409,7 @@
 																},
 																success : function(data) {
 																	console.log(data);
-																	$("#totalamount").val($("#totalamount").val() - (_this.parent().parent().children().eq(4).html()));
+																	$("#totalamount").val(($("#totalamount").val() - (_this.parent().parent().children().eq(4).html())).toFixed(2));
 																	_this.parents("tr").remove();
 																},
 																error : function(data, status, er) {
@@ -1393,13 +1433,30 @@
 												$("#myModal").bPopup();
 											} else if (_this.html() == "Cancel") {
 
-											} else{ 
+											} else{
 												_this = $(this);
-												 var proId =  _this.parents(".panel-body").find("#idpro").html(); 
+												var proNm = $(this).parents(".panel-body").find("#pro_nm").val();
+												var proId = $(this).parents(".panel-body").find("#pro_id").val();
+												var price = $(this).parents(".panel-body").find("#PRICE").html();
+												var saletype = $(this).parents(".panel-body").find("#saleType").find(":selected").text();
+												var proqty = 1;
+												var _this = $(this);
+												var totalAmount = proqty * price;
+													console.log(totalAmount);
+													json = {
+														"productId" : proId,
+														"productName" : proNm,
+														"price" : price,
+														"quantity" : proqty,
+														"totalAmount" : totalAmount,
+														"saleType" : saletype
+													};
+
 												 $.ajax({
-														url : "${pageContext.request.contextPath}/seller/removetocart/"+proId, /* deletedOrderProduct/" + _orderid + "/" + proId, */
+														url : "${pageContext.request.contextPath}/seller/removetocart/", /* deletedOrderProduct/" + _orderid + "/" + proId, */
 														type : 'POST',
 														dataType : 'JSON',
+														data : JSON.stringify(json),
 														beforeSend : function(xhr) {
 															xhr.setRequestHeader("Accept", "application/json");
 															xhr.setRequestHeader("Content-Type", "application/json");

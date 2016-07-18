@@ -137,6 +137,30 @@ public class SellController {
 				System.out.println("carts.get(i).getProductName()" + carts.get(i).getProductName());
 				if(carts.get(i).getProductId().equals(cart.getProductId())){
 					carts.get(i).setQuantity(carts.get(i).getQuantity()+ cart.getQuantity());
+					carts.get(i).setPrice(cart.getPrice());
+					carts.get(i).setTotalAmount(cart.getPrice().multiply(new BigDecimal(carts.get(i).getQuantity())));
+					carts.get(i).setSaleType(cart.getSaleType());
+					session.setAttribute("CARTS", carts);
+					return carts;
+				}
+			}
+		}
+		carts.add(cart);  
+		session.setAttribute("CARTS", carts); 
+		return carts;
+	}
+	
+	@RequestMapping(value="/seller/changeCate", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+	public  @ResponseBody List<Cart> changecate(HttpSession session, @RequestBody Cart cart){
+		List<Cart> carts = new ArrayList<Cart>();
+		if(session.getAttribute("CARTS")!=null){
+			carts = (ArrayList<Cart>)session.getAttribute("CARTS"); 
+			for(int i=0; i <carts.size();i++){ 
+				//System.out.println("cart.getProductName" + cart.getProductName());
+				//System.out.println("carts.get(i).getProductName()" + carts.get(i).getProductName());
+				if(carts.get(i).getProductId().equals(cart.getProductId())){
+					//carts.get(i).setQuantity(carts.get(i).getQuantity()+ cart.getQuantity());
+					carts.get(i).setPrice(cart.getPrice());
 					carts.get(i).setTotalAmount(cart.getPrice().multiply(new BigDecimal(carts.get(i).getQuantity())));
 					carts.get(i).setSaleType(cart.getSaleType());
 					session.setAttribute("CARTS", carts);
@@ -168,21 +192,23 @@ public class SellController {
 		return carts;
 	}
 
-	@RequestMapping(value="/seller/removetocart/{id}", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Cart> removeproductfromcart(HttpSession session, @PathVariable("id") Long productId){
-		System.out.println("Product ID = " + productId);
+	@RequestMapping(value="/seller/removetocart/", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Cart> removeproductfromcart(HttpSession session, @RequestBody Cart cartReq){
+		
 		List<Cart> carts = new ArrayList<Cart>();
 		if(session.getAttribute("CARTS") != null){
 			carts = (ArrayList<Cart>)session.getAttribute("CARTS");
 		}
 			
 		for(Cart cart: carts){
-			if(cart.getProductId().equals(productId)){
+			if(cart.getProductId().equals(cartReq.getProductId())){
 				long bb = cart.getQuantity();
 				long aa = 1L;
 				if( bb > aa){
 					cart.setQuantity(cart.getQuantity() - 1);
+					cart.setPrice(cartReq.getPrice());
 					cart.setTotalAmount(cart.getPrice().multiply(new BigDecimal(cart.getQuantity())));
+					cart.setSaleType(cartReq.getSaleType());
 					System.out.println("cart.getQuantity()" + cart.getQuantity());
 				}
 				else{
