@@ -190,9 +190,9 @@
 													src="${pageContext.request.contextPath}/resources/images/products/<%=products.get(i).getImage()%>">
 												<span id="Proname"> <%=products.get(i).getProductName()%></span>
 											</span>
-												<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 35px;' id='saleType'>
-										 	<option value="<%=products.get(i).getSalePrice()%>"><%=products.get(i).getUnit().getUnitName()%></option>
-										 	<option value="<%=products.get(i).getCostPrice()%>"><%=products.get(i).getUnit().getTo()%></option>
+												<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 35px;' id='saleType' data-uQty="<%=products.get(i).getUnit().getQty()%>">
+										 	<option value="<%=products.get(i).getSalePrice()%>" data-unitQty="<%=products.get(i).getUnit().getQty()%>"><%=products.get(i).getUnit().getUnitName()%></option>
+										 	<option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
 										 	</select></span>
 											</div>
 
@@ -876,9 +876,9 @@
 										 	str += "<div id='idpro' style='display: none;'>" + data.searchpro[i].productId + "</div>";
 										 	str += "<div style='width: 300px;'><span class='col-md-8'> <img id='imgpro' src='${pageContext.request.contextPath}/resources/images/products/"+  data.searchpro[i].image + "'/>";
 										 	str += "<span id='Proname'> " + data.searchpro[i].productName + "</span></span>";
-										 	str += "<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 33px;' id='saleType'>";
-										 	str += "<option value="+ data.searchpro[i].salePrice +">" + data.searchpro[i].unit.unitName + "</option>";
-										 	str += "<option value="+ data.searchpro[i].costPrice +">" + data.searchpro[i].unit.to + "</option>";
+										 	str += "<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 33px;' id='saleType' data-uQty='"+ data.searchpro[i].unit.qty +"'>";
+										 	str += "<option value='"+ data.searchpro[i].salePrice +"'data-unitQty='"+ data.searchpro[i].unit.qty + "'>" + data.searchpro[i].unit.unitName + "</option>";
+										 	str += "<option value='"+ data.searchpro[i].costPrice +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
 										 	str += "</select></span></div>";
 										 	str += "<input type='text' class='form-control' value='" + data.searchpro[i].productId + "'";
 										 	str += " id='pro_id' style='display: none;'>";
@@ -938,8 +938,13 @@
 						});
 						// change price of produce when change type of sale paroduce
 						$(document).on("change", "#saleType", function(){
-							cost_price = $(this).find(":selected").val();
+							var cost_price = $(this).find(":selected").val();
+							var uQty = $(this).find(":selected").data('unitqty');
+							
 							$(this).parents(".panel-body").find("#PRICE").text(cost_price);
+							$(this).data("uqty",uQty);
+							
+							
 							if($(this).parents(".panel-body").find("#txtqty").val() == 0)
 								return;
 							
@@ -949,7 +954,8 @@
 							json = {
 								    "productId": proId,
 								    "price": price,
-								    "saleType": saletype
+								    "saleType": saletype,
+								    "unitqty" : uQty
 								};
 							
 							console.log(json);
@@ -957,7 +963,7 @@
 							    url: "${pageContext.request.contextPath}/seller/changeCate",
 							    type: 'POST',
 							    datatype: 'JSON',
-							    data: JSON.stringify(json),
+							    data: json,
 							    beforeSend: function(xhr) {
 							        xhr.setRequestHeader("Accept", "application/json");
 							        xhr.setRequestHeader("Content-Type", "application/json");
@@ -1439,6 +1445,7 @@
 												var proId = $(this).parents(".panel-body").find("#pro_id").val();
 												var price = $(this).parents(".panel-body").find("#PRICE").html();
 												var saletype = $(this).parents(".panel-body").find("#saleType").find(":selected").text();
+												
 												var proqty = 1;
 												var _this = $(this);
 												var totalAmount = proqty * price;
@@ -1508,6 +1515,7 @@
 											var proId = $(this).parents(".panel-body").find("#pro_id").val();
 											var price = $(this).parents(".panel-body").find("#PRICE").html();
 											var saletype = $(this).parents(".panel-body").find("#saleType").find(":selected").text();
+											var uQty = $(this).parents(".panel-body").find("#saleType").data("uqty");
 											var proqty = 1;
 											var _this = $(this);
 											var totalAmount = proqty * price;
@@ -1518,7 +1526,8 @@
 												"price" : price,
 												"quantity" : proqty,
 												"totalAmount" : totalAmount,
-												"saleType" : saletype
+												"saleType" : saletype,
+												"unitqty" : uQty
 											};
 											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/addtocart",
@@ -1580,7 +1589,7 @@ $("#addOwedForm").submit(function(e){
 	    }
 	});  
 });
-$("#btnconfirm").click(function() {	
+$("#btnconfirm").click(function() {
 	var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));			
 	if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){		 
 		if(!(confirm("ការបង់ ប្រាក់មិនគ្រប់គ្រាន់។ ចុច Ok ដើម្បីបន្ត រឺ Cancel ដើម្បីគិតឡើងវីញ។")))

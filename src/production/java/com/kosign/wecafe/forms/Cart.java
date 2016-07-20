@@ -26,6 +26,16 @@ public class Cart implements Serializable{
 	
 	private String saleType;
 	
+	private Long untiqty;
+	
+	public Long getUntiqty() {
+		return untiqty;
+	}
+
+	public void setUntiqty(Long untiqty) {
+		this.untiqty = untiqty;
+	}
+
 	public String getSaleType() {
 		return saleType;
 	}
