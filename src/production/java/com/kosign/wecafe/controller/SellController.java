@@ -130,17 +130,16 @@ public class SellController {
 	@RequestMapping(value="/seller/addtocart", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
 	public  @ResponseBody List<Cart> addProductToCart(HttpSession session, @RequestBody Cart cart){
 		List<Cart> carts = new ArrayList<Cart>();
+		System.out.println("cart.getProductName" + cart.getUnitqty());
 		if(session.getAttribute("CARTS")!=null){
 			carts = (ArrayList<Cart>)session.getAttribute("CARTS"); 
 			for(int i=0; i <carts.size();i++){
-				System.out.println("cart.getProductName" + cart.getProductName());
-				System.out.println("carts.get(i).getProductName()" + carts.get(i).getProductName());
 				if(carts.get(i).getProductId().equals(cart.getProductId())){
 					carts.get(i).setQuantity(carts.get(i).getQuantity()+ cart.getQuantity());
 					carts.get(i).setPrice(cart.getPrice());
 					carts.get(i).setTotalAmount(cart.getPrice().multiply(new BigDecimal(carts.get(i).getQuantity())));
 					carts.get(i).setSaleType(cart.getSaleType());
-					carts.get(i).setUntiqty(cart.getUntiqty());
+					carts.get(i).setUnitqty(cart.getUnitqty());
 					session.setAttribute("CARTS", carts);
 					return carts;
 				}
@@ -157,8 +156,8 @@ public class SellController {
 		List<Cart> carts = new ArrayList<Cart>();
 		if(session.getAttribute("CARTS")!=null){
 			carts = (ArrayList<Cart>)session.getAttribute("CARTS"); 
-			
-			for(int i=0; i <carts.size();i++){ 
+			System.out.println("cart.getProductName" + cart.toString());
+			for(int i=0; i <carts.size();i++){
 				//System.out.println("cart.getProductName" + cart.getProductName());
 				//System.out.println("carts.get(i).getProductName()" + carts.get(i).getProductName());
 				if(carts.get(i).getProductId().equals(cart.getProductId())){
@@ -166,7 +165,7 @@ public class SellController {
 					carts.get(i).setPrice(cart.getPrice());
 					carts.get(i).setTotalAmount(cart.getPrice().multiply(new BigDecimal(carts.get(i).getQuantity())));
 					carts.get(i).setSaleType(cart.getSaleType());
-					carts.get(i).setUntiqty(cart.getUntiqty());
+					carts.get(i).setUnitqty(cart.getUnitqty());
 					session.setAttribute("CARTS", carts);
 					return carts;
 				}

@@ -324,6 +324,8 @@
 								for(var i=0;i<data.products.length;i++){
 									data.products[i]["button"] = "btn-success";
 									products.format(data.products[i]);
+									data.products[i]["quantity"] = Math.floor(data.products[i].quantity/data.products[i].unit.qty) + " " + data.products[i].unit.unitName + ", " +
+									(parseInt(data.products[i].quantity) % parseInt(data.products[i].unit.qty));
 								}
 								$("#CONTENT_TEMPLATE").tmpl(data.products).appendTo("tbody#CONTENTS");
 							}else{
@@ -360,6 +362,12 @@
 			 		value["importDetail"] = ++j;
         		}
         		// TODO: FIND PRODUCT BY Name
+        		$("#txtSearch").keyup(function(e){
+        			 if (e.keyCode == 13) {
+        				 $("#btnSearch").click();
+        			 }
+        		});
+        		
         		$("#btnSearch").click(function(){
         			str = $("#txtSearch").val();
         			if(str == ""){
@@ -380,10 +388,13 @@
         					b = true;
 							 v = data;	
 							if(data.productName.length>0){
+								
 								$("tbody#CONTENTS").html('');
 								for(var i=0;i<data.productName.length;i++){
 									data.productName[i]["button"] = "btn-success";
 									products.format(data.productName[i]);
+									data.productName[i]["quantity"] = Math.floor(data.productName[i].quantity/data.productName[i].unit.qty) + " " + data.productName[i].unit.unitName + ", " +
+										(parseInt(data.productName[i].quantity) % parseInt(data.productName[i].unit.qty));
 								}
 								$("#CONTENT_TEMPLATE").tmpl(data.productName).appendTo("tbody#CONTENTS");
 							}else{

@@ -106,7 +106,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 					//.invalidSessionUrl("/admin/session_expired")
 					.sessionFixation()
 					.changeSessionId()
-					.maximumSessions(1)
+					.maximumSessions(10)
 					.maxSessionsPreventsLogin(true)
 					.expiredUrl("/admin/login?maxSessions")
 					.sessionRegistry(sessionRegistryImpl())

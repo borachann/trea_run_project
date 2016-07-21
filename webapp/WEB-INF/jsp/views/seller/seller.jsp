@@ -181,7 +181,7 @@
 								for (i = A - 1; i >= A - 6 && i >= 0; i--) {
 							%><div class="col-sm-6">
 								<div class="panel panel-default form-group">
-									<div class="panel-body">
+									<div class="panel-body" data-id="<%=products.get(i).getProductId()%>">
 										<div style="float: left;">
 											<div id="idpro" style="display: none;"><%=products.get(i).getProductId()%></div>
 											<div style="width: 300px;">
@@ -309,8 +309,7 @@
 									</span>
 									<span class="col-sm-7">
 										<select class="form-control" id="editSaleType">
-									        <option>1</option>
-									        <option>2</option>
+									        
 								      	</select>
 									</span>
 								</div>
@@ -871,7 +870,7 @@
 											
 										 	str += "<div class='col-sm-6'>";
 										 	str += "<div class='panel panel-default form-group'>";
-										 	str += "<div class='panel-body'>";
+										 	str += "<div class='panel-body' data-id='"+ data.searchpro[i].productId +"'>";
 										 	str += "<div style='float: left;'>"
 										 	str += "<div id='idpro' style='display: none;'>" + data.searchpro[i].productId + "</div>";
 										 	str += "<div style='width: 300px;'><span class='col-md-8'> <img id='imgpro' src='${pageContext.request.contextPath}/resources/images/products/"+  data.searchpro[i].image + "'/>";
@@ -963,7 +962,7 @@
 							    url: "${pageContext.request.contextPath}/seller/changeCate",
 							    type: 'POST',
 							    datatype: 'JSON',
-							    data: json,
+							    data: JSON.stringify(json),
 							    beforeSend: function(xhr) {
 							        xhr.setRequestHeader("Accept", "application/json");
 							        xhr.setRequestHeader("Content-Type", "application/json");
@@ -1436,6 +1435,13 @@
 												$("#productprice").html($(this).parent().parent().children().eq(2).html());
 												$("#qtytxt").val(parseInt($(this).parent().parent().children().eq(3).html()));
 												$("#procomment").val($(this).parent().parent().children().eq(5).html());
+												$(".panel-body").each(function(i,e){
+													var x = $(e).data("id");
+													if(x == _productid){
+														$("#editSaleType").html($(e).find("#saleType").html());
+														$("#editSaleType option[value='"+ $(e).find("#saleType").find(":selected").val() +"']").prop('selected', true);
+													}
+												});
 												$("#myModal").bPopup();
 											} else if (_this.html() == "Cancel") {
 
@@ -1484,10 +1490,20 @@
 													
 											}
 										});
+						$("#editSaleType").change(function(){
+							var _this = this;
+							$(".panel-body").each(function(i,e){
+								var x = $(e).data("id");
+								if(x == _productid){
+									$(e).find("#saleType option[value='"+ $(_this).find(":selected").val() +"']").prop('selected', true);
+								}
+							});
+						});
 
 						$("#btnUpdate").click(function() {
 											_qty = $("#qtytxt").val();
-											 
+											uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
+											editsaletype = $(this).parents("#myModal").find("#editSaleType").find(":selected").text();
 											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/updateSellerProduct/"+ _productid + "/" + _qty,
 														type : 'GET',
@@ -1500,7 +1516,7 @@
 															console.log(data);
 															var subtotal = $("#qtytxt").val() * _thisRow.children().eq(2).html();
 															var totalamount = $("#totalamount").val() - _thisRow.children().eq(4).html();
-															_thisRow.children().eq(3).html($("#qtytxt").val());
+															_thisRow.children().eq(3).html($("#qtytxt").val() + " " + editsaletype);
 															_thisRow.children().eq(4).html(subtotal);
 															_thisRow.children().eq(5).html($("#procomment").html());
 															$("#totalamount").val(subtotal + totalamount);
@@ -1651,6 +1667,8 @@ $("#btnconfirm").click(function() {
 								alert("ការបព្ចារទិញ បានជោគជ័យ។");
 								//var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));
 								window.print();
+						    		location.href="${pageContext.request.contextPath}/seller/";
+								
 								/* if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){
 									$("#addtocart").hide();
 									if(confirm("Do you want to save the rest of payment?"))
@@ -1860,9 +1878,9 @@ function searchCustomer(){
   <p class="text-center">Tel: 077 72 83 83 / 098 71 17 18</p>         
     <div>
   	លក់ជូន : <span id="printtocusname" style="width: 10%;">..................................</span>  	
-  	<span class="pull-right">ទូរស័ព្ទ : <span  id="printcusphone"style="width: 10%;">.....................</span></span>
+  	<span class="pull-right">ទូរស័ព្ទ : <span  id="printcusphone"style="width: 10%;">...................</span></span>
   	<br>
-  	អាស័យ​ដ្ឋាន : <span id="printcusaddr" style="width: 10%;">............................</span>  	
+  	អាស័យ​ដ្ឋាន : <span id="printcusaddr" style="width: 10%;">.............................</span>  	
   	<span class="pull-right">ថ្ងៃខែឆ្នាំ : <span  id="printcusdate"style="width: 10%;">..................................</span></span>
   </div>
   <table class="table table-condensed">
@@ -1882,7 +1900,16 @@ function searchCustomer(){
 
 
   <div class="row text-right">
-  <div class="col-xs-4 col-xs-offset-6">
+  <div class="col-xs-6 text-left">
+  <br>
+     អត្រាប្រាក់ :  <span id="printrate"></span> ៛
+ <br><br>
+ <br>
+ <p>
+ 	សូមពិនិត្យទំនិញអោយបានច្បាស់លាស់មុននិង ចាកចេញ។ រាល់ទំនិញដែលទិញហើយមិនអាចប្តូរយកប្រាក់វិញបានឡើយ។
+ </p>
+  </div>
+  <div class="col-xs-4">
     <p>
       <strong>
         ប្រាក់សរុប : <br/>
@@ -1891,7 +1918,6 @@ function searchCustomer(){
         ទទួលប្រាក់ រៀល : <br/>
         អាប់ប្រាក់ រៀល : <br/>
         អាប់ប្រាក់ ដុល្លា : <br/>
-        អត្រាប្រាក់ : 
       </strong>
     </p>
   </div>
@@ -1903,7 +1929,6 @@ function searchCustomer(){
       <span id="printpaidr"></span> ៛<br/>
       <span id="printchange"></span> ៛<br/>
       <span id="printdollar"></span> $<br/>
-      <span id="printrate"></span> ៛
     </strong>
   </div>
 </div>

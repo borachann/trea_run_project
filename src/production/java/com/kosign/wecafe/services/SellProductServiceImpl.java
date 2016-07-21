@@ -109,27 +109,6 @@ public class SellProductServiceImpl implements SellProductsService {
 
 			System.out.println("SALE DATE=" + sale.getSaleDatetime());
 
-			/*
-			 * Order order = new Order(); order.setOrderDate(new Date());
-			 * order.setCusId(1L);
-			 * 
-			 * List<Product> products = new ArrayList<>();
-			 * 
-			 * if(sessions.getAttribute("products") != null){ products =
-			 * (ArrayList<Product>)sessions.getAttribute("products");
-			 * 
-			 * } products.add(product);
-			 * 
-			 * for (int i = 0; i < products.size(); i++) {
-			 * 
-			 * OrderDetail orderDetaill = new OrderDetail();
-			 * orderDetaill.setProduct(product); orderDetaill.setOrder(order);
-			 * orderDetaill.setProComment("comment"); orderDetaill.setProQty(new
-			 * Long(1)); orderDetaill.setProUnitPrice(product.getSalePrice());
-			 * 
-			 * order.getOrderDetail().add(orderDetaill); }
-			 */
-
 			Order order = new Order();
 			order.setOrderDate(new Date());
 			// order.setCustomer(userService.findUserByUsername("GENERAL"));
@@ -141,12 +120,12 @@ public class SellProductServiceImpl implements SellProductsService {
 				orderDetail.setOrder(order);
 				orderDetail.setProduct(product);
 				orderDetail.setProComment("");
-				orderDetail.setProQty(cart.getQuantity());
+				orderDetail.setProQty(cart.getQuantity()*cart.getUnitqty());
 				orderDetail.setProUnitPrice(product.getSalePrice());
 				sale.setTotalAmount(sale.getTotalAmount()
-						.add((product.getSalePrice().multiply(new BigDecimal(cart.getQuantity())))));
+						.add((product.getSalePrice().multiply(new BigDecimal(cart.getQuantity()*cart.getUnitqty())))));
 
-				product.setQuantity(product.getQuantity() - cart.getQuantity());
+				product.setQuantity(product.getQuantity() - cart.getQuantity()*cart.getUnitqty());
 				session.update(product);
 
 				order.getOrderDetail().add(orderDetail);
