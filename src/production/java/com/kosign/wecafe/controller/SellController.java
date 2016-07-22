@@ -295,17 +295,21 @@ public class SellController {
 		return false;
 	}
 	
-	@RequestMapping(value="/seller/updateSellerProduct/{productid}/{quatity}", method=RequestMethod.GET)
-	public @ResponseBody List<Cart> updateSellerProduct(HttpSession session, @PathVariable("productid") Long proId, @PathVariable("quatity") Long qty){
+	@RequestMapping(value="/seller/updateSellerProduct/", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Cart> updateSellerProduct(HttpSession session, @RequestBody Cart cartReq){
 		List<Cart> carts = new ArrayList<Cart>();
 		if(session.getAttribute("CARTS")!=null){
 			carts = (ArrayList<Cart>)session.getAttribute("CARTS"); 
 			for(int i=0; i <carts.size();i++){ 
-				/*System.out.println("cart.getProductName" + cart.getProductName());
+				/*System.out.println("cart.getProductName" + cartReq.getProductName());
 				System.out.println("carts.get(i).getProductName()" + carts.get(i).getProductName());*/
-				if(carts.get(i).getProductId().equals(proId)){
-					carts.get(i).setQuantity(qty);
-					carts.get(i).setTotalAmount(carts.get(i).getPrice().multiply(new BigDecimal(qty)));
+				if(carts.get(i).getProductId().equals(cartReq.getProductId())){
+					//BigDecimal Price = new BigDecimal(lnPrice); 
+					carts.get(i).setQuantity(cartReq.getQuantity());
+					carts.get(i).setPrice(cartReq.getPrice());
+					carts.get(i).setTotalAmount(carts.get(i).getPrice().multiply(new BigDecimal(carts.get(i).getQuantity())));
+					carts.get(i).setSaleType(cartReq.getSaleType());
+					carts.get(i).setUnitqty(cartReq.getUnitqty());
 					session.setAttribute("CARTS", carts);
 					return carts;
 				}

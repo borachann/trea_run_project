@@ -1,11 +1,11 @@
 <%@page import="com.kosign.wecafe.forms.Cart"%>
 <%@page import="com.kosign.wecafe.entities.Product"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="javax.servlet.http.HttpSession"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -288,38 +288,39 @@
 						<h4 class="modal-title" id="productNm">Coca Cola</h4>
 					</div>
 					<div class="modal-body form-horizontal" style="height: 290px;">
-						<div class="col-sm-4">
-							<img
-								src="${pageContext.request.contextPath}/resources/images/products/drink.jpg"
-								style="height: 250px;" id="imgProduct">
-						</div>
-						<div class="col-sm-8 container">
-							<div class="form-group">
-								<label class="control-label col-sm-3">Price :</label>
-								<div class="col-sm-9">
-									<label class="control-label col-sm-3" id="productprice">0.5$</label>
-								</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/products/drink.jpg"
+									style="height: 250px;" id="imgProduct">
 							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="txtName">Qty
-									:</label>
-								<div class="col-sm-9">
-									<span class="col-sm-5">
-									<input type="text" class="form-control" maxlength="30" name="txtName" id="qtytxt">
-									</span>
-									<span class="col-sm-7">
-										<select class="form-control" id="editSaleType">
-									        
-								      	</select>
-									</span>
+							<div class="col-sm-8">
+								<div class="form-group">
+									<label class="control-label col-sm-3">Price :</label>
+									<div class="col-sm-9">
+										<label class="control-label col-sm-3" id="productprice">0.5$</label>
+									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" id="comment"
-									for="txtcomment">Comment:</label>
-								<div class="col-sm-9">
-									<textarea id="procomment" cols="33" rows="4"
-										style="resize: none;"></textarea>
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="txtName">Qty :</label>
+									<div class="col-sm-9">
+										<div class="row">
+											<span class="col-sm-5">
+												<input type="text" class="form-control" maxlength="30" name="txtName" id="qtytxt">
+											</span>
+											<span class="col-sm-7">
+												<select class="form-control" id="editSaleType"></select>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3" id="comment"
+										for="txtcomment">Comment :</label>
+									<div class="col-sm-9">
+										<textarea id="procomment" rows="4" class="form-control"
+											style="resize: none;"></textarea>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -1501,21 +1502,31 @@
 						});
 
 						$("#btnUpdate").click(function() {
-											_qty = $("#qtytxt").val();
-											uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
-											editsaletype = $(this).parents("#myModal").find("#editSaleType").find(":selected").text();
+										var	_qty = $("#qtytxt").val();
+										var	uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
+										var	editsaletype = $(this).parents("#myModal").find("#editSaleType").find(":selected").text();
+										var	saleprice = $(this).parents("#myModal").find("#editSaleType").find(":selected").val();
+										 	json = {
+												    "productId": _productid,
+												    "price": saleprice,
+												    "quantity" : _qty,
+												    "saleType": editsaletype,
+												    "unitqty" : uQty
+												};
 											$.ajax({
-														url : "${pageContext.request.contextPath}/seller/updateSellerProduct/"+ _productid + "/" + _qty,
-														type : 'GET',
+														url : "${pageContext.request.contextPath}/seller/updateSellerProduct/",
+														type : 'POST',
 														dataType : 'JSON',
+														data : JSON.stringify(json),
 														beforeSend : function(xhr) {
 															xhr.setRequestHeader("Accept", "application/json");
 															xhr.setRequestHeader("Content-Type", "application/json");
 														},
 														success : function(data) {
 															console.log(data);
-															var subtotal = $("#qtytxt").val() * _thisRow.children().eq(2).html();
+															var subtotal = $("#qtytxt").val() * saleprice;
 															var totalamount = $("#totalamount").val() - _thisRow.children().eq(4).html();
+															_thisRow.children().eq(2).html(saleprice);
 															_thisRow.children().eq(3).html($("#qtytxt").val() + " " + editsaletype);
 															_thisRow.children().eq(4).html(subtotal);
 															_thisRow.children().eq(5).html($("#procomment").html());
