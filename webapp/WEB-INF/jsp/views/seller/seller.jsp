@@ -74,24 +74,19 @@
 	width: 70%;
 	margin: auto;
 }
-
 .panel-body:hover {
 	cursor: pointer;
 }
-
 .panel-body img {
 	width: 80px;
 	height: 100px;
 }
-
 #addtocart {
 	width: 80%;
 }
-
 .modal-content {
 	border-radius: 0;
 }
-
 .hidebtn {
 	display: none;
 }
@@ -192,7 +187,38 @@
 											</span>
 												<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 35px;' id='saleType' data-uQty="<%=products.get(i).getUnit().getQty()%>">
 										 	<option value="<%=products.get(i).getSalePrice()%>" data-unitQty="<%=products.get(i).getUnit().getQty()%>"><%=products.get(i).getUnit().getUnitName()%></option>
-										 	<option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+										 	<%-- <option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option> --%>
+										 	<%
+											 	boolean existOption = true;
+										 		List<Cart> cartsPrice = (List<Cart>) request.getAttribute("carts"); 
+										 		for (Cart cart : cartsPrice) {
+										 			if (cart.getProductId().equals(products.get(i).getProductId())) {
+										 				if(cart.getPrice().equals(products.get(i).getCostPrice())){
+										 					existOption = false;
+										 	%>				<option selected value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+										 				<%}%>
+										 			<%}%>
+										 	<%	}%>
+										 	<%if((cartsPrice.size() < 1) || existOption) {%>
+										 		<option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+										 	<%} %>	
+										<%--  <%
+										 		boolean existOption = true;
+										 		List<Cart> cartsPrice = (List<Cart>) request.getAttribute("carts");
+										 	for (Cart cart : cartsPrice) { 
+												if (cart.getProductId().equals(products.get(i).getProductId())) {existOption = false;
+													if(cart.getPrice().equals(products.get(i).getCostPrice())){%>
+										 				<option selected value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+										 		<%}else{ %>
+										 				<option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+										 		<%} 
+												}else{%>
+													<option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+											<% }
+											}%>
+											<% if(existOption){%>
+												<option value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
+											<% existOption = false;} %> --%>
 										 	</select></span>
 											</div>
 
@@ -204,12 +230,16 @@
 												style="display: none;">
 										</div>
 										<div style="text-align: right;">
-											<span id="PRICE"><%=products.get(i).getSalePrice()%></span><span>&nbsp;
-												$</span>
+											<%	boolean exitsprice = true;
+												for(Cart cart : cartsPrice) {
+													if (cart.getProductId().equals(products.get(i).getProductId())) { exitsprice = false;%>
+														<span id="PRICE"><%=cart.getPrice()%></span><span>&nbsp;$</span>
+													<%}%>
+											<%} if(exitsprice){%>
+												<span id="PRICE"><%=products.get(i).getUnitPrice()%></span><span>&nbsp;$</span>
+												<%} %>
 											<div>
-												<br> <a href="#"> <span id="btnminus"
-													class="glyphicon glyphicon-minus"></span>
-												</a>
+												<br> <a href="#"> <span id="btnminus" class="glyphicon glyphicon-minus"></span> </a>
 												<%
 													List<Cart> carts = (List<Cart>) request.getAttribute("carts");
 															boolean exist = false;
@@ -345,7 +375,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 
-					<button type="button" class="close" aria-hidden="true">
+					<button type="button" class="close" aria-hidden="true" id="closepopup">
 						<span class="button b-close"><span>×</span></span>
 					</button>
 					<h4 class="modal-title">មុខ ទំនិញ</h4>
@@ -506,9 +536,7 @@
 										name="remain_qty" type="text">
 								</div>
 							</div>
-
 							<div class="form-group" align="right">
-
 								<button class="btn btn-success waves-effect waves-light"
 									style="width: 100px;" id="btn_add" type="button">Add</button>
 								<button class="btn btn-default waves-effect waves-light"
@@ -523,7 +551,6 @@
 								<table id="datatable"
 									class="table table-striped table-bordered dataTable">
 									<thead>
-
 									</thead>
 									<thead>
 										<tr>
@@ -535,12 +562,10 @@
 										</tr>
 									</thead>
 									<tbody id="tbllistimport">
-
 									</tbody>
 								</table>
 							</div>
 						</div>
-
 						===================
 						<div class="form-group" align="right">
 							<button class="btn btn-success waves-effect waves-light"
@@ -549,7 +574,6 @@
 								style="width: 100px; margin-right: 10px;" id="btn_cancel_save"
 								type="button">Cancel</button>
 						</div>
-
 					</div>
 					.form
 			</div>
@@ -765,7 +789,6 @@
 							checkOnlyNumber(e);
 						});
 						
-
 						//Click button save cancel
 						/* $("#btn_cancel_save").click(function() {
 							if (confirm("Do you want to cancel?")) {
@@ -828,7 +851,6 @@
 								"backdrop":"static"
 							});
 							//$("#form_request_stock").bPopup();
-
 						}); */
 						$("#btnSearch").click(function(e){
 							e.preventDefault(); 
@@ -1034,12 +1056,10 @@
 											clear();
 											}
 										});
-
 						$('.counter').counterUp({
 							delay : 100,
 							time : 1200
 						});
-
 						/* $("#btn_save").click(function() {
 											var requestDetail = [];
 											if ($('#tbllistimport tr').length == 0) {
@@ -1076,7 +1096,6 @@
 											}
 										});
 									}); */
-
 						function clear() {
 							$("#product_name").val("");
 							$("#product_name").removeClass("borderRed");
@@ -1145,7 +1164,6 @@
 						$(document).on("click", "#btn_delete", function() {
 							$(this).parents("tr").remove();
 						});
-
 					});
 	
 	
@@ -1154,7 +1172,6 @@
 				|| (e.keyCode == 46)
 				|| ((e.keyCode >= 37) && (e.keyCode <= 40)))
 			return;
-
 		var data = String
 				.fromCharCode(e.which);
 		var reg = new RegExp('^[0-9]+$');
@@ -1229,7 +1246,6 @@
 																			"application/json");
 														},
 														success : function(data) {
-
 														},
 														error : function(data,
 																status, er) {
@@ -1242,13 +1258,11 @@
 																			+ er);
 														}
 													});
-
 											$("#totalorder")
 													.html(
 															$("#totalorder")
 																	.html() - 1);
 										});
-
 						$('#btncancel').click(function() {
 							if(confirm("តើអ្នកពិតជា ចង់លុបចោលការបព្ចារទិញនេះពិតមែនទេ?"))
 							{   
@@ -1256,7 +1270,6 @@
 								$('input[name="orderqty"]').val('0');
 							}
 						});
-
 						$(document).on('click','#cusordered',function() {
 											_this = $(this);
 											_orderid = (_this.find("#orderedId").html());
@@ -1326,7 +1339,6 @@
 														}
 													});
 										});
-
 						function listproductorder() {
 							var st = "";
 							var amount = 0;
@@ -1372,7 +1384,6 @@
 								}
 							});
 						}
-
 						$("#bt_add, #btnCart").click(function() {
 							$("#btncancel").removeClass("hidebtn");
 							$("#btncancelorder").addClass("hidebtn");
@@ -1390,16 +1401,13 @@
 							$("#cusdate").val(moment().format('DD-MM-YYYY'));
 							
 							$("#addtocart").bPopup({follow: [false, false], position: ["10%","5%"]});
-
 						});
-
 						$(document).on('click',"#btndelete, #btnminus, #btnedit,#cancelbtn",function() {
 											_thisRow = $(this).parents("tr");
 											var st = "";
 											var _url = "";
 											var amount = 0;
 											_this = $(this);
-
 											if (_this.html() == "Delete") {
 												var proId = $(this).parent().parent().children().eq(0).html(); 
 												var txt;
@@ -1428,7 +1436,6 @@
 													// 												        txt = "You pressed Cancel!";
 												}
 												//document.getElementById("demo").innerHTML = txt;
-
 											} else if (_this.html() == "Edit") {
 												_productid = $(this).parent().parent().children().eq(0).html();
 												var proId = $(this).parent().parent().children().eq(0).html();
@@ -1445,7 +1452,6 @@
 												});
 												$("#myModal").bPopup();
 											} else if (_this.html() == "Cancel") {
-
 											} else{
 												_this = $(this);
 												var proNm = $(this).parents(".panel-body").find("#pro_nm").val();
@@ -1465,7 +1471,6 @@
 														"totalAmount" : totalAmount,
 														"saleType" : saletype
 													};
-
 												 $.ajax({
 														url : "${pageContext.request.contextPath}/seller/removetocart/", /* deletedOrderProduct/" + _orderid + "/" + proId, */
 														type : 'POST',
@@ -1493,14 +1498,15 @@
 										});
 						$("#editSaleType").change(function(){
 							var _this = this;
+							$("#productprice").text($(this).find(":selected").val());
 							$(".panel-body").each(function(i,e){
 								var x = $(e).data("id");
 								if(x == _productid){
 									$(e).find("#saleType option[value='"+ $(_this).find(":selected").val() +"']").prop('selected', true);
+									$(e).find("#PRICE").text($(_this).find(":selected").val());
 								}
 							});
 						});
-
 						$("#btnUpdate").click(function() {
 										var	_qty = $("#qtytxt").val();
 										var	uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
@@ -1531,6 +1537,7 @@
 															_thisRow.children().eq(4).html(subtotal);
 															_thisRow.children().eq(5).html($("#procomment").html());
 															$("#totalamount").val(subtotal + totalamount);
+															$("#totalreil").val(numeral($("#totalamount").val() * $("#exchangerate").val()).format('0,0'));
 														},
 														error : function(data, status, er) {
 															console.log("error: " + data + " status: " + status + " er:" + er);
@@ -1616,6 +1623,19 @@ $("#addOwedForm").submit(function(e){
 	    }
 	});  
 });
+
+/* $(document).on("click","#btnbuymore , #closepopup", function(){
+	
+	location.href="${pageContext.request.contextPath}/seller/";
+}); */
+
+/* $("#closepopup").click(function(){
+	location.href="${pageContext.request.contextPath}/seller/";
+});
+$("#btnbuymore").click(function(){
+	location.href="${pageContext.request.contextPath}/seller/";
+}); */
+
 $("#btnconfirm").click(function() {
 	var restPayment = (parseInt($("#txtpay").val() * $("#exchangerate").val()) + parseInt($("#txtpayreil").val().replace(',', '')));			
 	if(restPayment < parseInt($("#totalreil").val().replace(',', ''))){		 
@@ -1740,7 +1760,6 @@ function searchCustomer(){
 	});
 	return ;
 } 
-
 				function getsizeSession() {
 					$.ajax({
 								url : "${pageContext.request.contextPath}/order/listcart",
@@ -1763,9 +1782,7 @@ function searchCustomer(){
 											+ " er:" + er);
 								}
 							});
-
 						}
-
 						function clearallsession() {
 							$.ajax({
 										url : "${pageContext.request.contextPath}/order/removeAllFromCart/",
@@ -1790,7 +1807,6 @@ function searchCustomer(){
 									});
 							return;
 						}
-
 						function getordered() {
 							$.ajax({
 										url : "${pageContext.request.contextPath}/seller/getordered",
@@ -1826,9 +1842,7 @@ function searchCustomer(){
 										}
 									});
 							return;
-
 						}
-
 						var wsURI = "ws://"+ document.location.host	+ "${pageContext.request.contextPath}/notification";
 						if (!("WebSocket" in window)) {
 							console
@@ -1840,28 +1854,22 @@ function searchCustomer(){
 						var connection = new WebSocket(wsURI);
 						var sendedMessage = "";
 						connection.binaryType = 'arraybuffer';
-
 						connection.onopen = function(event) {
 							onOpen(event);
 						}
-
 						connection.onerror = function(event) {
 							onError(event);
 						}
-
 						connection.onmessage = function(event) {
 							console.log("MESSAGE...")
 							onMessage(event);
 						}
-
 						function onOpen(event) {
 							console.log("CONNECTED...")
 						}
-
 						function onError(event) {
 							console.log(event);
 						}
-
 						function onMessage(event) {
 							console.log(event.data);
 							if (sendedMessage == event.data) {
