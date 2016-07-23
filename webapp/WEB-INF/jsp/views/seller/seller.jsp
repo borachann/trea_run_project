@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="com.kosign.wecafe.forms.Cart"%>
 <%@page import="com.kosign.wecafe.entities.Product"%>
 <%@page import="java.util.List"%>
@@ -192,7 +193,7 @@
 											 	boolean existOption = true;
 										 		List<Cart> cartsPrice = (List<Cart>) request.getAttribute("carts"); 
 										 		for (Cart cart : cartsPrice) {
-										 			if (cart.getProductId().equals(products.get(i).getProductId())) {
+										 			if (cart.getProductId().compareTo(products.get(i).getProductId()) == 0) {
 										 				if(cart.getPrice().equals(products.get(i).getCostPrice())){
 										 					existOption = false;
 										 	%>				<option selected value="<%=products.get(i).getCostPrice()%>" data-unitQty="1"><%=products.get(i).getUnit().getTo()%></option>
@@ -905,12 +906,12 @@
 										 		if (data.carts[j].productId == data.searchpro[i].productId) {
 										 			if (data.carts[j].price == data.searchpro[i].costPrice) {
 										 				existOption = false;
-										 				str += "<option selected value='"+ data.searchpro[i].costPrice +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
+										 				str += "<option selected value='"+ data.searchpro[i].costPrice.toFixed(2) +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
 										 			}
 										 		}
 										 	}
 										 	if(data.carts.length <1 || existOption)
-										 		str += "<option value='"+ data.searchpro[i].costPrice +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
+										 		str += "<option value='"+ data.searchpro[i].costPrice.toFixed(2) +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
 										 	str += "</select></span></div>";
 										 	str += "<input type='text' class='form-control' value='" + data.searchpro[i].productId + "'";
 										 	str += " id='pro_id' style='display: none;'>";
@@ -980,6 +981,7 @@
 						// change price of produce when change type of sale paroduce
 						$(document).on("change", "#saleType", function(){
 							var cost_price = $(this).find(":selected").val();
+							
 							var uQty = $(this).find(":selected").data('unitqty');
 							
 							$(this).parents(".panel-body").find("#PRICE").text(cost_price);
@@ -1381,7 +1383,7 @@
 										st += "<td>"
 												+ data[i].productName
 												+ "</td>";
-										st += "<td>" + data[i].price
+										st += "<td>" + data[i].price.toFixed(2)
 												+ "</td>";
 										st += "<td>" + data[i].quantity + ' ' + data[i].saleType +"</td>";
 										st += "<td>"
