@@ -1,3 +1,4 @@
+<%@page import="com.fasterxml.jackson.annotation.JsonInclude.Include"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -20,7 +21,9 @@ a {
 .hidetable {
 	display: none;
 }
-
+#addtocart {
+	width: 80%;
+}
 </style>
 <!-- Base Css Files -->
 <link
@@ -368,8 +371,11 @@ a {
 			<!-- ============================================================== -->
 		</div>
 		<!-- END wrapper -->
+		<!-- print_invoice -->
+		<%@ include file="print_invoice.jsp" %>
+		
 		<!-- ############################################################# --> 
-		<div id="impDetail" style="display: none; width: 90%;">
+		<div id="impDetail" style="display: none; width: 80%;">
 			<div class="modal-content">
 				<div class="modal-header">
 
@@ -400,6 +406,8 @@ a {
 							<div class="col-lg-2">
 									<input class="form-control" id="btotalamount"type="text">
 							</div>
+						<a href="javascrpt:" class="btn btn-inverse waves-effect waves-light b-close" id="print_invoice">
+						<i class="fa fa-print"></i></a>
 						<button class="btn btn-default b-close">Close</button>
 					</div>
 				</div>
@@ -1292,8 +1300,13 @@ a {
 			    }
 			});
 		 
-		  $("#impDetail").bPopup();  
+		  $("#impDetail").bPopup({follow: [false, false], position: ["10%","5%"]});  
 	 });
+	 $("#print_invoice").click(function(){
+		 $("#addtocart").bPopup({follow: [false, false], position: ["10%","5%"]});
+	 });
+	 
+	 
   function print_daily(){
 	  $.ajax({ 
 		    url: "${pageContext.request.contextPath}/api/admin/reports/salereportdaily_print/" , 
