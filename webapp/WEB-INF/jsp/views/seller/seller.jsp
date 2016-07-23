@@ -1921,7 +1921,7 @@ function searchCustomer(){
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.ui.autocomplete.scroll.min.js"></script>
 
-
+<%@ include file="print_invoice.jsp"%>
 
 
 
