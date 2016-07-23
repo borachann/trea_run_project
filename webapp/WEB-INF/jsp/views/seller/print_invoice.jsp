@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div class="container visible-print-block"  style="font-size : 13px;"> 
   <div class="text-center"><h3>សេងហ៊ី ចំការមន</h3></div>    
@@ -27,10 +29,8 @@
 
   <div class="row text-right">
   <div class="col-xs-6 text-left">
-  <br>
      អត្រាប្រាក់ :  <span id="printrate"></span> ៛
  <br><br>
- <br>
  <p>
  	សូមពិនិត្យទំនិញអោយបានច្បាស់លាស់មុននិង ចាកចេញ។ រាល់ទំនិញដែលទិញហើយមិនអាចប្តូរយកប្រាក់វិញបានឡើយ។
  </p>
