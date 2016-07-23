@@ -900,18 +900,37 @@
 										 	str += "<span id='Proname'> " + data.searchpro[i].productName + "</span></span>";
 										 	str += "<span class='col-md-4 pull-right'><select class='form-control' style='margin-top: 33px;' id='saleType' data-uQty='"+ data.searchpro[i].unit.qty +"'>";
 										 	str += "<option value='"+ data.searchpro[i].salePrice +"'data-unitQty='"+ data.searchpro[i].unit.qty + "'>" + data.searchpro[i].unit.unitName + "</option>";
-										 	str += "<option value='"+ data.searchpro[i].costPrice +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
+										 	var existOption = true;
+										 	for(var j = 0; j < data.carts.length; j++) {
+										 		if (data.carts[j].productId == data.searchpro[i].productId) {
+										 			if (data.carts[j].price == data.searchpro[i].costPrice) {
+										 				existOption = false;
+										 				str += "<option selected value='"+ data.searchpro[i].costPrice +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
+										 			}
+										 		}
+										 	}
+										 	if(data.carts.length <1 || existOption)
+										 		str += "<option value='"+ data.searchpro[i].costPrice +"'data-unitQty='1'>" + data.searchpro[i].unit.to + "</option>";
 										 	str += "</select></span></div>";
 										 	str += "<input type='text' class='form-control' value='" + data.searchpro[i].productId + "'";
 										 	str += " id='pro_id' style='display: none;'>";
 										 	str += "<input type='text' class='form-control' value='" +data.searchpro[i].productName + "'";
 										 	str += " id='pro_nm' + style='display: none;'></div>";
 										 	str += "<div style='text-align: right;'>";
-										 	str += "<span id='PRICE'>"+ data.searchpro[i].salePrice + "</span><span>&nbsp; Riels</span>";
+										 	var existPrice = false;
+										 	for(var j = 0; j < data.carts.length; j++) {
+										 		if (data.carts[j].productId == data.searchpro[i].productId) {
+										 			existPrice = true;
+										 			str += "<span id='PRICE'>"+ data.carts[j].price.toFixed(2) + "</span><span>&nbsp; $</span>";
+										 		}
+										 	}
+										 	if (!existPrice) {
+										 		str += "<span id='PRICE'>"+ data.searchpro[i].salePrice.toFixed(2) + "</span><span>&nbsp; $</span>";
+										 	}
 										 	str += "<div><br><a href='#'><span id='btnminus' class='glyphicon glyphicon-minus'> </span></a> "; 
 										 	
 											var exist = false;  
-										 	for(j = 0; j < data.carts.length; j++) {
+										 	for(var j = 0; j < data.carts.length; j++) {
 										 		
 										 		if (data.carts[j].productId == data.searchpro[i].productId) {
 										 			exist = true;
@@ -1496,17 +1515,17 @@
 													
 											}
 										});
-						$("#editSaleType").change(function(){
+						 $("#editSaleType").change(function(){
 							var _this = this;
 							$("#productprice").text($(this).find(":selected").val());
-							$(".panel-body").each(function(i,e){
+							/* $(".panel-body").each(function(i,e){
 								var x = $(e).data("id");
 								if(x == _productid){
 									$(e).find("#saleType option[value='"+ $(_this).find(":selected").val() +"']").prop('selected', true);
 									$(e).find("#PRICE").text($(_this).find(":selected").val());
 								}
-							});
-						});
+							}); */
+						}); 
 						$("#btnUpdate").click(function() {
 										var	_qty = $("#qtytxt").val();
 										var	uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
@@ -1538,6 +1557,14 @@
 															_thisRow.children().eq(5).html($("#procomment").html());
 															$("#totalamount").val(subtotal + totalamount);
 															$("#totalreil").val(numeral($("#totalamount").val() * $("#exchangerate").val()).format('0,0'));
+															$(".panel-body").each(function(i,e){
+																var x = $(e).data("id");
+																if(x == _productid){
+																	$(e).find("#saleType option[value='"+ saleprice +"']").prop('selected', true);
+																	$(e).find("#PRICE").text(saleprice);
+																	$(e).find("#txtqty").val(_qty);
+																}
+															});
 														},
 														error : function(data, status, er) {
 															console.log("error: " + data + " status: " + status + " er:" + er);
