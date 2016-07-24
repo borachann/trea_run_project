@@ -237,7 +237,7 @@
 														<span id="PRICE"><%=cart.getPrice()%></span><span>&nbsp;$</span>
 													<%}%>
 											<%} if(exitsprice){%>
-												<span id="PRICE"><%=products.get(i).getUnitPrice()%></span><span>&nbsp;$</span>
+												<span id="PRICE"><%=products.get(i).getSalePrice()%></span><span>&nbsp;$</span>
 												<%} %>
 											<div>
 												<br> <a href="#"> <span id="btnminus" class="glyphicon glyphicon-minus"></span> </a>
@@ -329,7 +329,8 @@
 								<div class="form-group">
 									<label class="control-label col-sm-3">Price :</label>
 									<div class="col-sm-9">
-										<label class="control-label col-sm-3" id="productprice">0.5$</label>
+										<label class="control-label col-sm-3"  id="productprice">0.5$</label>
+										<input type="text" class="form-control" maxlength="30" style="display: none;" id="txtproductprice">
 									</div>
 								</div>
 								<div class="form-group">
@@ -1504,19 +1505,23 @@
 						 $("#editSaleType").change(function(){
 							var _this = this;
 							$("#productprice").text($(this).find(":selected").val());
-							/* $(".panel-body").each(function(i,e){
-								var x = $(e).data("id");
-								if(x == _productid){
-									$(e).find("#saleType option[value='"+ $(_this).find(":selected").val() +"']").prop('selected', true);
-									$(e).find("#PRICE").text($(_this).find(":selected").val());
-								}
-							}); */
 						}); 
+						 $("#productprice").dblclick(function(){
+							 $(this).hide();
+							 $("#txtproductprice").val($(this).text());
+							 $("#txtproductprice").show();
+						 });
+						 $("#txtproductprice").blur(function(){
+							 $(this).hide();
+							 $("#productprice").text($("#txtproductprice").val());
+							 $("#productprice").show();
+						 });
+						 
 						$("#btnUpdate").click(function() {
 										var	_qty = $("#qtytxt").val();
 										var	uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
 										var	editsaletype = $(this).parents("#myModal").find("#editSaleType").find(":selected").text();
-										var	saleprice = $(this).parents("#myModal").find("#editSaleType").find(":selected").val();
+										var	saleprice = $("#productprice").text(); //$(this).parents("#myModal").find("#editSaleType").find(":selected").val();
 										 	json = {
 												    "productId": _productid,
 												    "price": saleprice,
