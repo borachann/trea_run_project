@@ -14,17 +14,6 @@
 <link rel="shortcut icon" href="images/favicon_1.ico">
 
 <title>KOSIGN WeCafe...</title>
-<style>
-a { 
-	cursor: pointer;
-}
-.hidetable {
-	display: none;
-}
-#addtocart {
-	width: 80%;
-}
-</style>
 <!-- Base Css Files -->
 <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
@@ -71,21 +60,30 @@ a {
         <![endif]-->
 
 <script src="${pageContext.request.contextPath}/resources/js/modernizr.min.js"></script>
-
 <style>
-@media print {
-	.content-page {
-		margin-top: 0px;
-		margin-left: 0px;
-	}
-	.content {
-		margin-top: 0px;
-		margin-bottom: 0px;
-	}
+a { 
+	cursor: pointer;
 }
-
+.hidetable {
+	display: none;
+}
+#addtocart {
+	width: 80%;
+}
+ @media print {
+  @page { margin: 0; }
+  body { margin: 1cm; }
+}
+#tblprint{
+	border-collapse: collapse;
+}
+#tblprint td{
+	border: 1px solid black;
+}
+#tblholdprint, #tblprinthead td{
+	border: 0 solid black;
+}
 </style>
-
 </head>
 
 
@@ -93,7 +91,7 @@ a {
 <body class="fixed-left-void">
 
 	<!-- Begin page -->
-	<div id="wrapper">
+	<div id="wrapper" class="hidden-print">
 
 		<!-- Top Bar Start -->
 		<%@ include file="topbar.jsp"%>
@@ -373,7 +371,7 @@ a {
 		<!-- END wrapper -->
 		<!-- print_invoice -->
 		<%@ include file="print_invoice.jsp" %>
-		
+		<%@ include file="../seller/print_invoice.jsp" %>
 		<!-- ############################################################# --> 
 		<div id="impDetail" style="display: none; width: 80%;">
 			<div class="modal-content">
@@ -554,7 +552,24 @@ a {
 	
 	 setCalendar();  
 	
-	
+		var exchangerate = $.ajax({
+			 url: "${pageContext.request.contextPath}/admin/getchangerate", 
+			 type: 'GET',
+			 datatype: 'JSON',
+			 async: false,
+			beforeSend: function(xhr) {
+	            xhr.setRequestHeader("Accept", "application/json");
+	            xhr.setRequestHeader("Content-Type", "application/json");
+	        },
+			success: function(res){
+				 return (res);
+			},
+			error:function(data, status,er){
+				console.log("error: " + data + "status: " + status + "er: ");
+			}
+		});
+		
+		exchangerate = JSON.parse(exchangerate.responseText).data.exchangerate;
 	 /* $('#monthly_list').on('hidden.bs.modal', function (event) {
  		$("#select_yearly option[value='1']").attr("selected","selected");
  		$("#select_yearly option[value='1']").attr("selected","selected");
@@ -1282,13 +1297,13 @@ a {
                   xhr.setRequestHeader("Content-Type", "application/json");
               },
 			    success: function(data) {
-			    
+			    console.log(data);
 			     	var st= "";
 			    	var amount = 0;
 			       for(i=0; i<data.saleDetail.length; i++){
 			    	   st += "<tr><td>" + (i + 1) + "</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_name +"</td>";
-			    	   st += "<td>" + data.saleDetail[i].pro_qty +"</td>";
+			    	   st += "<td>" + data.saleDetail[i].pro_qty + " " + data.saleDetail[i].pro_comment +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_unit_price +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].amount +"</td></tr>"			    	   
 			       }
@@ -1302,11 +1317,94 @@ a {
 		 
 		  $("#impDetail").bPopup({follow: [false, false], position: ["10%","5%"]});  
 	 });
-	 $("#print_invoice").click(function(){
-		 $("#addtocart").bPopup({follow: [false, false], position: ["10%","5%"]});
+	 $("#printInvoice").click(function(){
+		 $('#orderdetail tr').each(function(i,e){
+				var child = $(e).children();
+				st += '<tr><td>' + child.eq(0).html() + '</td>';
+				st += '<td>' + child.eq(1).html() + '</td>';
+				st += '<td>' + child.eq(3).html() + '</td>';
+				st += '<td>' + child.eq(2).html() + '</td>';
+				st += '<td>' + child.eq(4).html() + '</td></tr>';
+			});
+	 	$("#tblprint").html(st);
+	 	$("#printtotal").html($("#totalamount").val());
+		$("#printtotalreil").html($("#totalreil").val());
+		$("#printpaid").html($("#txtpay").val());
+		$("#printpaidr").html($("#txtpayreil").val());
+		$("#printchange").html($("#txtchange").val());
+		$("#printdollar").html($("#txtchangedollar").val());
+		$("#printrate").html($("#exchangerate").val());
+		$("#printcusdate").html($("#cusdate").val());
+			
+			if($("#tocusname").val() != "")
+				$("#printtocusname").html($("#tocusname").val());
+			if($("#cusaddr").val() != "")
+				$("#printcusaddr").html($("#cusaddr").val());
+			if($("#cusphone").val() != "")
+				$("#printcusphone").html($("#cusphone").val());	
+		 window.print();
 	 });
 	 
+	 $("#print_invoice").click(function(){
+		 var st = "";
+		for(var i=0; i<$("#impProDetail tr").length; i++){
+			st += "<tr>"
+				st += "<td>" + $("#impProDetail").children().eq(i).children().eq(0).text() + "</td>";
+			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(1).text() + "</td>";
+			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(3).text() + "</td>";
+			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(2).text() + "</td>";
+			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(4).text() + "</td>";
+			st += "</tr>";
+		}
+		$("#orderdetail").html(st);
+		$("#totalamount").val($("#btotalamount").val());
+		$("#cusdate").val(moment().format('DD-MM-YYYY'));
+		$("#totalreil").val(numeral($("#btotalamount").val()*exchangerate).format('0,0'));
+		$("#exchangerate").val(exchangerate);
+		$("#addtocart").bPopup({follow: [false, false], position: ["10%","5%"]});
+	 });
 	 
+	 $("#txtpay").on("blur",function(){
+			var paid = 0, paidreil = 0;
+			
+			if($(this).val() != ""){
+				paid = ($("#totalamount").val() - $(this).val()).toFixed(2)
+				if(paid <= 0){									
+					paidreil = (paid * $("#exchangerate").val()).toFixed(0);
+					$("#txtpayreil").val('0');
+					$("#txtchange").val(numeral(Math.abs(paidreil)).format('0,0'));
+					$("#txtchangedollar").val(Math.abs(paid));
+				}
+				else{
+					paidreil = (paid * $("#exchangerate").val()).toFixed(0);
+					$("#txtpayreil").val(numeral(paidreil).format('0,0'));
+					$("#txtchange").val('0');
+					$("#txtchangedollar").val('0');
+				}
+			}
+		});
+		$("#txtpayreil").on("dblclick",function(){
+			$(this).removeAttr('readonly');
+		});
+		$("#txtpayreil").on("blur",function(){
+			var paid = 0;
+			var total = 0;
+			$(this).removeAttr('readonly');
+			paid = ($("#txtpay").val() != "") ? $("#txtpay").val() : 0;
+			
+			total = (paid * parseInt($("#exchangerate").val())) + parseInt($(this).val());
+			totalreil = (parseInt($("#totalreil").val().replace(',', '')));
+			if(total > totalreil){
+				$("#txtchange").val(numeral(total - totalreil).format('0,0'));
+				$("#txtchangedollar").val((total - totalreil)/parseInt($("#exchangerate").val()));
+			}else
+			{
+				$("#txtchange").val('0');
+				("#txtchangedollar").val('0');
+			}
+				
+		});
+		
   function print_daily(){
 	  $.ajax({ 
 		    url: "${pageContext.request.contextPath}/api/admin/reports/salereportdaily_print/" , 

@@ -119,8 +119,8 @@ public class SellProductServiceImpl implements SellProductsService {
 				OrderDetail orderDetail = new OrderDetail();
 				orderDetail.setOrder(order);
 				orderDetail.setProduct(product);
-				orderDetail.setProComment("");
-				orderDetail.setProQty(cart.getQuantity()*cart.getUnitqty());
+				orderDetail.setProComment(cart.getSaleType());
+				orderDetail.setProQty(cart.getQuantity());
 				orderDetail.setProUnitPrice(product.getSalePrice());
 				sale.setTotalAmount(sale.getTotalAmount()
 						.add((product.getSalePrice().multiply(new BigDecimal(cart.getQuantity()*cart.getUnitqty())))));

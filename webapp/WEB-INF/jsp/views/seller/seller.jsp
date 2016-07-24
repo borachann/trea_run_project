@@ -1318,35 +1318,19 @@
 															var st = ""; // var amount = 0;
 															console.log(data);
 															for (i = 0; i < data.length; i++) {
-																st += "<tr><td style='display: none;'>"
-																		+ data[i][2].productId
-																		+ "</td>"
-																st += "<td>"
-																		+ data[i][2].productName
-																		+ "</td>";
-																st += "<td>"
-																		+ data[i][0].proUnitPrice
-																		+ "</td>";
-																st += "<td>"
-																		+ data[i][0].proQty
-																		+ "</td>";
-																st += "<td>"
-																		+ (data[i][0].proUnitPrice * data[i][0].proQty)
-																		+ "</td>";
-																st += "<td>"
-																		+ data[i][0].proComment
-																		+ "</td>";
+																st += "<tr><td style='display: none;'>"	+ data[i][2].productId + "</td>"
+																st += "<td>" + data[i][2].productName + "</td>";
+																st += "<td>" + data[i][0].proUnitPrice + "</td>";
+																st += "<td>" + data[i][0].proQty + "</td>";
+																st += "<td>" + (data[i][0].proUnitPrice * data[i][0].proQty) + "</td>";
+																st += "<td>" + data[i][0].proComment + "</td>";
 																st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
 																//amount += data[i][1].orderAmount;
 															}
 															$("#totalamount").val(data[0][1].orderAmount.toFixed(2));
-															$("#orderdetail")
-																	.html(st);
-															$("#orderID")
-																	.html(
-																			data[0][1].orderId);
-															$("#addtocart")
-																	.bPopup({follow: [false, false], position: ["10%","50%"]});
+															$("#orderdetail").html(st);
+															$("#orderID").html(data[0][1].orderId);
+															$("#addtocart").bPopup({follow: [false, false], position: ["10%","50%"]});
 														},
 														error : function(data,
 																status, er) {

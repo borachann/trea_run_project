@@ -11,8 +11,8 @@
   	អាស័យ​ដ្ឋាន : <span id="printcusaddr" style="width: 10%;">.............................</span>  	
   	<span class="pull-right">ថ្ងៃខែឆ្នាំ : <span  id="printcusdate"style="width: 10%;">..................................</span></span>
   </div>
-  <table class="table table-condensed">
-    <thead>
+  <table class="table table-condensed" id="tblholdprint">
+    <thead id="tblprinthead">
       <tr>
         <td>N<sup>0</sup></td>
         <td>ឈ្មោះ</td>

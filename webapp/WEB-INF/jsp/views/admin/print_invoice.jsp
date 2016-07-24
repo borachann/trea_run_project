@@ -14,12 +14,11 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
+								<th>ល.រ</th>
 								<th>ឈ្មោះ</th>
 								<th>តំលៃ</th>
 								<th>ចំនួន</th>
 								<th>សរុប</th>
-								<th>ផ្សេងទៀត</th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody id="orderdetail">
@@ -104,24 +103,11 @@
 				</div>
 				<div class="modal-footer" style="height: 80px; overflow: auto;">
 					<div align="right">
-						<button type="button" id="btnbuymore" class="btn btn-default">
-							<span class="button b-close"><span>បន្ថៃមទំនិញ</span></span>
-						</button>
-						<button type="button" id="btnconfirm"
-							class="btn btn-default hidebtn b-close">
-							<span class="button b-close"><span>យល់ព្រម</span></span>
-						</button>
-						<button type="button" id="btnconfirmorder"
+						<a href="javascrpt:" class="btn btn-inverse waves-effect waves-light b-close" id="printInvoice">
+						<i class="fa fa-print"></i></a>
+						<button type="button" id="btnclose"
 							class="btn btn-default hidebtn">
-							<span class="button b-close"><span>Confirm</span></span>
-						</button>
-						<button type="button" id="btncancel"
-							class="btn btn-default hidebtn">
-							<span class="button b-close"><span>លុបចោល</span></span>
-						</button>
-						<button type="button" id="btncancelorder"
-							class="btn btn-default hidebtn">
-							<span class="button b-close"><span>Cancel Order</span></span>
+							<span class="button b-close"><span>Close</span></span>
 						</button>
 					</div>
 				</div>
