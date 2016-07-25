@@ -442,7 +442,7 @@ public class AdminReportServiceImp implements AdminReportService {
 			calendar.add(Calendar.MONTH, i); 
 			sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
 			sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
-			sb.append(months[i] + " INTEGER[],");
+			sb.append(months[i] + " NUMERIC[],");
 			
 		} 
 		try {
@@ -560,18 +560,18 @@ public class AdminReportServiceImp implements AdminReportService {
 										   " FROM generate_series(0,11) n' " +
 										   ") AS mthreport ( " +
 										   "row_name TEXT [], " +
-										   "jan INTEGER[], " +
-										   "feb INTEGER[], " +
-										   "mar INTEGER[], " +
-										   "apr INTEGER[], " +
-										   "may INTEGER[], " +
-										   "jun INTEGER[], " +
-										   "jul INTEGER[], " +
-										   "aug INTEGER[], " +
-										   "sep INTEGER[], " +
-										   "oct INTEGER[], " +
-										   "nov INTEGER[], " +
-										   "dec INTEGER[]) "); 	
+										   "jan NUMERIC[], " +
+										   "feb NUMERIC[], " +
+										   "mar NUMERIC[], " +
+										   "apr NUMERIC[], " +
+										   "may NUMERIC[], " +
+										   "jun NUMERIC[], " +
+										   "jul NUMERIC[], " +
+										   "aug NUMERIC[], " +
+										   "sep NUMERIC[], " +
+										   "oct NUMERIC[], " +
+										   "nov NUMERIC[], " +
+										   "dec NUMERIC[]) "); 	
 			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 			Map<String, Object> sales= (Map<String, Object>)query.uniqueResult();
 			return sales;
@@ -657,7 +657,7 @@ public class AdminReportServiceImp implements AdminReportService {
 	for(int i=0 ; i<7 ; i++){ 
 		sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
 		sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
-		sb.append(months[i] + " INTEGER[],");  
+		sb.append(months[i] + " NUMERIC[],");  
 	} 
 	try {
 		session = sessionFactory.getCurrentSession();
@@ -753,7 +753,7 @@ public class AdminReportServiceImp implements AdminReportService {
 			 
 			sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
 			sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
-			sb.append(months[i] + " INTEGER[],"); 
+			sb.append(months[i] + " NUMERIC[],"); 
 			
 		}
 		System.out.println(sb.toString().substring(0, sb.toString().lastIndexOf(",")));
