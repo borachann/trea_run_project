@@ -16,6 +16,17 @@ public class ExchangeRate implements Serializable{
 	@Column(name="EXCHANGE_RATE")
 	private Integer exchangerate;
 
+	@Column(name="COST_MONEY")
+	private Integer costmoney;
+	
+	public Integer getCostmoney() {
+		return costmoney;
+	}
+
+	public void setCostmoney(Integer costmoney) {
+		this.costmoney = costmoney;
+	}
+
 	public Integer getId() {
 		return id;
 	}

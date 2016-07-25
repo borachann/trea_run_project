@@ -163,7 +163,7 @@
 							</div>
 						</div>
 
-						<div class="col-md-6 col-sm-6 col-lg-3">
+						<div class="col-md-6 col-sm-6 col-lg-3" style="cursor: pointer;" id="request_money">
 							<div class="mini-stat clearfix bx-shadow">
 								<span class="mini-stat-icon bg-primary"><i
 									class="ion-arrow-graph-up-right"></i></span>
@@ -204,8 +204,8 @@
 
 	
 	
-	 <%@ include file="requeststocklist.jsp"%> 
-	
+	<%@ include file="requeststocklist.jsp"%> 
+	<%@ include file="requestcostmoney.jsp"%> 
 
 	<script>
 		var resizefunc = [];
@@ -327,6 +327,16 @@
 				}) ;
 				
 			}); 
+			 
+			 $("#request_money").click(function() {
+					
+					getExchangeRate();
+					$('#request_cost_money').modal({
+						"backdrop":"static"
+					}) ;
+					
+				}); 
+			 
 			 getExchangeRate();
 			function getExchangeRate(){
 				$.ajax({
@@ -374,9 +384,29 @@
 				});
 				 
 			 });
-			
-				
-			
+			 $("#btnsavecostmoney").click(function(){
+				 var json = {
+						 	"money" : $("#txtcostmoney").val()
+					};
+				 $.ajax({
+					 url: "${pageContext.request.contextPath}/admin/costmoneyupdate", 
+					 type: 'GET',
+					 data: json,
+					 dataType: 'JSON',
+					beforeSend: function(xhr) {
+			            xhr.setRequestHeader("Accept", "application/json");
+			            xhr.setRequestHeader("Content-Type", "application/json");
+			        },
+					success: function(data){
+						 console.log(data);
+						 $("#total_users").html($("#txtcostmoney").val());
+						 $('#request_cost_money').modal("hide") ;
+					},
+					error:function(data, status,er){
+						console.log("error: " + data + "status: " + status + "er: ");
+					}
+				});
+			 });
 		});
 		
 	

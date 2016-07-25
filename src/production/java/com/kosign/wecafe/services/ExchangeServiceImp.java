@@ -48,14 +48,58 @@ public class ExchangeServiceImp implements ExchangeService{
 		Session session = null;
 		try{
 			session = sessionFactory.getCurrentSession();
-			Query query = session.createQuery("UPDATE ExchangeRate set exchangerate = :rate where id = 1");
+			
+			// Read ExchangeRate form db set to update
+			ExchangeRate exchange = session.load(ExchangeRate.class, 1);
+			
+			if (exchange.getId() > 0) {
+				exchange.setExchangerate(rate);
+				session.save(exchange);
+			} else {
+				exchange = new ExchangeRate();
+				exchange.setExchangerate(rate);
+				session.save(exchange);
+			}
+			
+			/*Query query = session.createQuery("UPDATE ExchangeRate set exchangerate = :rate where id = 1");
 			query.setParameter("rate", rate);
-			int result = query.executeUpdate();
+			int result = query.executeUpdate();*/
 		
-		System.out.println("Rows affected: " + result);		
-		return true;
+			return true;
 		
-		}catch(Exception e){
+		} catch(Exception e){
+			e.printStackTrace();
+		}	
+		return false;
+	}
+
+	@Override
+	@Transactional
+	public Boolean setCostMoney(Integer money) {
+		// TODO Auto-generated method stub
+		Session session = null;
+		try{
+			session = sessionFactory.getCurrentSession();
+			
+			// Read ExchangeRate form db set to update
+			ExchangeRate exchange = session.load(ExchangeRate.class, 1);
+			
+			if (exchange.getId() > 0) {
+				exchange.setCostmoney(money);
+				session.save(exchange);
+			} else {
+				exchange = new ExchangeRate();
+				exchange.setCostmoney(money);
+				session.save(exchange);
+			}
+			
+			/*Query query = session.createQuery("UPDATE ExchangeRate set exchangerate = :rate where id = 1");
+			query.setParameter("rate", rate);
+			int result = query.executeUpdate();*/
+		
+			return true;
+		
+		} catch(Exception e){
 			e.printStackTrace();
 		}	
 		return false;

@@ -46,6 +46,24 @@ public class ExchangeRateController {
 		 return null;
 	}
 	
+
+	@RequestMapping(value="/admin/costmoneyupdate", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> setCostMoney(@RequestParam(value="money") String strMoney) throws ParseException{
+		int money = Integer.parseInt(strMoney);
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try{			
+			System.out.println("test :" + exchangeService.setCostMoney(money));
+			map.put("updateMoney", true);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			
+		}catch(Exception e){
+			System.out.println("You failed to update Cost money.");
+			e.printStackTrace();
+		}
+		 return null;
+	}
+	
 	/*@RequestMapping(value="/admin/exchangeupdate1", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
 	public Boolean setExchangeRate1(@RequestParam(value="rate") String strRate) throws ParseException{
 		try {
