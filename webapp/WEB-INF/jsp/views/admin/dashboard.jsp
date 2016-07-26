@@ -278,15 +278,19 @@
 <!-- Pageination -->
 		<script src="${pageContext.request.contextPath}/resources/js/jquery.simplePagination.js"></script>
 		
-	<script type="text/javascript">
+<script type="text/javascript">
+	 
 		var request_id="";
 		var check = true;
 		var products = {};
 		var st=0;
 		var data=[];
 		var currentPage=1;
+		var cost_monty = 0;
+		
+		
 		$(function(){
-			
+			getExchangeRate();
 			function loadDataInDashboard(){
 				$.ajax({ 
 				    url: "${pageContext.request.contextPath}/admin/dashboardsize/" , 
@@ -300,6 +304,7 @@
 					    	var totalStock = 0;
 					    	var totalSale = 0;
 					    	var totalIncome = 0;
+					    	var totalpurchase = 0;
 					    	for(i=0; i<data.TOTAL_SALES.length; i++){
 					    		totalSale += (data.TOTAL_SALES[i].TOTAL);
 					    	}
@@ -308,8 +313,12 @@
 					    		totalStock += ((data.AllProduct[i].unitPrice/data.AllProduct[i].unit.qty)*data.AllProduct[i].quantity);
 					    	}
 					    	$("#total_request").html(totalStock.toFixed(2) + " $");
-					    	$("#total_users").html(numeral(data.TOTAL_USERS).format('0,0'));
-					    	console.log(data);
+					    	
+					    	for(i=0; i<data.Total_Purchase.length; i++){
+					    		totalpurchase += data.Total_Purchase[i].purchase_total_amount;
+					    	}
+					    	totalIncome = totalStock + (totalSale-totalpurchase) - cost_monty;
+					    	$("#total_users").html(totalIncome.toFixed(2) + " $");
 					    },
 					    error:function(data,status,er) { 
 					        console.log("error: ",data," status: ",status," er:",er);
@@ -337,7 +346,7 @@
 					
 				}); 
 			 
-			 getExchangeRate();
+			 
 			function getExchangeRate(){
 				$.ajax({
 					 url: "${pageContext.request.contextPath}/admin/getchangerate", 
@@ -351,6 +360,7 @@
 						 console.log(res);
 						 $("#txtexchange").val(res.data.exchangerate);
 						 $("#exchangeRate").html(res.data.exchangerate);
+						 cost_monty = res.data.costmoney;
 					},
 					error:function(data, status,er){
 						console.log("error: " + data + "status: " + status + "er: ");
@@ -408,7 +418,7 @@
 				});
 			 });
 		});
-		
+	 	
 	
 		
 		

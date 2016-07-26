@@ -805,5 +805,23 @@ public class AdminReportServiceImp implements AdminReportService {
 		return null;
 	}
 
- 
+	@Override
+	@Transactional
+	public List<Map> getTotalPurchase() {
+		 Session session = null;
+		    try {
+		        session = sessionFactory.getCurrentSession();
+		        session.getTransaction().begin();
+		        SQLQuery query = session.createSQLQuery(
+		            "SELECT SUM (pro_qty * unit_price) AS purchase_total_amount FROM import A INNER JOIN import_detail B ON A .imp_id = B.imp_id LEFT JOIN users C ON C . ID = A .user_id UNION ALL SELECT SUM (B.expense_qty * B.expense_unitprice) AS purhcase_total_amount	FROM tbl_expense A INNER JOIN tbl_expense_detail B ON A .expense_id = B.expense_id	LEFT JOIN users C ON A .exp_user_id = C . ID");
+		        query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+		        List < Map > importProducts = (List < Map > ) query.list();
+		        return importProducts;
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+
+		    }
+		    return null;
 	}
+}

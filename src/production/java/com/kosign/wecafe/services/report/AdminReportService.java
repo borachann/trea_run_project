@@ -21,6 +21,7 @@ public interface AdminReportService {
 	public Map<String, Object> getAllPurchaseMonthlyReportsTotal(Date startDate, Date endDate);	
 	public List<Map> getListReportYearlyPurchaseRest(int byYear);	
 	public List<Map> getListReportDetailPurchase();	
+	public List<Map> getTotalPurchase();
 	public List<Map> getSearchSellbyDate(DateForm dateForm);
 	public List<Map> getSearchOrderbyDate(DateForm dateForm);	
 	//public List<Object[]> getReportListAllBeverageStock(DateForm dateForm);	

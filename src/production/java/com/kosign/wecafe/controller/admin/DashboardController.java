@@ -13,6 +13,7 @@ import com.kosign.wecafe.services.ProductService;
 import com.kosign.wecafe.services.SellProductsService;
 import com.kosign.wecafe.services.SellService;
 import com.kosign.wecafe.services.UserService;
+import com.kosign.wecafe.services.report.AdminReportService;
 
 @Controller
 public class DashboardController {
@@ -29,6 +30,9 @@ public class DashboardController {
 	@Autowired
 	ProductService productService;
 	
+	@Autowired
+	AdminReportService adminReportService;
+	
 	@RequestMapping(value={"/admin/dashboard","/admin/","/admin/home"})
 	public String dashboard(/*Map<String, Object> model*/){
 		/*model.put("TOTAL_SALES", sellerService.getAllSellCount());
@@ -42,9 +46,10 @@ public class DashboardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("TOTAL_SALES", sellerService.getSellAmount());
 		//map.put("NEW_ORDERS", sellProductService.getOrdered().size());
+		map.put("Total_Purchase", adminReportService.getTotalPurchase());
 		map.put("AllProduct", productService.AllProducts());
 		map.put("REQUEST_STOCK", sellProductService.getRequestStock().size());
-		map.put("TOTAL_USERS", userService.count());
+		//map.put("TOTAL_USERS", userService.count());
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);	 
 	}
 }

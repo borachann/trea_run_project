@@ -155,4 +155,14 @@ public class ReportPurchaseController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
 		
 	}
+/*	@RequestMapping(value="/totalpurchase", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> gettotalpurchase() throws ParseException{
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("get_total_purchase", adminReportService.getTotalPurchase());
+		
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
+	}*/
+	
 }
