@@ -1,5 +1,7 @@
 package com.kosign.wecafe.entities;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,8 +18,19 @@ public class ExchangeRate implements Serializable{
 	@Column(name="EXCHANGE_RATE")
 	private Integer exchangerate;
 
+	public BigDecimal getUrmoney() {
+		return urmoney;
+	}
+
+	public void setUrmoney(BigDecimal urmoney) {
+		this.urmoney = urmoney;
+	}
+
 	@Column(name="COST_MONEY")
 	private Integer costmoney;
+	
+	@Column (name="table_money")
+	private BigDecimal urmoney;
 	
 	public Integer getCostmoney() {
 		return costmoney;

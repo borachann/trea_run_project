@@ -1,5 +1,6 @@
 package com.kosign.wecafe.controller.admin;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,12 +49,14 @@ public class ExchangeRateController {
 	
 
 	@RequestMapping(value="/admin/costmoneyupdate", method=RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> setCostMoney(@RequestParam(value="money") String strMoney) throws ParseException{
+	public ResponseEntity<Map<String, Object>> setCostMoney(@RequestParam(value="money") String strMoney,@RequestParam(value="urmoney") BigDecimal strUrMoney) 
+			throws ParseException{
 		int money = Integer.parseInt(strMoney);
+		BigDecimal urMoney= (strUrMoney);
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try{			
-			System.out.println("test :" + exchangeService.setCostMoney(money));
+			System.out.println("test :" + exchangeService.setCostMoney(money, urMoney));
 			map.put("updateMoney", true);
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 			

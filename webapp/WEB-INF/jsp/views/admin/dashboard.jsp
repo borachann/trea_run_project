@@ -287,7 +287,8 @@
 		var data=[];
 		var currentPage=1;
 		var cost_monty = 0;
-		
+		var urmoney = 0;
+		var totalStock = 0;
 		
 		$(function(){
 			getExchangeRate();
@@ -301,7 +302,7 @@
 			               xhr.setRequestHeader("Content-Type", "application/json");
 			           },
 					    success: function(data) {
-					    	var totalStock = 0;
+					    	totalStock = 0;
 					    	var totalSale = 0;
 					    	var totalIncome = 0;
 					    	var totalpurchase = 0;
@@ -314,10 +315,11 @@
 					    	}
 					    	$("#total_request").html(totalStock.toFixed(2) + " $");
 					    	
-					    	for(i=0; i<data.Total_Purchase.length; i++){
+					    	/* for(i=0; i<data.Total_Purchase.length; i++){
 					    		totalpurchase += data.Total_Purchase[i].purchase_total_amount;
-					    	}
-					    	totalIncome = totalStock + (totalSale-totalpurchase) - cost_monty;
+					    	} */
+					    	
+					    	totalIncome = totalStock + urmoney - cost_monty;
 					    	$("#total_users").html(totalIncome.toFixed(2) + " $");
 					    },
 					    error:function(data,status,er) { 
@@ -361,6 +363,9 @@
 						 $("#txtexchange").val(res.data.exchangerate);
 						 $("#exchangeRate").html(res.data.exchangerate);
 						 cost_monty = res.data.costmoney;
+						 urmoney = res.data.urmoney;
+						 $("#txtcostmoney").val(cost_monty);
+						 $("#txturmoney").val(urmoney);
 					},
 					error:function(data, status,er){
 						console.log("error: " + data + "status: " + status + "er: ");
@@ -396,7 +401,8 @@
 			 });
 			 $("#btnsavecostmoney").click(function(){
 				 var json = {
-						 	"money" : $("#txtcostmoney").val()
+						 	"money" : $("#txtcostmoney").val(),
+						 	"urmoney" : $("#txturmoney").val()
 					};
 				 $.ajax({
 					 url: "${pageContext.request.contextPath}/admin/costmoneyupdate", 
@@ -409,8 +415,10 @@
 			        },
 					success: function(data){
 						 console.log(data);
-						 $("#total_users").html($("#txtcostmoney").val());
-						 $('#request_cost_money').modal("hide") ;
+						var income = 0;
+						income = (parseFloat(totalStock) + parseFloat($("#txturmoney").val()) - $("#txtcostmoney").val());
+						$("#total_users").html(income.toFixed(2));
+						$('#request_cost_money').modal("hide") ;
 					},
 					error:function(data, status,er){
 						console.log("error: " + data + "status: " + status + "er: ");

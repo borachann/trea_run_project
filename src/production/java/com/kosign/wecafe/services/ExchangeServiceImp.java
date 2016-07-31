@@ -2,6 +2,7 @@ package com.kosign.wecafe.services;
 
 import org.hibernate.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -75,7 +76,7 @@ public class ExchangeServiceImp implements ExchangeService{
 
 	@Override
 	@Transactional
-	public Boolean setCostMoney(Integer money) {
+	public Boolean setCostMoney(Integer money, BigDecimal urmoney) {
 		// TODO Auto-generated method stub
 		Session session = null;
 		try{
@@ -86,10 +87,12 @@ public class ExchangeServiceImp implements ExchangeService{
 			
 			if (exchange.getId() > 0) {
 				exchange.setCostmoney(money);
+				exchange.setUrmoney(urmoney);
 				session.save(exchange);
 			} else {
 				exchange = new ExchangeRate();
 				exchange.setCostmoney(money);
+				exchange.setUrmoney(urmoney);
 				session.save(exchange);
 			}
 			
