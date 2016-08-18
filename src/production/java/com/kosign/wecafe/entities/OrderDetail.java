@@ -54,7 +54,17 @@ public class OrderDetail implements java.io.Serializable{
 	@Column(name="pro_comment")
 	private String proComment;
 	
+	@Column(name="pro_others")
+	private String pro_others;
  
+
+	public String getPro_others() {
+		return pro_others;
+	}
+
+	public void setPro_others(String pro_others) {
+		this.pro_others = pro_others;
+	}
 
 	public long getProQty() {
 		return proQty;

@@ -310,6 +310,7 @@ public class SellController {
 					carts.get(i).setTotalAmount(carts.get(i).getPrice().multiply(new BigDecimal(carts.get(i).getQuantity())));
 					carts.get(i).setSaleType(cartReq.getSaleType());
 					carts.get(i).setUnitqty(cartReq.getUnitqty());
+					carts.get(i).setOther(cartReq.getOther());
 					session.setAttribute("CARTS", carts);
 					return carts;
 				}

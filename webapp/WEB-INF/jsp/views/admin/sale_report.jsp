@@ -392,6 +392,7 @@ a {
 								<th>Qty</th>
 								<th>Unit Price</th> 
 								<th>Total Amount</th>
+								<th>Other</th>
 							</tr>
 						</thead>
 						<tbody id="impProDetail"> 
@@ -1305,7 +1306,8 @@ a {
 			    	   st += "<td>" + data.saleDetail[i].pro_name +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_qty + " " + data.saleDetail[i].pro_comment +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_unit_price +"</td>";
-			    	   st += "<td>" + data.saleDetail[i].amount +"</td></tr>"			    	   
+			    	   st += "<td>" + data.saleDetail[i].amount +"</td>";
+			    	   st += "<td>" + data.saleDetail[i].pro_others +"</td></tr>"
 			       }
 			       $("#impProDetail").html(st);
 			       $("#btotalamount").val(data.saleDetail[0].total_amount);  
@@ -1324,7 +1326,8 @@ a {
 				st += '<td>' + child.eq(1).html() + '</td>';
 				st += '<td>' + child.eq(3).html() + '</td>';
 				st += '<td>' + child.eq(2).html() + '</td>';
-				st += '<td>' + child.eq(4).html() + '</td></tr>';
+				st += '<td>' + child.eq(4).html() + '</td>';
+				st += '<td>' + child.eq(5).html() + '</td></tr>';
 			});
 	 	$("#tblprint").html(st);
 	 	$("#printtotal").html($("#totalamount").val());
@@ -1354,6 +1357,7 @@ a {
 			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(3).text() + "</td>";
 			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(2).text() + "</td>";
 			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(4).text() + "</td>";
+			    st += "<td>" + $("#impProDetail").children().eq(i).children().eq(5).text() + "</td>";
 			st += "</tr>";
 		}
 		$("#orderdetail").html(st);

@@ -1374,7 +1374,7 @@
 										st += "<td>"
 												+ data[i].totalAmount
 												+ "</td>";												
-										st += "<td>"+ ((data[i].comment != null) ? data[i].comment : "") + "</td>";
+										st += "<td>"+ ((data[i].other != null) ? data[i].other : "") + "</td>";
 										st += "<td><a href= 'javascript:;' id='btnedit'>Edit</a> <a href='javascript:;' id='btndelete'>Delete</a></td></tr>";
 										amount += data[i].totalAmount;
 									}
@@ -1521,13 +1521,15 @@
 										var	_qty = $("#qtytxt").val();
 										var	uQty = $(this).parents("#myModal").find("#editSaleType").find(":selected").data("unitqty");
 										var	editsaletype = $(this).parents("#myModal").find("#editSaleType").find(":selected").text();
+										var other = $("#procomment").val();
 										var	saleprice = $("#productprice").text(); //$(this).parents("#myModal").find("#editSaleType").find(":selected").val();
 										 	json = {
 												    "productId": _productid,
 												    "price": saleprice,
 												    "quantity" : _qty,
 												    "saleType": editsaletype,
-												    "unitqty" : uQty
+												    "unitqty" : uQty,
+												    "other" : other
 												};
 											$.ajax({
 														url : "${pageContext.request.contextPath}/seller/updateSellerProduct/",
@@ -1545,7 +1547,7 @@
 															_thisRow.children().eq(2).html(saleprice);
 															_thisRow.children().eq(3).html($("#qtytxt").val() + " " + editsaletype);
 															_thisRow.children().eq(4).html(subtotal);
-															_thisRow.children().eq(5).html($("#procomment").html());
+															_thisRow.children().eq(5).html(other);
 															$("#totalamount").val(subtotal + totalamount);
 															$("#totalreil").val(numeral($("#totalamount").val() * $("#exchangerate").val()).format('0,0'));
 															$(".panel-body").each(function(i,e){
@@ -1694,7 +1696,8 @@ $("#btnconfirm").click(function() {
 									st += '<td>' + child.eq(1).html() + '</td>';
 									st += '<td>' + child.eq(3).html() + '</td>';
 									st += '<td>' + child.eq(2).html() + '</td>';
-									st += '<td>' + child.eq(4).html() + '</td></tr>';
+									st += '<td>' + child.eq(4).html() + '</td>';
+									st += '<td>' + child.eq(5).html() + '</td></tr>';
 								});
 								$("#tblprint").html(st);
 								$("#printtotal").html($("#totalamount").val());

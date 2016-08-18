@@ -375,6 +375,7 @@ public class AdminReportSaleServiceIml implements AdminReportSaleService {
 					+ "B.pro_qty, "
 					+ "B.pro_unit_price, "
 					+ "B.pro_comment, "
+					+ "B.pro_others, "
 					+ "C.pro_name, B.pro_qty*B.pro_unit_price as amount "
 					+ "FROM sale A INNER JOIN order_detail B on A.ord_id = B.order_id "
 					+ "LEFT JOIN product C ON B.pro_id = C.pro_id "

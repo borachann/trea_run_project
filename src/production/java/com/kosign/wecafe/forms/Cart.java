@@ -28,7 +28,15 @@ public class Cart implements Serializable{
 	
 	private Long unitqty;
 
-	
+	private String other;
+
+	public String getOther() {
+		return other;
+	}
+
+	public void setOther(String other) {
+		this.other = other;
+	}
 
 	public Long getUnitqty() {
 		return unitqty;

@@ -144,7 +144,7 @@
 
 					<!-- Start Widget -->
 					<div class="row">
-						<div class="col-md-6 col-sm-6 col-lg-3">
+						<div class="col-md-6 col-sm-6 col-lg-3 hidden">
 							<div class="mini-stat clearfix bx-shadow">
 								<span class="mini-stat-icon bg-info"><i
 									class="ion-social-usd"></i></span>

@@ -19,6 +19,7 @@
 								<th>តំលៃ</th>
 								<th>ចំនួន</th>
 								<th>សរុប</th>
+								<th>ផ្សេងទៀត</th>
 							</tr>
 						</thead>
 						<tbody id="orderdetail">

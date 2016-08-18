@@ -19,6 +19,7 @@
         <td>ចំនួន</td>
         <td>តំលៃ</td>
         <td>សរុប</td>
+        <td>ផ្សេងទៀត</td>
       </tr>
     </thead>
     <tbody id="tblprint">
