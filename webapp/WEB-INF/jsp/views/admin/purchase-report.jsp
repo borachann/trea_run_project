@@ -163,9 +163,9 @@ a {
 										</span>
 										<span id="yearcombo">
 											<select id="selectyear">
-												<option value="2014">2014</option>
+												<!-- <option value="2014">2014</option>
 												<option value="2015">2015</option>
-												<option value="2016">2016</option>												
+												<option value="2016">2016</option> -->												
 											</select>
 										</span>
 										</div>
@@ -555,7 +555,15 @@ a {
 	var b = true;
 	 setCalendar();
 	 searchByDate();
-
+	 var showYear = "";
+	    for(i=0; i < new Date().getFullYear() - 2016 + 1; i++){
+	    if((2016 + i) == new Date().getFullYear())
+	    	showYear += "<option selected>" + (2016 + i) + "</option>";
+	    else
+	    	showYear += "<option>" + (2016 + i) + "</option>";
+	    $("#selectyear").html(showYear);
+	    
+	    }
      
      // print pursurse monthly 
      $("#btn_print_monthly").click(function(){

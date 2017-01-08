@@ -164,9 +164,9 @@ a {
 										</span>
 										<span id="yearcombo">
 											<select id="selectyear">
-												<option value="2014">2014</option>
+												<!-- <option value="2014">2014</option>
 												<option value="2015">2015</option>
-												<option value="2016">2016</option>												
+												<option value="2016">2016</option> -->												
 											</select>
 										</span>
 										</div>
@@ -552,7 +552,15 @@ a {
 	var b = true;
 	
 	 setCalendar();  
-	
+	 var showYear = "";
+	    for(i=0; i < new Date().getFullYear() - 2016 + 1; i++){
+	    if((2016 + i) == new Date().getFullYear())
+	    	showYear += "<option selected>" + (2016 + i) + "</option>";
+	    else
+	    	showYear += "<option>" + (2016 + i) + "</option>";
+	    $("#selectyear").html(showYear);
+	    
+	    }
 		var exchangerate = $.ajax({
 			 url: "${pageContext.request.contextPath}/admin/getchangerate", 
 			 type: 'GET',
@@ -1301,13 +1309,15 @@ a {
 			    console.log(data);
 			     	var st= "";
 			    	var amount = 0;
+			    	var other = "";
 			       for(i=0; i<data.saleDetail.length; i++){
+			    	   other = data.saleDetail[i].pro_others || "";
 			    	   st += "<tr><td>" + (i + 1) + "</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_name +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_qty + " " + data.saleDetail[i].pro_comment +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].pro_unit_price +"</td>";
 			    	   st += "<td>" + data.saleDetail[i].amount +"</td>";
-			    	   st += "<td>" + data.saleDetail[i].pro_others +"</td></tr>"
+			    	   st += "<td>" + other +"</td></tr>"
 			       }
 			       $("#impProDetail").html(st);
 			       $("#btotalamount").val(data.saleDetail[0].total_amount);  
@@ -1320,6 +1330,7 @@ a {
 		  $("#impDetail").bPopup({follow: [false, false], position: ["10%","5%"]});  
 	 });
 	 $("#printInvoice").click(function(){
+		 st = "";
 		 $('#orderdetail tr').each(function(i,e){
 				var child = $(e).children();
 				st += '<tr><td>' + child.eq(0).html() + '</td>';
