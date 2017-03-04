@@ -46,6 +46,12 @@ public class ReportAdminController {
 		return "admin/reportOrder";
 	}
 	
+	@RequestMapping(value="/admin/import_product_detail_report", method=RequestMethod.GET)
+	public String ListReportImportProduct(){
+	//	model.put("reportPurchase", adminReportService.getReportListAllPurchase());
+		return "admin/Import-report";
+	}
+	
 	@RequestMapping(value="/admin/purchasereport", method=RequestMethod.GET)
 	public String ListReportpurchase(){
 	//	model.put("reportPurchase", adminReportService.getReportListAllPurchase());
