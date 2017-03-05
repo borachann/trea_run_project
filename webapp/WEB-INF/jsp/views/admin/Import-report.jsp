@@ -119,17 +119,30 @@ a {
 											<h2 class="text-right">
 												<%-- <img src="${pageContext.request.contextPath}/resources/images/logo_dark.png" alt="velonic"> --%>
 
-												<strong>Purchase Information</strong> 
+												<strong>Import Information</strong> 
 												<small id="startfrom"></small>
 												<!-- <small>start from</small> <small id="purchasemonth"></small> -->
 											</h2>
 										</div>
 									</div>
-
+<div class="cmxform form-horizontal tasi-form" >
+						<div class="form-group ui-widget">
+							<label for="productName" class="control-label col-lg-2">Product
+								Name *</label>
+							<div class="col-lg-4">
+								<input class=" form-control" required="required"
+									id="productName" name="productName" type="text"> <input
+									class="hidetable" id="proID">
+							</div>
+							<div class="col-lg-4">
+								<button type="button" class="btn btn-primary" id="btn_search" data-dismiss="modal">Search</button>
+							</div>
+						</div>
+</div>
 									<hr>
 									<div class="m-h-50 form-group hidden-print ">
 										<div class="col-sm-9 ">
-										<spen id="datelable" class="hidetable">
+										<spen id="datelable" >
 											<label class="col-sm-1 control-label">Date : </label> <input
 												type="hidden" id="SEND_DT" data-id="SEND_DT" />
 											<div id="sendFrdt" class="date-range col-sm-5">
@@ -139,7 +152,7 @@ a {
 													href="#none" id="btnREGS_DATE_S"><img
 													style="width: 20px; height: 20px;"
 													src="${pageContext.request.contextPath}/resources/images/img/ico_calendar.png">
-													</a><span id="EDate">&nbsp;~&nbsp;
+													</a><span id="EDate" class="">&nbsp;~&nbsp;
 												<input type="text" readonly="readonly" id="REGS_DATE_E"	name="stopdate" class="range-end" style="width: 100px; text-align: center;">&nbsp; 
 												<a href="#none" id="btnREGS_DATE_E"><img style="width: 20px; height: 20px;" src="${pageContext.request.contextPath}/resources/images/img/ico_calendar.png"></a>
 													</span>
@@ -162,7 +175,7 @@ a {
 											</select>
 										</span>
 										<span id="yearcombo">
-											<select id="selectyear">
+											<select id="selectyear" class="hidetable">
 												<!-- <option value="2014">2014</option>
 												<option value="2015">2015</option>
 												<option value="2016">2016</option> -->												
@@ -171,7 +184,7 @@ a {
 										</div>
 										<div class="col-sm-3 form-group">
 											<select class="form-control" id="selectreport">
-												<option value="0">Detail</option>
+												<!-- <option value="0">Detail</option> -->
 												<option value="1">Daily</option>
 												<option value="2">Weekly</option>
 												<option value="3">Monthly</option>
@@ -183,12 +196,13 @@ a {
 
 									<div class="row">
 										<div class="col-md-12 col-sm-12 col-xs-12 overflow-x">
-											<div class="hidetable" id="tbldaily">
+											<div  id="tbldaily">
 												<table id="dailytable">
 													<thead>
 														<tr>
 															<th>#</th>
-															<th>Customer</th>
+															<th>Supplier</th>
+															<th>Date</th>
 															<th>Item</th>
 															<th>Qty</th>
 															<th>Unit Price</th>
@@ -201,7 +215,7 @@ a {
 													</tbody>
 												</table>
 											</div>
-											<div id="tbldetail" class="overflow-x">
+											<div id="tbldetail" class="overflow-x hidetable">
 												<table id="detailtable" >
 													<thead>
 														<tr> 
@@ -332,10 +346,14 @@ a {
 												</select>
 											</div>
 											<div class="col-md-10 form-horizontal" align="right">
-												<label  class="control-label col-md-9">Total Amount : </label>
-													<div class="col-md-3">
+												<label  class="control-label col-md-2">Total Qty : </label>
+												<div class="col-md-3">
+															<input class="form-control" readonly="readonly" id="allTotalQty" type="text">
+												</div>												
+												<label  class="control-label col-md-4">Total Amount : </label>
+												<div class="col-md-3">
 															<input class="form-control" readonly="readonly" id="allTotalAmount" type="text">
-													</div>												
+												</div>
 											</div>
 											<div id="PAGINATION" class="pull-right"></div>
 										</div>
@@ -474,6 +492,7 @@ a {
     	<tr>
 			<td>{{= order}}</td>
 			<td class="content-left"><span class="ellipsis">{{= supplier_name}}</span></td>
+			<td class="content-left"><span class="ellipsis">{{= purchase_date}}</span></td>
 			<td class="content-left"><span class="ellipsis">{{= product_name}}</span></td>
 			<td>{{= product_qty}}</td>
 			<td>{{= pro_unit_price}}</td>
@@ -554,7 +573,8 @@ a {
 	var v=[];
 	var b = true;
 	 setCalendar();
-	 searchByDate();
+	// searchByDate();
+	 searchProduct();
 	 var showYear = "";
 	    for(i=0; i < new Date().getFullYear() - 2016 + 1; i++){
 	    if((2016 + i) == new Date().getFullYear())
@@ -570,6 +590,38 @@ a {
   	   var divContents = $("#print_data_monthly").html(); 
          loadPrintPage(divContents,getLangScape());
          return false;
+     });
+     
+     $("#btn_search").click(function(){
+    	 if($("#proID").val() == "")
+    		 {
+    		 	alert("ឈ្មោះផលិតផលមិនត្រឹមត្រូវ។");
+    		 	return;
+    		 }
+    	if($("#selectreport option:selected").val() == 1){
+    		//setCalendar();
+    		check = true;
+    		products.listDaily(1);    		 
+    	}
+    	else if($("#selectreport option:selected").val() == 2){
+    		setCalendar();
+    		settableheader();
+    		check = true;
+    		products.listWeekly(1);
+    	}
+		else if($("#selectreport option:selected").val() == 3){
+			$('select#selectyear option[value="'+new Date().getFullYear()+'"]').attr("selected",true);
+			$('select#selectmonth option[value="'+new Date().getMonth()+'"]').attr("selected",true);
+			check = true;
+			setheadermonthly();
+			products.listMonthly(1);
+    	 }
+		else if($("#selectreport option:selected").val() == 4){
+			var startdate = new Date().getFullYear() + '/01/01';
+			var stopdate = new Date().getFullYear() + '/12/31';
+			check = true;
+			products.listYearly(1);
+   	 	}
      });
      
      // print pursurse yearly 
@@ -598,6 +650,45 @@ a {
 				 break;
 		 }
 	 });
+	 function searchProduct(){
+    	 
+			$.ajax({ 
+			    url: "${pageContext.request.contextPath}/admin/searchproduct", 
+			    type: 'POST', 
+			    dataType: 'JSON', 
+			    beforeSend: function(xhr) {
+                 xhr.setRequestHeader("Accept", "application/json");
+                 xhr.setRequestHeader("Content-Type", "application/json");
+             },
+			    success: function(data) { 
+			       console.log(data); 
+			       var availableTags=[];
+			       for(i=0; i<data.length; i++)
+						{							
+			    	   availableTags[i]= 
+						         {
+						         	"label": data[i].productName,
+									"dataid": data[i].productId 
+						         };
+						}
+			       $("#productName" ).autocomplete({
+			    	   
+			    	   select: function(event, ui){
+			    		   $("#proID").val(ui.item.dataid);
+			    	   },
+			    	  // maxShowItems: 8,
+			           source: availableTags
+			       });
+			       $(".ui-autocomplete").css("position", "absolute");
+				   $(".ui-autocomplete").css("z-index", "2147483647");
+			    },
+			    error:function(data,status,er) { 
+			        console.log("error: "+data+" status: "+status+" er:"+er);
+			    }
+			});
+			return ;
+		}
+	 
 	 function checkFilter(currentPage){
 		 switch($("#selectreport").val()){
 		 case '0': 
@@ -667,13 +758,18 @@ a {
 			}); 
 	 }
 	 products.listDaily = function(currentPage){
+		 
+		 if($("#proID").val() == "")
+			 return;
 		 $.ajax({ 
-			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportdaily/" , 
+			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportdailyimport/" , 
 			    type: 'GET', 
 			    data: {
 			    		"currentPage" : currentPage,
 			    		"perPage"     : $("#PER_PAGE").val(),
-			    		"startDate"   : $("#REGS_DATE_S").val()			    		 
+			    		"startDate"   : $("#REGS_DATE_S").val(),
+			    		"endDate"   : $("#REGS_DATE_E").val(),
+			    		"proId" : $("#proID").val()
 			    },
 				    beforeSend: function(xhr) {
 	               xhr.setRequestHeader("Accept", "application/json");
@@ -684,6 +780,7 @@ a {
 			    	b =true;
 					v=data;
 					var total_amount = 0;
+					var total_qty = 0;
 				 	 if(data.reportdaily.length>0){
 						$("tbody#tbodydaily").html('');
 						   for(var i=0;i<data.reportdaily.length;i++){
@@ -691,12 +788,15 @@ a {
 						}   
 					 for(var i=0; i<data.get_total_amount.length; i++){
 							   total_amount += data.get_total_amount[i].purchase_total_amount;
+							   total_qty += data.get_total_amount[i].product_qty
 						   }
 						$("#CONTENT_DAILY").tmpl(data.reportdaily).appendTo("tbody#tbodydaily"); 
 						$("#allTotalAmount").val((total_amount).toFixed(2));
+						$("#allTotalQty").val(total_qty);
 					}else{
 						$("tbody#tbodydaily").html("");
 						$("#allTotalAmount").val('');
+						$("#allTotalQty").val('');
 					}
 			    	if(check){
 			    		products.setPagination(data.pagination.totalPages,1);
@@ -709,13 +809,16 @@ a {
 			}); 
 	 }
 	 products.listWeekly = function(currentPage){ 
+		 if($("#proID").val() == "")
+			 return ;
 		 var json = {
 				 	"currentPage" : currentPage,
 		    		"perPage"     : $("#PER_PAGE").val(),
 	   				"start_date" : $("#REGS_DATE_S").val(),
-	   				"end_date"   : $("#REGS_DATE_E").val()
-			};$.ajax({ 
-			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportweekly/", 
+	   				"end_date"   : $("#REGS_DATE_E").val(),
+	   				"proId" : $("#proID").val()
+	   			};$.ajax({ 
+			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportweekly_import/", 
 			    type: 'GET',  
 			    data: json, 
 			    beforeSend: function(xhr) {
@@ -732,16 +835,20 @@ a {
 							products.formatWeekly(data.reportweekly[i]);
 						}   
 						$("#CONTENT_WEEKLY").tmpl(data.reportweekly).appendTo("tbody#tbodyweekly"); 
-					 	var total_amount = 0;					 
+					 	var total_amount = 0;
+					 	var total_qty = 0;
 					 	for(var i=0; i<data.get_total_amount.length; i++){
 					 			for(j=1;j<=7;j++){
 					 				total_amount += data.get_total_amount[i]["day" + j +"_amount" ]; 
+					 				total_qty += data.get_total_amount[i]["day" + j +"_qty" ]; 
 					 			} 
 						   }	  
 						$("#allTotalAmount").val(numeral(total_amount).format('0,0')); 
+						$("#allTotalQty").val(total_qty.toFixed(2));
 					}else{
 						$("tbody#tbodyweekly").html("");
 						$("#allTotalAmount").val('');
+						$("#allTotalQty").val('');
 					}
 			    	if(check){
 			    		products.setPagination(data.pagination.totalPages,1);
@@ -755,13 +862,16 @@ a {
 		 
 	 }
 	 products.listMonthly = function(currentPage){
+		 if($("#proID").val() == "")
+			 return;
 		 var json = {
 				 	"currentPage" : currentPage,
 		    		"perPage"     : $("#PER_PAGE").val(),
 	   				"start_date" : $("#selectyear").val() + "-" + (parseInt($("#selectmonth").val()) + 1) + "-01",
-	   				"end_date"   : $("#selectyear").val() + "-" + (parseInt($("#selectmonth").val()) + 1) + "-" + (new Date($("#selectyear").val(),parseInt($("#selectmonth").val()) + 1, 0).getDate())
-			};$.ajax({
-			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportmonthly/", 
+	   				"end_date"   : $("#selectyear").val() + "-" + (parseInt($("#selectmonth").val()) + 1) + "-" + (new Date($("#selectyear").val(),parseInt($("#selectmonth").val()) + 1, 0).getDate()),
+					"proId" : $("#proID").val()
+		 };$.ajax({
+			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportmonthly_import/", 
 			    type: 'GET',  
 			    data: json, 
 			    beforeSend: function(xhr) {
@@ -772,8 +882,11 @@ a {
 			    	console.log(data);
 			    	b=true;
 			    	var total_all = 0;
+			    	var total_all_qty = 0;
 			    	    if(data.reportmonthly){ 
 				    	$("#monthlytable tbody").html('');
+				    	$("#allTotalAmount").val('');
+				    	$("#allTotalQty").val('');
 				    	var st = ""; 
 					    	for(var i=0;i<data.reportmonthly.length;i++){
 					    	var total_qty = 0, total_amount = 0;
@@ -806,10 +919,12 @@ a {
 					     			for(var j=0; j<(new Date($("#selectyear").val(),parseInt($("#selectmonth").val()) + 1, 0).getDate());j++) 
 					     			{  
 					     				total_all +=  data.get_total_amount[i]['day' + (j+1) + '_amount'] ;  
+					     				total_all_qty += data.get_total_amount[i]['day' + (j+1) + '_qty'] ; 
 					     			} 
 				    			}  
 				    	$("#monthlytable tbody").html(st);
 				     	$("#allTotalAmount").val(numeral(total_all).format('0,0')); 
+				     	$("#allTotalQty").val(numeral(total_all_qty).format('0,0')); 
 				    }    
 			    	    if(check){
 				    		products.setPagination(data.pagination.totalPages,1);
@@ -822,13 +937,16 @@ a {
 			}); 
 	 }
 	 products.listYearly = function(currentPage){
+		 if($("#proID").val() == "")
+			return;
 		 var json = {
 				 	"currentPage" : currentPage,
 		    		"perPage"     : $("#PER_PAGE").val(),
 	   				"start_date" : $("#selectyear").val() + "-01-01",
-	   				"end_date"   : $("#selectyear").val() + "-12-31"
+	   				"end_date"   : $("#selectyear").val() + "-12-31",
+	   				"proId" : $("#proID").val()
 			};$.ajax({ 
-			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportyearly/", 
+			    url: "${pageContext.request.contextPath}/api/admin/reports/purchasereportyearly_import/", 
 			    type: 'GET',  
 			    data: json, 
 			    beforeSend: function(xhr) {
@@ -839,7 +957,10 @@ a {
 			    	b= true;
 			    	v=data;
 			    	var total_amount = 0;
+			    	var total_qty = 0;
 			    	console.log(data);
+			    	$("#allTotalAmount").val('');
+		    		$("#allTotalQty").val('');
 			    	if(data.reportyear){
 				    	$("tbody#tbodyyearly").html('');
 				    	for(var i=0;i<data.reportyear.length;i++){
@@ -858,9 +979,22 @@ a {
 							    		+ data.get_total_amount[j].oct_amount 
 							    		+ data.get_total_amount[j].nov_amount 
 							    		+ data.get_total_amount[j].dec_amount; 
+				    		total_qty +=  data.get_total_amount[j].jan_qty
+				    		+ data.get_total_amount[j].feb_qty 
+				    		+ data.get_total_amount[j].mar_qty 
+				    		+ data.get_total_amount[j].apr_qty 
+				    		+ data.get_total_amount[j].may_qty 
+				    		+ data.get_total_amount[j].jun_qty 
+				    		+ data.get_total_amount[j].jul_qty 
+				    		+ data.get_total_amount[j].aug_qty 
+				    		+ data.get_total_amount[j].sep_qty 
+				    		+ data.get_total_amount[j].oct_qty 
+				    		+ data.get_total_amount[j].nov_qty 
+				    		+ data.get_total_amount[j].dec_qty; 
 				    	}
 			    		 $("#CONTENT_YEARLY").tmpl(data.reportyear).appendTo("tbody#tbodyyearly");	
 			    		 $("#allTotalAmount").val(numeral(total_amount).format('0,0'));
+			    		 $("#allTotalQty").val(numeral(total_qty).format('0,0'));
 			    	}
 			    	else
 			    		{
@@ -1018,7 +1152,9 @@ a {
 		    	checkFilter(currentPage);
 		    }); 
 		};
-	 products.listDetail(1); 
+	// products.listDetail(1); 
+	
+	products.listDaily(1);
 	 
 	 $("#selectreport").change(function(){
 		 if($(this).val()==0){
@@ -1043,7 +1179,7 @@ a {
 			 $("#yearcombo").addClass("hidetable");
 			 $("#monthcombo").addClass("hidetable");
 			 $("#datelable").removeClass("hidetable");
-			 $("#EDate").addClass("hidetable");			 
+			 $("#EDate").removeClass("hidetable");			 
 			 $("#printAble").removeClass("hidetable");
 			 setCalendar();
 			 check = true;
@@ -1073,6 +1209,7 @@ a {
 			 $('select#selectmonth option[value="'+new Date().getMonth()+'"]').attr("selected",true);			 
 			 $("#yearcombo").removeClass("hidetable");
 			 $("#selectmonth").removeClass("hidetable");
+			 $("#selectyear").removeClass("hidetable");
 			 $("#datelable").addClass("hidetable");
 			 $("#monthcombo").removeClass("hidetable");			 
 			 $("#printAble").removeClass("hidetable");
@@ -1087,11 +1224,16 @@ a {
 			 $("#tblmonthly").addClass("hidetable");
 			 $("#tblyearly").removeClass("hidetable");
 			 
+			 $("#yearcombo").removeClass("hidetable");
+			 $("#selectmonth").addClass("hidetable");
+			 $("#datelable").addClass("hidetable");
+			 $("#monthcombo").addClass("hidetable");	
+			 $("#selectyear").removeClass("hidetable");
+			 
 			 $("#printAble").removeClass("hidetable");
 			 var startdate = new Date().getFullYear() + '/01/01';
 			 var stopdate = new Date().getFullYear() + '/12/31';
 			 check = true;
-			 $("#selectmonth").addClass("hidetable");
 			 products.listYearly(1);
 		 }		 
 	 });
@@ -1197,13 +1339,14 @@ a {
 	 		      defaultDate: new Date(),
 	 		      setDate: new Date(),
 	 		      changeMonth: true,
+	 		     changeYear : true,
 	 		      numberOfMonths: 1,
 	 		      dateFormat: "yy-mm-dd",
 	 		      onClose: function( selectedDate ) {			    	  
 	 			    	    calculateDay($("#REGS_DATE_S").datepicker("getDate"),$("#REGS_DATE_E").datepicker("getDate"));
 	 				
 	 						$("#REGS_DATE_E").datepicker("option", "minDate", selectedDate);
-	 						if($("#EDate").hasClass("hidetable"))
+	 						if($("#selectreport option:selected").val() == 1)
 	 							{
 	 								check = true;
 	 								products.listDaily(1);
@@ -1211,6 +1354,7 @@ a {
 	 						else
 	 							{
 	 								settableheader();
+	 								if($("#selectreport option:selected").val() != 1)
 	 								$("#REGS_DATE_E").datepicker('setDate', moment($("#REGS_DATE_S").val()).add(6, 'days').format('YYYY-MM-DD'));
 	 								check = true;
 	 								products.listWeekly(1);
@@ -1224,24 +1368,33 @@ a {
 	 		     defaultDate: new Date(),
 	 		      setDate: new Date(),
 	 		      changeMonth: true,
+	 		     changeYear : true,
 	 		      numberOfMonths: 1,
 	 		      dateFormat: "yy-mm-dd",
 	 		      onClose: function( selectedDate ) {
 
 	 			    	  $("#REGS_DATE_S").datepicker("option", "maxDate", selectedDate);
 	 			    	    calculateDay($("#REGS_DATE_S").datepicker("getDate"),$("#REGS_DATE_E").datepicker("getDate"));
-	 						
+	 			    	   if($("#selectreport option:selected").val() == 1){
+	 								check = true;
+	 								products.listDaily(1);
+	 			    	   }	 			    	   
+	 			    	   else{
 	 						$("#REGS_DATE_S").datepicker('setDate', moment($("#REGS_DATE_E").val()).subtract(6, 'days').format('YYYY-MM-DD'));
 	 						settableheader();
 	 						searchByDate();
 	 						check = true;
-	 						products.listWeekly(1);
+	 						products.listWeekly(1);}
 	 			      }
 	 		});	
 	 		if($("#EDate").hasClass("hidetable"))
 	 			$("#REGS_DATE_S").datepicker('setDate', moment().format('YYYY-MM-DD'));
-	 		else
-	 			$("#REGS_DATE_S").datepicker('setDate', moment().subtract(6, 'days').format('YYYY-MM-DD'));
+	 		else{
+	 			if($("#selectreport option:selected").val() != 1)	 			
+	 				$("#REGS_DATE_S").datepicker('setDate', moment().subtract(6, 'days').format('YYYY-MM-DD'));
+	 			else
+	 				$("#REGS_DATE_S").datepicker('setDate', moment().format('YYYY-MM-DD'));
+	 		}
 	 		
 	 		$("#REGS_DATE_E").datepicker('setDate', moment().format('YYYY-MM-DD'));
 	 }

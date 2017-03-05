@@ -419,6 +419,94 @@ public class AdminReportServiceImp implements AdminReportService {
 		}
 		return null;
 	} 
+	
+	@Transactional
+	@Override
+	public List<Map<String, Object>> getListReportYearlyPurcase_import(Pagination pagination,Date startDate, Date endDate,boolean isPagination, String proId) {
+		// TODO Auto-generated method stub
+		Session session = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		System.out.println(sdf.format(startDate));
+		System.out.println(sdf.format(endDate));
+		Calendar calStartDate = Calendar.getInstance();
+		calStartDate.setTime(startDate);
+		
+		Calendar calEndDate = Calendar.getInstance();
+		calEndDate.setTime(endDate);
+		
+		Calendar calendar = calStartDate;
+		String[] months = new String[]{"jan","feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sbSelect = new StringBuilder();
+		for(int i=calStartDate.get(Calendar.MONTH) ; i<=calEndDate.get(Calendar.MONTH) ; i++){
+			calendar.add(Calendar.MONTH, i); 
+			sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
+			sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
+			sb.append(months[i] + " NUMERIC[],");
+			
+		} 
+		try {
+			session = sessionFactory.getCurrentSession();
+			SQLQuery query = 
+					session.createSQLQuery("SELECT " +
+										   "mthreport.row_name [ 1 ] AS customer, " +
+										   "mthreport.row_name [ 2 ] AS pro_name, " + 
+										   "COALESCE(jan[1],0) AS JAN_QTY, " +
+										   "COALESCE(jan[2],0) AS JAN_AMOUNT, " +
+										   "COALESCE(feb[1],0) AS FEB_QTY, " +
+										   "COALESCE(feb[2],0) AS FEB_AMOUNT, " +
+										   "COALESCE(mar[1],0) AS MAR_QTY, " +
+										   "COALESCE(mar[2],0) AS MAR_AMOUNT, " +
+										   "COALESCE(apr[1],0) AS APR_QTY, " +
+										   "COALESCE(apr[2],0) AS APR_AMOUNT, " +
+										   "COALESCE(may[1],0) AS MAY_QTY," +
+										   "COALESCE(may[2],0) AS MAY_AMOUNT," +
+										   "COALESCE(jun[1],0) AS JUN_QTY," +
+										   "COALESCE(jun[2],0) AS JUN_AMOUNT," +
+										   "COALESCE(jul[1],0) AS JUL_QTY," +
+										   "COALESCE(jul[2],0) AS JUL_AMOUNT," +
+										   "COALESCE(aug[1],0) AS AUG_QTY," +
+										   "COALESCE(aug[2],0) AS AUG_AMOUNT, " +
+										   "COALESCE(sep[1],0) AS SEP_QTY, " +
+										   "COALESCE(sep[2],0) AS SEP_AMOUNT, " +
+										   "COALESCE(oct[1],0) AS OCT_QTY, " +
+										   "COALESCE(oct[2],0) AS OCT_AMOUNT, " +
+										   "COALESCE(nov[1],0) AS NOV_QTY, " +
+										   "COALESCE(nov[2],0) AS NOV_AMOUNT, " +
+										   "COALESCE(DEC[1],0) AS DEC_QTY, " +
+										   "COALESCE(DEC[2],0) AS DEC_AMOUNT " +  
+										   "FROM " +
+										   "	crosstab ( " +
+										   "	'SELECT ARRAY[sup.sup_name::text, P.pro_name::text] As row_name " +
+										   "		   ,to_char(imp.imp_date, ''mon'')::text As imp_date 	 " +
+										   "		   ,ARRAY[SUM(impde.pro_qty), SUM(impde.unit_price*impde.pro_qty)] AS row  " +
+										   "	 FROM product P INNER JOIN import_detail impde on impde.pro_id = P.pro_id " +
+										   "	 INNER JOIN import imp on imp.imp_id = impde.imp_id" +
+										   "	 INNER JOIN supplier sup on sup.sup_id = impde.sup_id "
+										   + "	 WHERE to_char(imp.imp_date ,''yyyy-MM-dd'') BETWEEN ''"+sdf.format(startDate)+"'' AND ''"+sdf.format(endDate)+"'' " +
+										   " and impde.pro_id = " + proId +
+										   "	 GROUP BY 1,2 " +
+										   "	 ORDER BY 1', " +
+										   "'SELECT to_char(date ''"+sdf.format(startDate)+"'' + (n || '' month'')::interval, ''mon'') As short_mname " +   
+										   " FROM generate_series(0,11) n' " +
+										   ") AS mthreport ( " +
+										   "row_name TEXT [], " + sb.toString().substring(0, sb.toString().lastIndexOf(",")) + ")" 
+										   ); 	
+			if(isPagination){
+				query.setFirstResult(pagination.offset());
+				query.setMaxResults(pagination.getPerPage());
+			}
+			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+			List<Map<String, Object>> sales= (List<Map<String, Object>>)query.list();
+			return sales;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
 	@Transactional
 	@Override
 	public List<Map<String, Object>> getListReportYearlyPurcase(Pagination pagination,Date startDate, Date endDate,boolean isPagination) {
@@ -590,6 +678,89 @@ public class AdminReportServiceImp implements AdminReportService {
 
 	@Override
 	@Transactional
+	public List<Map> getListReportDailyImport(Pagination pagination,Date startdate,Date enddate, boolean isPagination, String proId) {
+		String startDate = new SimpleDateFormat("yyyy-MM-dd").format(startdate);
+		String endDate = new SimpleDateFormat("yyyy-MM-dd").format(enddate);
+		Session session = null;
+		try{
+			session = sessionFactory.getCurrentSession();
+			session.getTransaction().begin();
+			SQLQuery query = session.createSQLQuery(
+					"SELECT A.imp_id AS purchase_id," 
+					+ " to_char(A.imp_date,'YYYY-mm-dd') AS purchase_date , " 
+					+ " CONCAT(C.lastname, ' ',C.firstname) AS purchase_by ," 
+					+ " D.sup_name As supplier_name,"
+					+ " E.pro_name As product_name,"
+					+ " B.pro_qty As product_qty,"
+					+ " B.unit_price As pro_unit_price,"
+					+ " SUM(B.pro_qty * B.unit_price) AS purchase_total_amount, '0' AS purchase_type "
+					+ " FROM import A INNER JOIN import_detail B ON A.imp_id = B.imp_id LEFT JOIN users C ON C.id = A.user_id LEFT JOIN supplier D ON D.sup_id = B.sup_id "
+					+ " 						LEFT JOIN product E on E.pro_id = B.pro_id"
+					+ " WHERE to_char(A.imp_date,'YYYY-mm-dd') >= '" + startDate + "' and to_char(A.imp_date,'YYYY-mm-dd') <= '" + endDate 
+					+ "' and b.pro_id = " + proId
+					+ " GROUP BY 1,2,3,4,5,6,7 "
+					+ " ORDER BY 9, 2");
+			if(isPagination){
+				query.setFirstResult(pagination.offset());
+				query.setMaxResults(pagination.getPerPage());
+			}
+			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+			List<Map>	importProducts = (List<Map>)query.list();	
+			System.out.println("Records Count = "   + importProducts.size());
+			return importProducts;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			
+		}
+		
+		return null;
+	}
+ 	
+	@Override
+	@Transactional
+	public List<Map> getListReportDailyImportAmount(Pagination pagination,Date startdate, Date enddate, boolean isPagination, String proId) {
+		String startDate = new SimpleDateFormat("yyyy-MM-dd").format(startdate);
+		String endDate = new SimpleDateFormat("yyyy-MM-dd").format(enddate);
+		Session session = null;
+		try{
+			session = sessionFactory.getCurrentSession();
+			session.getTransaction().begin();
+			SQLQuery query = session.createSQLQuery(
+					"SELECT A.imp_id AS purchase_id," 
+					+ " A.imp_date AS purchase_date , " 
+					+ " CONCAT(C.lastname, ' ',C.firstname) AS purchase_by ," 
+					+ " D.sup_name As supplier_name,"
+					+ " E.pro_name As product_name,"
+					+ " B.pro_qty As product_qty,"
+					+ " B.unit_price As pro_unit_price,"
+					+ " SUM(B.pro_qty * B.unit_price) AS purchase_total_amount, '0' AS purchase_type "
+					+ " FROM import A INNER JOIN import_detail B ON A.imp_id = B.imp_id LEFT JOIN users C ON C.id = A.user_id LEFT JOIN supplier D ON D.sup_id = B.sup_id "
+					+ " 						LEFT JOIN product E on E.pro_id = B.pro_id"
+					+ " WHERE to_char(A.imp_date,'YYYY-mm-dd') >= '"  + startDate + "' and to_char(A.imp_date,'YYYY-mm-dd') <= '" + endDate 
+					+ "' and b.pro_id = " + proId
+					+ " GROUP BY 1,2,3,4,5,6,7 "
+					
+					+ " ORDER BY 9");
+			if(isPagination){
+				query.setFirstResult(pagination.offset());
+				query.setMaxResults(pagination.getPerPage());
+			}
+			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+			List<Map>	importProducts = (List<Map>)query.list();	
+			System.out.println("Records Count = "   + importProducts.size());
+			return importProducts;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			
+		}
+		
+		return null;
+	}
+	
+	@Override
+	@Transactional
 	public List<Map> getListReportDailyPurchaseRest(Pagination pagination,Date startdate, boolean isPagination) {
 		String startDate = new SimpleDateFormat("yyyy-MM-dd").format(startdate);
 		Session session = null;
@@ -641,6 +812,143 @@ public class AdminReportServiceImp implements AdminReportService {
 		return null;
 	}
 
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getListReportWeeklyPurchaseRest_import(Pagination pagination,Date startdate, Date enddate, boolean isPagination,String proId) {		
+		Session session = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		Calendar calStartDate = Calendar.getInstance();
+		calStartDate.setTime(startdate); 
+		Calendar calEndDate = Calendar.getInstance();
+		calEndDate.setTime(enddate); 
+		Calendar calendar = calStartDate;
+		String[] months = new String[]{"day1","day2", "day3", "day4", "day5", "day6", "day7"};
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sbSelect = new StringBuilder();  
+	for(int i=0 ; i<7 ; i++){ 
+		sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
+		sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
+		sb.append(months[i] + " NUMERIC[],");  
+	} 
+	try {
+		session = sessionFactory.getCurrentSession();
+		SQLQuery query = 
+				session.createSQLQuery("SELECT " +
+									   "mthreport.row_name [ 1 ] AS customer, " +
+									   "mthreport.row_name [ 2 ] AS pro_name, " + 
+									   "COALESCE(day1[1],0) AS day1_QTY, " +
+									   "COALESCE(day1[2],0) AS day1_AMOUNT, " +
+									   "COALESCE(day2[1],0) AS day2_QTY, " +
+									   "COALESCE(day2[2],0) AS day2_AMOUNT, " +
+									   "COALESCE(day3[1],0) AS day3_QTY, " +
+									   "COALESCE(day3[2],0) AS day3_AMOUNT, " +
+									   "COALESCE(day4[1],0) AS day4_QTY, " +
+									   "COALESCE(day4[2],0) AS day4_AMOUNT, " +
+									   "COALESCE(day5[1],0) AS day5_QTY," +
+									   "COALESCE(day5[2],0) AS day5_AMOUNT," +
+									   "COALESCE(day6[1],0) AS day6_QTY," +
+									   "COALESCE(day6[2],0) AS day6_AMOUNT," +
+									   "COALESCE(day7[1],0) AS day7_QTY," +
+									   "COALESCE(day7[2],0) AS day7_AMOUNT" +									    
+									   " FROM " +
+									   "	crosstab ( " +
+									   "	'SELECT ARRAY[sup.sup_name::text, P.pro_name::text] As row_name " +
+									   "		   ,to_char(imp.imp_date, ''DD'')::text As imp_date " +
+									   "		   ,ARRAY[SUM(impde.pro_qty), SUM(impde.unit_price*impde.pro_qty)] AS row " +
+									   "	 FROM product P INNER JOIN import_detail impde on impde.pro_id = P.pro_id " +
+									   "	 INNER JOIN import imp on imp.imp_id = impde.imp_id " +
+									   "	 INNER JOIN supplier sup on sup.sup_id = impde.sup_id " +   
+									   "	 WHERE to_char(imp.imp_date ,''yyyy-MM-dd'') BETWEEN ''"+sdf.format(startdate)+"'' And ''"+sdf.format(enddate)+"''" +
+									   "	 and impde.pro_id = " + proId + " GROUP BY 1,2 " +
+									   "	 ORDER BY 1', " +
+									   "'SELECT to_char(date ''"+sdf.format(startdate)+"'' + (n || '' day'')::interval, ''DD'') As short_mname " +									   
+									   " FROM generate_series(0,6) n;' " +
+									   ") AS mthreport ( " +
+									   "row_name TEXT [], " + sb.toString().substring(0, sb.toString().lastIndexOf(",")) + ")" 
+									   ); 	
+		if(isPagination){
+			query.setFirstResult(pagination.offset());
+			query.setMaxResults(pagination.getPerPage());
+		}
+		query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+		List<Map<String, Object>> sales= (List<Map<String, Object>>)query.list();
+		return sales;
+	} catch (Exception e) {
+		e.printStackTrace();
+		System.out.println(e.getMessage());
+	}
+	return null;
+	}
+	
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getListReportWeeklyPurchaseRestAmount(Pagination pagination,Date startdate, Date enddate, boolean isPagination, String proId) {		
+		Session session = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		Calendar calStartDate = Calendar.getInstance();
+		calStartDate.setTime(startdate); 
+		Calendar calEndDate = Calendar.getInstance();
+		calEndDate.setTime(enddate); 
+		Calendar calendar = calStartDate;
+		String[] months = new String[]{"day1","day2", "day3", "day4", "day5", "day6", "day7"};
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sbSelect = new StringBuilder();  
+	for(int i=0 ; i<7 ; i++){ 
+		sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
+		sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
+		sb.append(months[i] + " NUMERIC[],");  
+	} 
+	try {
+		session = sessionFactory.getCurrentSession();
+		SQLQuery query = 
+				session.createSQLQuery("SELECT " +
+									   "mthreport.row_name [ 1 ] AS customer, " +
+									   "mthreport.row_name [ 2 ] AS pro_name, " + 
+									   "COALESCE(day1[1],0) AS day1_QTY, " +
+									   "COALESCE(day1[2],0) AS day1_AMOUNT, " +
+									   "COALESCE(day2[1],0) AS day2_QTY, " +
+									   "COALESCE(day2[2],0) AS day2_AMOUNT, " +
+									   "COALESCE(day3[1],0) AS day3_QTY, " +
+									   "COALESCE(day3[2],0) AS day3_AMOUNT, " +
+									   "COALESCE(day4[1],0) AS day4_QTY, " +
+									   "COALESCE(day4[2],0) AS day4_AMOUNT, " +
+									   "COALESCE(day5[1],0) AS day5_QTY," +
+									   "COALESCE(day5[2],0) AS day5_AMOUNT," +
+									   "COALESCE(day6[1],0) AS day6_QTY," +
+									   "COALESCE(day6[2],0) AS day6_AMOUNT," +
+									   "COALESCE(day7[1],0) AS day7_QTY," +
+									   "COALESCE(day7[2],0) AS day7_AMOUNT" +									    
+									   " FROM " +
+									   "	crosstab ( " +
+									   "	'SELECT ARRAY[sup.sup_name::text, P.pro_name::text] As row_name " +
+									   "		   ,to_char(imp.imp_date, ''DD'')::text As imp_date " +
+									   "		   ,ARRAY[SUM(impde.pro_qty), SUM(impde.unit_price*impde.pro_qty)] AS row " +
+									   "	 FROM product P INNER JOIN import_detail impde on impde.pro_id = P.pro_id " +
+									   "	 INNER JOIN import imp on imp.imp_id = impde.imp_id " +
+									   "	 INNER JOIN supplier sup on sup.sup_id = impde.sup_id " +   
+									   "	 WHERE to_char(imp.imp_date ,''yyyy-MM-dd'') BETWEEN ''"+sdf.format(startdate)+"'' And ''"+sdf.format(enddate)+"''" +
+									   " and impde.pro_id = " + proId +
+									   "	 GROUP BY 1,2 " +
+									   "	 ORDER BY 1', " +
+									   "'SELECT to_char(date ''"+sdf.format(startdate)+"'' + (n || '' day'')::interval, ''DD'') As short_mname " +									   
+									   " FROM generate_series(0,6) n;' " +
+									   ") AS mthreport ( " +
+									   "row_name TEXT [], " + sb.toString().substring(0, sb.toString().lastIndexOf(",")) + ")" 
+									   ); 	
+		if(isPagination){
+			query.setFirstResult(pagination.offset());
+			query.setMaxResults(pagination.getPerPage());
+		}
+		query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+		List<Map<String, Object>> sales= (List<Map<String, Object>>)query.list();
+		return sales;
+	} catch (Exception e) {
+		e.printStackTrace();
+		System.out.println(e.getMessage());
+	}
+	return null;
+	}
+	
 	@Override
 	@Transactional
 	public List<Map<String, Object>> getListReportWeeklyPurchaseRest(Pagination pagination,Date startdate, Date enddate, boolean isPagination) {		
@@ -722,6 +1030,83 @@ public class AdminReportServiceImp implements AdminReportService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	@Override
+	@Transactional
+	public Object getListReportMonthlyPurchaseRest_import(Pagination pagination,Date startdate, Date enddate, boolean isPagination, String proId) {
+		Session session = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Calendar calStartDate = Calendar.getInstance();
+		calStartDate.setTime(startdate);
+		
+		Calendar calEndDate = Calendar.getInstance();
+		calEndDate.setTime(enddate);
+		System.out.println("Enddate = " + calEndDate.get(Calendar.DAY_OF_MONTH));
+		System.out.println("start Date = " + calStartDate.get(Calendar.DAY_OF_MONTH));
+		
+		String[] months = new String[calEndDate.get(Calendar.DAY_OF_MONTH)];
+		for(int i=0;i<calEndDate.get(Calendar.DAY_OF_MONTH);i++)
+		{
+			months[i] = "day" + (i+1);
+		}
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sbSelect = new StringBuilder();
+		
+		
+		for(int i=0 ; i<calEndDate.get(Calendar.DAY_OF_MONTH) ; i++){
+			//calendar.add(Calendar.DATE, i);
+			 
+			//System.out.println("Month ==== " + months[i]);
+			 
+			sbSelect.append("COALESCE("+months[i]+"[1],0) AS "+months[i].toUpperCase()+"_QTY ,");
+			sbSelect.append("COALESCE("+months[i]+"[2],0) AS "+months[i].toUpperCase()+"_AMOUNT ,");
+			sb.append(months[i] + " NUMERIC[],"); 
+			
+		}
+		System.out.println(sb.toString().substring(0, sb.toString().lastIndexOf(",")));
+		
+		System.out.println(calStartDate.getTime());
+		System.out.println(calEndDate.getTime());
+		  
+		try {
+			session = sessionFactory.getCurrentSession();
+			SQLQuery query = 
+					session.createSQLQuery("SELECT " +
+										   "mthreport.row_name [ 1 ] AS customer, " +
+										   "mthreport.row_name [ 2 ] AS pro_name, " + sbSelect.toString().substring(0, sbSelect.toString().lastIndexOf(",")) +									    
+										   " FROM " +
+										   "	crosstab ( " +
+										   "	'SELECT ARRAY[sup.sup_name::text, P.pro_name::text] As row_name " +
+										   "		   ,to_char(imp.imp_date, ''DD'')::text As imp_date " +
+										   "		   ,ARRAY[SUM(impde.pro_qty), SUM(impde.unit_price*impde.pro_qty)] AS row " +
+										   "	 FROM product P INNER JOIN import_detail impde on impde.pro_id = P.pro_id " +
+										   "	 INNER JOIN import imp on imp.imp_id = impde.imp_id " +
+										   "	 INNER JOIN supplier sup on sup.sup_id = impde.sup_id " +   
+										   "	 WHERE to_char(imp.imp_date ,''yyyy-MM-dd'') BETWEEN ''"+sdf.format(startdate)+"'' And ''"+sdf.format(enddate)+"''" +
+										   " 	and impde.pro_id = " + proId +
+										   "	 GROUP BY 1,2 " +
+										   "	 ORDER BY 1', " +
+										   "'SELECT to_char(date ''"+sdf.format(startdate)+"'' + (n || '' day'')::interval, ''DD'') As short_mname " +									   
+										   " FROM generate_series(0,"+ (calEndDate.get(Calendar.DAY_OF_MONTH) -1) +") n;' " +
+										   ") AS mthreport ( " +
+										   "row_name TEXT [], " + sb.toString().substring(0, sb.toString().lastIndexOf(",")) + ")" 
+										   ); 	
+			if(isPagination){
+				query.setFirstResult(pagination.offset());
+				query.setMaxResults(pagination.getPerPage());
+			}
+			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+			List<Map<String, Object>> sales = (List<Map<String, Object>>)query.list(); 
+			return sales;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
 
 	@Override
 	@Transactional
