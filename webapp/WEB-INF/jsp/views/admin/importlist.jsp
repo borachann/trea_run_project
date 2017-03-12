@@ -948,7 +948,7 @@
     				       $("#productName" ).autocomplete({
     				    	   
     				    	   select: function(event, ui){
-    				    		   $("#proID").val(ui.item.dataid);
+    				    		   $("#proID").val(ui.item.dataid); alert($("#proID").val());
     				    	   },
     				    	  // maxShowItems: 8,
     				           source: availableTags

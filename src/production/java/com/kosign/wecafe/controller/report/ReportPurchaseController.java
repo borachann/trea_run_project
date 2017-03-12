@@ -83,6 +83,20 @@ public class ReportPurchaseController {
 		map.put("get_total_amount_print", adminReportService.getListReportDailyPurchaseRest(pagination, startDate,false)); 
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
 	}
+	
+	@RequestMapping(value="/purchasereportdaily_print_import", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> getpurchasereportdaily_print_import(@RequestParam(value="startDate") String strStartDate, @RequestParam(value = "proId") String proId,
+			@RequestParam(value = "endDate") String strendDate, Pagination pagination) throws ParseException{
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = simpleDateFormat.parse(strStartDate);
+		Date endDate = simpleDateFormat.parse(strendDate);
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("Date = " + startDate);
+		map.put("reportdaily_print", adminReportService.getListReportDailyImport(pagination, startDate, endDate,false, proId));  
+		map.put("get_total_amount_print", adminReportService.getListReportDailyImportAmount(pagination, startDate, endDate, false, proId));
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
+	}
+	
 	@RequestMapping(value="/purchasereportweekly", method=RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> getpurchasereportweekly(@RequestParam(value="start_date") String strStartDate, @RequestParam(value="end_date") String strEndDate, 
 			Pagination pagination) throws ParseException{
@@ -123,6 +137,20 @@ public class ReportPurchaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("reportweekly_print", adminReportService.getListReportWeeklyPurchaseRest(pagination,startDate, endDate,false));
 		map.put("get_total_amount_print", adminReportService.getListReportWeeklyPurchaseRest(pagination, startDate,endDate ,false)); 
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);		
+	}
+	
+	
+	@RequestMapping(value="/purchasereportweekly_print_import", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> getpurchasereportweekly_print_import(@RequestParam(value="start_date") String strStartDate,
+			@RequestParam(value="end_date") String strEndDate, @RequestParam(value="proId") String proId,
+			Pagination pagination) throws ParseException{
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = simpleDateFormat.parse(strStartDate);
+		Date endDate = simpleDateFormat.parse(strEndDate);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("reportweekly_print", adminReportService.getListReportWeeklyPurchaseRest_import(pagination,startDate, endDate,false,proId));
+		map.put("get_total_amount_print", adminReportService.getListReportWeeklyPurchaseRestAmount(pagination, startDate,endDate ,false, proId)); 
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);		
 	}
 	
@@ -170,6 +198,20 @@ public class ReportPurchaseController {
 		map.put("get_total_amount_print", adminReportService.getListReportMonthlyPurchaseRest(pagination, startDate,endDate ,false)); 
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
 	}
+	
+	@RequestMapping(value="/purchasereportmonthly_print_import", method=RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> getpurchasereportmonthly_print_import(@RequestParam(value="start_date") String strStartDate, 
+			@RequestParam(value="end_date") String strEndDate, @RequestParam(value="proId") String proId,
+			Pagination pagination) throws ParseException{
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = simpleDateFormat.parse(strStartDate);
+		Date endDate = simpleDateFormat.parse(strEndDate);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("reportmonthly_print", adminReportService.getListReportMonthlyPurchaseRest_import(pagination,startDate, endDate,false,proId));
+		map.put("get_total_amount_print", adminReportService.getListReportMonthlyPurchaseRest_import(pagination, startDate,endDate ,false,proId)); 
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
+	}
+	
 	@RequestMapping(value="/purchasereportyearly", method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<String, Object>> getpurchasereportyearly(Pagination pagination,
 			   @RequestParam(value="start_date") String strStartDate, 
@@ -227,6 +269,23 @@ public class ReportPurchaseController {
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
 		
 	}
+	
+	@RequestMapping(value="/purchasereportyearly_print_import", method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, Object>> getpurchasereportyearly_print_import(Pagination pagination,
+			@RequestParam(value="proId") String proId,   @RequestParam(value="start_date") String strStartDate, 
+			   @RequestParam(value="end_date") String strEndDate) throws ParseException{
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date startDate = simpleDateFormat.parse(strStartDate);
+		Date endDate = simpleDateFormat.parse(strEndDate);
+		Map<String, Object> map = new HashMap<String, Object>(); 
+	
+		map.put("reportyear_print", adminReportService.getListReportYearlyPurcase_import(pagination,startDate, endDate, false,proId));
+		map.put("get_total_amount_print", adminReportService.getListReportYearlyPurcase_import(pagination, startDate,endDate ,false,proId));
+		map.put("total_reportyear", adminReportService.getAllPurchaseMonthlyReportsTotal(startDate, endDate));
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK); 
+		
+	}
+	
 /*	@RequestMapping(value="/totalpurchase", method=RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> gettotalpurchase() throws ParseException{
 		

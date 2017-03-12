@@ -21,7 +21,7 @@
 						<thead class="style2">
 							<tr class="active">
 								<th>#</th>
-								<th>Customer</th>
+								<th>Supplier</th>
 								<th>Item</th>
 								<th>Qty</th>
 								<th>Unit Price</th>
@@ -38,6 +38,7 @@
 				<br />
 				<div
 					style="border: 1px solid; margin: 0 auto; padding: 3px; width: 28%; margin-right: -2px; color: blue; text-align: left; padding-left: 8px;">
+					<span>Total Qty : </span><span id="print_all_qty_import_daily"></span>
 					<span>Total Amount : </span><span id="allTotalAmount_print_daily"></span>
 				</div>
 			</div>
@@ -105,6 +106,7 @@
 				<br />
 				<div
 					style="border: 1px solid; margin: 0 auto; padding: 3px; width: 28%; margin-right: -2px; color: blue; text-align: left; padding-left: 8px;">
+					<span>Total Qty : </span><span id="print_all_qty_import_weekly"></span>
 					<span>Total Amount : </span><span id="allTotalAmount_print_weekly"></span>
 				</div>
 			</div>
@@ -144,6 +146,7 @@
 				<br />
 				<div
 					style="border: 1px solid; margin: 0 auto; padding: 3px; width: 28%; margin-right: -2px; color: blue; text-align: left; padding-left: 8px;">
+					<span>Total Qty : </span><span id="print_all_qty_import_monthly"></span>
 					<span>Total Amount : </span><span id="allTotalAmount_print_monthly"></span>
 				</div>
 			</div>
@@ -229,6 +232,7 @@
 				<br />
 				<div
 					style="border: 1px solid; margin: 0 auto; padding: 3px; width: 28%; margin-right: -2px; color: blue; text-align: left; padding-left: 8px;">
+					<span>Total Qty : </span><span id="print_all_qty_import_yearly"></span>
 					<span>Total Amount : </span><span id="allTotalAmount_print_yearly"></span>
 				</div>
 			</div>
@@ -252,7 +256,7 @@
 			<td class="content-left"><span class="ellipsis">{{= product_name}}</span></td>
 			<td>{{= product_qty}}</td>
 			<td>{{= pro_unit_price}}</td>
-			<td>{{= purchase_by}}â</td>
+			<td>{{= purchase_by}}</td>
 			<td class="content-right">{{= purchase_type}}</td>
 			<td class="content-right">{{= purchase_total_amount}}</td>
 		</tr>
