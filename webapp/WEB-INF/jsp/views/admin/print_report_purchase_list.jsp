@@ -1,4 +1,5 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!-- Modal Daily-->
 <div class="modal fade" id="daily_list" role="dialog ">
 	<div class="modal-dialog modal-lg" style="width: 80%">
@@ -10,7 +11,7 @@
 					class="btn btn-inverse waves-effect waves-light pull-right hidden-print"
 					id="btn_print"><i class="fa fa-print"></i></a>
 
-				<h2 style="text-align: center;">Daily Purchase List</h2>
+				<h2 style="text-align: center;">Daily Import List</h2>
 				<h5>
 					<span id="report_start_daily"></span>
 				</h5>
@@ -251,7 +252,7 @@
 			<td class="content-left"><span class="ellipsis">{{= product_name}}</span></td>
 			<td>{{= product_qty}}</td>
 			<td>{{= pro_unit_price}}</td>
-			<td>{{= purchase_by}}​</td>
+			<td>{{= purchase_by}}â</td>
 			<td class="content-right">{{= purchase_type}}</td>
 			<td class="content-right">{{= purchase_total_amount}}</td>
 		</tr>

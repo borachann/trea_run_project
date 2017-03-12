@@ -357,7 +357,7 @@ a {
 											</div>
 											<div id="PAGINATION" class="pull-right"></div>
 										</div>
-										<div class="row hidetable" style="border-radius: 0px;" id="printAble">
+										<div class="row" style="border-radius: 0px;" id="printAble">
 											 <div class="hidden-print">
 											<div class="pull-right">
 												<a href="javascrpt:"
@@ -1479,10 +1479,10 @@ a {
 						$("tbody#PRINT_CONTENTS_DAILY").html("");
 						$("#allTotalAmount_print_daily").html('');
 					}
-			    	if(check){
+			    	/* if(check){
 			    		products.setPagination(data.pagination.totalPages,1);
 			    		check=false;
-			    	}  
+			    	}  */ 
 			    	
 			    	 var divContents = $("#print_data").html(); 
 			         loadPrintPage(divContents,getPortrait());
