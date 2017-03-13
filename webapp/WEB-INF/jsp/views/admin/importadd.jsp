@@ -17,8 +17,8 @@
 								Name *</label>
 							<div class="col-lg-10">
 								<input class=" form-control" required="required"
-									id="productName" name="productName" type="text"> <input
-									class="hidebtn" id="proID">
+									id="productName" name="productName" type="text"> 
+								<input type="hidden" class="hidebtn" id="proID">
 							</div>
 						</div>
 						<div class="form-group ">

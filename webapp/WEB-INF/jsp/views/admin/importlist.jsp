@@ -671,10 +671,10 @@
     	    		if(isAdded==true)getimportlist(1);
     			}); 
     			
-    				$("#productName").change(function(){   					
+    				/* $("#productName").change(function(){  					
             			$("#proID").val("");   
             			$("#supID").val("");
-    				});
+    				}); */
             		
             		$("#btn_cancel").click(function(){
             			$('#form_add_import').modal('hide');
