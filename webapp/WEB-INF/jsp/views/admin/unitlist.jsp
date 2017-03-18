@@ -181,8 +181,7 @@
             var resizefunc = [];
             var ctx = "${pageContext.request.contextPath}"
     </script>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/angular.js"></script>
 	<script src="<c:url value='/resources/scripts/dirPagination.js' />"></script>
 	<script src="<c:url value='/resources/scripts/app.js' />"></script>
 	
