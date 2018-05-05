@@ -71,6 +71,10 @@
 	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <style>
+#Proname {
+	width: 95px;
+    display: inline-block;
+}
 .carousel-inner>.item>img, .carousel-inner>.item>a>img {
 	width: 70%;
 	margin: auto;
@@ -151,9 +155,9 @@
 			</div>
 		</div>
 
-		<div id="myCarousel1" class="carousel">
+		<div id="myCarousel1" class="carousel" style="height: 515px; max-height:515px;">
 			<!-- Wrapper for slides -->
-			<div class="carousel-inner" role="listbox" style="height: 888px;">
+			<div class="carousel-inner" role="listbox">
 				<%
 					List<Product> products = (List<Product>) request.getAttribute("products");
 				//out.println("products" + products);
@@ -172,7 +176,7 @@
 						<%
 							}
 						%>
-						<div style="margin-top: 17%">
+						<div style="margin-top: 3%">
 							<%
 								for (i = A - 1; i >= A - 6 && i >= 0; i--) {
 							%><div class="col-sm-6">
@@ -880,13 +884,13 @@
 										 
 									do{
 										if (b){
-											str += "<div class='carousel-inner' role='listbox' style='height: 888px;'>";
+											str += "<div class='carousel-inner' role='listbox'>";
 											str += "<div class='item active' style='width: 70%; margin: 0 auto;'>";
 											b =false
 										}else{
 											str += "<div class='item' style='width: 70%; margin: 0 auto;'>";
 										}
-										 	str += "<div style='margin-top: 17%'>";
+										 	str += "<div style='margin-top: 3%'>";
 										 	
 										// alert(	data[0].searchpro.productId);	
 										/* var carts = [], count = 0;  */	 
