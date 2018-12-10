@@ -2,8 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div class="container visible-print-block"  style="font-size : 13px;"> 
-  <div class="text-center"><h3>សេងហ៊ី ចំការមន</h3></div>    
-  <p class="text-center">Tel: 077 72 83 83 / 098 71 17 18</p>         
+  <div class="text-center"><h3>សេងហ៊ី II ខណ្ឌជ្រោយចង្វារ</h3></div>    
+  <p class="text-center">Tel: 099 96 78 77 / 016 96 28 77</p>         
     <div>
   	លក់ជូន : <span id="printtocusname" style="width: 10%;">..................................</span>  	
   	<span class="pull-right">ទូរស័ព្ទ : <span  id="printcusphone"style="width: 10%;">...................</span></span>

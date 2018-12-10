@@ -21,4 +21,5 @@ public interface SellProductsService {
 	public Boolean updateOrderProduct(Long orderId, Long productId, Long qty );
 	public Boolean deleteOrderProduct(Long orderId, Long productId);
 //	public Boolean updateOrderProduct(OrderDetail orderDetail);
+	public String getInvoiceNo();
 }

@@ -8,8 +8,10 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -286,4 +288,19 @@ public class SellProductServiceImpl implements SellProductsService {
 		return false;
 	}
 
+	@Override
+	public String getInvoiceNo() {
+		Session session = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+			SQLQuery query = session.createSQLQuery("SELECT max(sale_id) FROM sale");
+			query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+			return query.uniqueResult().toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			// session.close();
+		}
+		return "";
+	}
 }

@@ -53,6 +53,11 @@ public class SellController {
 	@Autowired
 	UserService userService;
 	
+	@RequestMapping(value="/seller/invoiceNo", method=RequestMethod.GET)
+	public @ResponseBody String getInvoiceNo(){
+		return sellProductService.getInvoiceNo();
+	}
+	
 	@RequestMapping(value="/seller/request_product", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Boolean saveRequestProduct(@RequestBody List<RequestForm> requestForm)	{
 		RequestStockDetail requestDetail = new RequestStockDetail();

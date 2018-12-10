@@ -292,7 +292,7 @@
 		
 		$(function(){
 			getExchangeRate();
-			function loadDataInDashboard(){
+			/* function loadDataInDashboard(){
 				$.ajax({ 
 				    url: "${pageContext.request.contextPath}/admin/dashboardsize/" , 
 				    type: 'GET',
@@ -315,9 +315,9 @@
 					    	}
 					    	$("#total_request").html(totalStock.toFixed(2) + " $");
 					    	
-					    	/* for(i=0; i<data.Total_Purchase.length; i++){
-					    		totalpurchase += data.Total_Purchase[i].purchase_total_amount;
-					    	} */
+					    	// for(i=0; i<data.Total_Purchase.length; i++){
+					    	//	totalpurchase += data.Total_Purchase[i].purchase_total_amount;
+					    	//} 
 					    	
 					    	totalIncome = totalStock + urmoney - cost_monty;
 					    	$("#total_users").html(totalIncome.toFixed(2) + " $");
@@ -327,7 +327,7 @@
 					    }
 				})
 			}
-			loadDataInDashboard();
+			loadDataInDashboard(); */
 			
 	
 			 $("#request_stock").click(function() {
